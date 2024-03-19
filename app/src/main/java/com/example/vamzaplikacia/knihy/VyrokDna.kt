@@ -33,7 +33,7 @@ class Vstup {
     }
 
     fun NacitajVyroky(): MutableList<VyrokDna> {
-        var vyroky: MutableList<VyrokDna> = mutableListOf()
+        val vyroky: MutableList<VyrokDna> = mutableListOf()
         riadky.forEach({ vyroky.add(VyrokDna(it)) })
         return vyroky
     }
