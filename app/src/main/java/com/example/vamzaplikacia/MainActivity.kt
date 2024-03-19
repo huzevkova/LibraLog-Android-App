@@ -13,10 +13,14 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import com.example.vamzaplikacia.knihy.Kniha
+import com.example.vamzaplikacia.knihy.Vstup
+import com.example.vamzaplikacia.knihy.ZoznamKnih
 import com.example.vamzaplikacia.ui.theme.VAMZAplikaciaTheme
 import java.util.Date
 
 val zoznamKnih = ZoznamKnih()
+val vyroky = Vstup().NacitajVyroky()
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -58,6 +62,7 @@ fun VypisanieKnih(zoznam: ZoznamKnih) {
             for (kniha in zoznam.iterator()) {
                 Text(kniha.toString())
             }
+            Text(text = vyroky.get(0).toString())
         }
     }
 }
