@@ -1,8 +1,15 @@
 package com.example.vamzaplikacia.knihy
 
+import com.example.vamzaplikacia.R
 import java.util.Date
 
-class Kniha(val nazov: String, val autor: String, val rokVydania: Int, val datumPridania: Date = Date()) {
+class Kniha(
+    val nazov: String,
+    val autor: String,
+    val rokVydania: Int,
+    val datumPridania: Date = Date(),
+    val obrazok: Int = R.drawable.book
+) {
     var favorit: Boolean = false
     var precitana: Boolean = false
     var naNeskor: Boolean = false
