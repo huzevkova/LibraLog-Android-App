@@ -1,19 +1,32 @@
-package com.example.vamzaplikacia.knihy
+package com.example.vamzaplikacia.logika.knihy
 
 import com.example.vamzaplikacia.R
+import com.example.vamzaplikacia.logika.enumy.Vlastnosti
+import com.example.vamzaplikacia.logika.enumy.Zanre
+import java.util.Calendar
 import java.util.Date
 
-class Kniha(
+data class Kniha(
     val nazov: String,
     val autor: String,
     val rokVydania: Int,
-    val datumPridania: Date = Date(),
-    val obrazok: Int = R.drawable.book
+    val vydavatelstvo: String = "Neznáme",
+    val obrazok: Int = R.drawable.book,
+    var popis: String = "Bez popisu.",
+    var poznamky: String = "Bez poznámok.",
+    var precitana: Boolean = false,
+    var naNeskor: Boolean = false,
+    var pozicana: Boolean = false,
+    var kupena: Boolean = false,
+    var pocetStran: Int = 0,
+    var pocetPrecitanych: Int = -1,
+    var hodnotenie: Int = -1
 ) {
+    val datumPridania: Calendar = Calendar.getInstance()
     var favorit: Boolean = false
-    var precitana: Boolean = false
-    var naNeskor: Boolean = false
-    var popis: String = "Bez popisu."
+
+    var vlastnosti: MutableList<Vlastnosti> = mutableListOf()
+    var zanre: MutableList<Zanre> = mutableListOf()
 
     override fun toString(): String {
         return "$nazov, $autor, $rokVydania"
@@ -45,6 +58,10 @@ class ZoznamKnih() {
             return knihy[index]
         }
         return null
+    }
+
+    fun getSize(): Int {
+        return knihy.size
     }
 
     fun najdiKnihuPodla(text: String): Kniha? {
