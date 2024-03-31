@@ -1,4 +1,4 @@
-package com.example.vamzaplikacia.knihy
+package com.example.vamzaplikacia.logika.knihy
 
 import android.content.res.Resources
 import com.example.vamzaplikacia.R

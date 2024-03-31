@@ -1,4 +1,4 @@
-package com.example.vamzaplikacia.enumy
+package com.example.vamzaplikacia.logika.enumy
 
 enum class Zanre(val zaner: String) {
     SCIFI("sci-fi"),
