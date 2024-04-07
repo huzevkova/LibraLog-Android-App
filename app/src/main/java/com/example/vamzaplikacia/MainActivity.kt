@@ -43,10 +43,9 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             VAMZAplikaciaTheme {
-                //VytvorZoznam()
-                //VypisanieKnih(zoznam = zoznamKnih)
                 FormularKniha()
             }
+
         }
     }
 }
@@ -60,9 +59,6 @@ class MainActivity : ComponentActivity() {
 @Composable
 fun AppPreview() {
     VAMZAplikaciaTheme {
-        //VytvorZoznam()
-        //VypisanieKnih(zoznam = zoznamKnih)
-
         FormularKniha()
     }
 }

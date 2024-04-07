@@ -1,7 +1,10 @@
 package com.example.vamzaplikacia.grafika.formular
 
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ExperimentalLayoutApi
+import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -39,7 +42,11 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.runtime.mutableStateListOf
+import com.example.vamzaplikacia.R
+import com.example.vamzaplikacia.logika.enumy.Vlastnosti
+import com.example.vamzaplikacia.logika.enumy.Zanre
 
 private var nazov = ""
 private var autor = ""
@@ -54,6 +61,8 @@ private var kupena = false
 private var pocetStran = 0
 private var pocetPrecitanych = -1
 private var hodnotenie = -1
+private var zanreVyber = mutableListOf<Boolean>()
+private var vlastnostiVyber = mutableListOf<Boolean>()
 
 private val modifierTextField = Modifier
     .padding(bottom = 16.dp)
@@ -69,7 +78,7 @@ fun FormularKniha(){
     }
     else {
         Formular(onClick = {
-        PridajZadanuKnihu(nazov, autor, rok)
+        PridajZadanuKnihu(nazov, autor, rok, vydavatelstvo, popis, poznamky, precitana, naNeskor, pozicana, kupena, pocetStran, pocetPrecitanych, hodnotenie, zanreVyber, vlastnostiVyber)
         hotovo = (!hotovo)})
     }
 
@@ -90,6 +99,14 @@ fun Formular(onClick: () -> Unit) {
     var pocetStranInput by remember { mutableStateOf("") }
     var pocetPrecitanychInput by remember { mutableStateOf("") }
     var hodnotenieInput by remember { mutableStateOf("") }
+    val vybraneZanre = remember {mutableStateListOf<Boolean>()}
+    for (i in Zanre.entries) {
+        vybraneZanre.add(false)
+    }
+    val vybraneVlastnosti = remember {mutableStateListOf<Boolean>()}
+    for (i in Vlastnosti.entries) {
+        vybraneVlastnosti.add(false)
+    }
 
     nazov = nazovInput
     autor = autorInput
@@ -104,6 +121,8 @@ fun Formular(onClick: () -> Unit) {
     pocetStran = pocetStranInput.toIntOrNull() ?: 0
     pocetPrecitanych = pocetPrecitanychInput.toIntOrNull() ?: 0
     hodnotenie = hodnotenieInput.toIntOrNull() ?: 0
+    zanreVyber = vybraneZanre
+    vlastnostiVyber = vybraneVlastnosti
 
     Column(modifier = Modifier
         .verticalScroll(rememberScrollState())
@@ -122,7 +141,7 @@ fun Formular(onClick: () -> Unit) {
         InputPole(
             modifierTextField,
             value = autorInput,
-            placeHolder = "Paolo Coelho",
+            placeHolder = "Paulo Coelho",
             onValueChange = { autorInput = it },
             labelText = "Autor knihy"
         )
@@ -156,7 +175,9 @@ fun Formular(onClick: () -> Unit) {
         CheckboxWithText(text = "Na neskôr", onValueChange = {naNeskorInput = (!naNeskorInput)})
         CheckboxWithText(text = "Požičaná", onValueChange = {pozicanaInput = (!pozicanaInput)})
         CheckboxWithText(text = "Kúpená", onValueChange = {kupenaInput = (!kupenaInput)})
-        Row(modifier = Modifier.fillMaxWidth()) {
+        Row(modifier = Modifier
+            .fillMaxWidth()
+            .padding(4.dp)) {
             InputPole(
                 modifier = Modifier.weight(1f),
                 value = pocetStranInput,
@@ -173,8 +194,45 @@ fun Formular(onClick: () -> Unit) {
                 cisla = true
             )
         }
-        Button(onClick = onClick){
+        Text("Žánre knihy:", Modifier
+            .padding(4.dp)
+            .align(Alignment.Start),
+            style = MaterialTheme.typography.labelLarge)
+        VyberMoznosti(Zanre.entries.map { it.zaner }, vybraneZanre, onClick = {vybraneZanre[it] = !vybraneZanre[it]})
+        Text("Vlastnosti knihy:", Modifier
+            .padding(4.dp)
+            .align(Alignment.Start),
+            style = MaterialTheme.typography.labelLarge)
+        VyberMoznosti(Vlastnosti.entries.map {it.pridMeno}, vybraneVlastnosti, onClick = {vybraneVlastnosti[it] = !vybraneVlastnosti[it]})
+        Button(modifier = Modifier.padding(top = 10.dp), onClick = onClick){
             Text(text = "OK")
+        }
+    }
+}
+
+@OptIn(ExperimentalLayoutApi::class)
+@Composable
+fun VyberMoznosti(enumZoznam: List<String>, vybrane: List<Boolean>, onClick: (Int) -> Unit) {
+    FlowRow(modifier = Modifier.padding(0.dp), horizontalArrangement = Arrangement.SpaceAround) {
+        enumZoznam.forEachIndexed { index, zanre ->
+            Button(
+                onClick = {
+                    // Toggle the selected state of the clicked button
+                    //selectedAdjectives[index] = !selectedAdjectives[index]
+                    // Pass the selected adjective to the callback function
+                    onClick(index)
+                },
+                modifier = Modifier.padding(1.dp),
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = if (vybrane[index]) {
+                        MaterialTheme.colorScheme.inversePrimary // Change color if selected
+                    } else {
+                        MaterialTheme.colorScheme.onPrimaryContainer
+                    }
+                )
+            ) {
+                Text(text = enumZoznam[index])
+            }
         }
     }
 }
@@ -197,8 +255,27 @@ fun PridajButton(onClick: () -> Unit) {
     }
 }
 
-fun PridajZadanuKnihu(nazov: String, autor: String, rok: Int) {
-    zoznamKnih.pridajKnihu(Kniha(nazov, autor, rok))
+fun PridajZadanuKnihu(nazov: String, autor: String, rok: Int, vydavatelstvo: String = "", popis: String = "Bez popisu.",
+                      poznamky: String = "Bez poznámok.", precitana: Boolean = false, naNeskor: Boolean = false,
+                      pozicana: Boolean = false, kupena: Boolean = false, pocetStran: Int = 0, pocetPrecitanych: Int = -1,
+                      hodnotenie: Int = -1, zanreBool: List<Boolean>, vlastnostiBool: List<Boolean>, obrazok: Int = R.drawable.book) {
+    val zanre = mutableListOf<Zanre>()
+    zanreBool.forEachIndexed { index, b ->
+        if (b) {
+            zanre.add(Zanre.entries[index])
+        }
+    }
+    val vlastnosti = mutableListOf<Vlastnosti>()
+    vlastnostiBool.forEachIndexed { index, b ->
+        if (b) {
+            vlastnosti.add(Vlastnosti.entries[index])
+        }
+    }
+
+    val kniha = Kniha(nazov, autor, rok, vydavatelstvo, obrazok, popis, poznamky, precitana, naNeskor, pozicana, kupena, pocetStran, pocetPrecitanych, hodnotenie)
+    kniha.zanre = zanre
+    kniha.vlastnosti = vlastnosti
+    zoznamKnih.pridajKnihu(kniha)
 }
 
 @Composable
