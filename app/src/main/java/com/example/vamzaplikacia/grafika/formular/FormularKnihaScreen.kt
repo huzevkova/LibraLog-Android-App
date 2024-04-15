@@ -43,62 +43,40 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.mutableStateListOf
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.vamzaplikacia.R
+import com.example.vamzaplikacia.logika.FormularKnihyUIState
 import com.example.vamzaplikacia.logika.enumy.Vlastnosti
 import com.example.vamzaplikacia.logika.enumy.Zanre
 
-private var nazov = ""
-private var autor = ""
-private var rok = 0
-private var vydavatelstvo = ""
-private var popis = ""
-private var poznamky = ""
-private var precitana = false
-private var naNeskor = false
-private var pozicana = false
-private var kupena = false
-private var pocetStran = 0
-private var pocetPrecitanych = -1
-private var hodnotenie = -1
-private var zanreVyber = mutableListOf<Boolean>()
-private var vlastnostiVyber = mutableListOf<Boolean>()
 
 private val modifierTextField = Modifier
     .padding(bottom = 16.dp)
     .fillMaxWidth()
 
 @Composable
-fun FormularKniha(){
+fun FormularKnihaScreen(viewModel: FormularKnihyViewModel = viewModel()){
     var hotovo by remember { mutableStateOf(false) }
+    val uiState by viewModel.uiState.collectAsState()
 
     if (hotovo) {
         VypisanieKnih(zoznam = zoznamKnih)
         PridajButton(onClick = {hotovo = (!hotovo)})
     }
     else {
-        Formular(onClick = {
-        PridajZadanuKnihu(nazov, autor, rok, vydavatelstvo, popis, poznamky, precitana, naNeskor, pozicana, kupena, pocetStran, pocetPrecitanych, hodnotenie, zanreVyber, vlastnostiVyber)
-        hotovo = (!hotovo)})
+        Formular(viewModel, uiState, onClick = {
+            hotovo = (!hotovo)
+            PridajZadanuKnihu(uiState)
+        })
     }
 
 }
 
 @Composable
-fun Formular(onClick: () -> Unit) {
-    var nazovInput by remember { mutableStateOf("") }
-    var autorInput by remember { mutableStateOf("") }
-    var rokInput by remember { mutableStateOf("") }
-    var vydavatelInput by remember { mutableStateOf("") }
-    var popisInput by remember { mutableStateOf("") }
-    var poznamkyInput by remember { mutableStateOf("") }
-    var precitanaInput by remember { mutableStateOf(false) }
-    var naNeskorInput by remember { mutableStateOf(false) }
-    var pozicanaInput by remember { mutableStateOf(false) }
-    var kupenaInput by remember { mutableStateOf(false) }
-    var pocetStranInput by remember { mutableStateOf("") }
-    var pocetPrecitanychInput by remember { mutableStateOf("") }
-    var hodnotenieInput by remember { mutableStateOf("") }
+fun Formular(viewModel: FormularKnihyViewModel, uiState: FormularKnihyUIState, onClick: () -> Unit) {
+
     val vybraneZanre = remember {mutableStateListOf<Boolean>()}
     for (i in Zanre.entries) {
         vybraneZanre.add(false)
@@ -107,22 +85,6 @@ fun Formular(onClick: () -> Unit) {
     for (i in Vlastnosti.entries) {
         vybraneVlastnosti.add(false)
     }
-
-    nazov = nazovInput
-    autor = autorInput
-    rok = rokInput.toIntOrNull() ?: 0
-    vydavatelstvo = vydavatelInput
-    popis = popisInput
-    poznamky = poznamkyInput
-    precitana = precitanaInput
-    naNeskor = naNeskorInput
-    pozicana = pozicanaInput
-    kupena = kupenaInput
-    pocetStran = pocetStranInput.toIntOrNull() ?: 0
-    pocetPrecitanych = pocetPrecitanychInput.toIntOrNull() ?: 0
-    hodnotenie = hodnotenieInput.toIntOrNull() ?: 0
-    zanreVyber = vybraneZanre
-    vlastnostiVyber = vybraneVlastnosti
 
     Column(modifier = Modifier
         .verticalScroll(rememberScrollState())
@@ -133,63 +95,71 @@ fun Formular(onClick: () -> Unit) {
             .align(Alignment.CenterHorizontally), style = MaterialTheme.typography.headlineLarge)
         InputPole(
             modifierTextField,
-            value = nazovInput,
+            value = uiState.nazov,
             placeHolder = "Alchymista",
-            onValueChange = { nazovInput = it },
+            onValueChange = { viewModel.setNazov(it) },
             labelText = "Názov knihy"
         )
         InputPole(
             modifierTextField,
-            value = autorInput,
+            value = uiState.autor,
             placeHolder = "Paulo Coelho",
-            onValueChange = { autorInput = it },
+            onValueChange = { viewModel.setAutor(it) },
             labelText = "Autor knihy"
         )
         InputPole(
             modifierTextField,
-            value = rokInput,
-            onValueChange = { rokInput = it },
+            value = uiState.rok.toString(),
+            onValueChange = {
+                val rok = it.toIntOrNull() ?: 0
+                viewModel.setRok(rok) },
             labelText = "Rok vydania",
             cisla = true
         )
         InputPole(
             modifierTextField,
-            value = vydavatelInput,
-            onValueChange = { vydavatelInput = it },
+            value = uiState.vydavatelstvo,
+            onValueChange = { viewModel.setVydavatelstvo(it) },
             labelText = "Vydavateľstvo",
-            cisla = true
         )
         InputPole(
             modifierTextField,
-            value = popisInput,
-            onValueChange = { popisInput = it },
+            value = uiState.popis,
+            placeHolder = "Sem napíšte stručný popis / obsah knihy.",
+            onValueChange = { viewModel.setPopis(it) },
             labelText = "Popis knihy"
         )
         InputPole(
             modifierTextField,
-            value = poznamkyInput,
-            onValueChange = { poznamkyInput = it },
+            value = uiState.poznamky,
+            placeHolder = "Sem napíšte svoje poznámky ku knihe.",
+            onValueChange = { viewModel.setPoznamky(it)},
             labelText = "Poznámky ku knihe:"
         )
-        CheckboxWithText(text = "Prečítaná", onValueChange = {precitanaInput = (!precitanaInput)})
-        CheckboxWithText(text = "Na neskôr", onValueChange = {naNeskorInput = (!naNeskorInput)})
-        CheckboxWithText(text = "Požičaná", onValueChange = {pozicanaInput = (!pozicanaInput)})
-        CheckboxWithText(text = "Kúpená", onValueChange = {kupenaInput = (!kupenaInput)})
+        CheckboxWithText(text = "Prečítaná", onValueChange = {viewModel.setPrecitana()})
+        CheckboxWithText(text = "Na neskôr", onValueChange = {viewModel.setPozicana()})
+        CheckboxWithText(text = "Požičaná", onValueChange = {viewModel.setPozicana()})
+        CheckboxWithText(text = "Kúpená", onValueChange = {viewModel.setKupena()})
         Row(modifier = Modifier
             .fillMaxWidth()
             .padding(4.dp)) {
             InputPole(
                 modifier = Modifier.weight(1f),
-                value = pocetStranInput,
-                onValueChange = { pocetStranInput = it },
+                value = uiState.pocetStran.toString(),
+                onValueChange = {
+                    val pocet = it.toIntOrNull() ?: 0
+                    viewModel.setPocetStran(pocet) },
                 labelText = "Počet strán",
                 cisla = true
             )
             Spacer(modifier = Modifier.width(5.dp))
             InputPole(
                 modifier = Modifier.weight(1f),
-                value = pocetPrecitanychInput,
-                onValueChange = { pocetPrecitanychInput = it },
+                value = uiState.pocetPrecitanych.toString(),
+                onValueChange = {
+                    val pocet = it.toIntOrNull() ?: 0
+                    viewModel.setPocetPrecitanych(pocet)
+                },
                 labelText = "Z toho prečítaných",
                 cisla = true
             )
@@ -217,15 +187,12 @@ fun VyberMoznosti(enumZoznam: List<String>, vybrane: List<Boolean>, onClick: (In
         enumZoznam.forEachIndexed { index, zanre ->
             Button(
                 onClick = {
-                    // Toggle the selected state of the clicked button
-                    //selectedAdjectives[index] = !selectedAdjectives[index]
-                    // Pass the selected adjective to the callback function
                     onClick(index)
                 },
                 modifier = Modifier.padding(1.dp),
                 colors = ButtonDefaults.buttonColors(
                     containerColor = if (vybrane[index]) {
-                        MaterialTheme.colorScheme.inversePrimary // Change color if selected
+                        MaterialTheme.colorScheme.inversePrimary
                     } else {
                         MaterialTheme.colorScheme.onPrimaryContainer
                     }
@@ -255,31 +222,30 @@ fun PridajButton(onClick: () -> Unit) {
     }
 }
 
-fun PridajZadanuKnihu(nazov: String, autor: String, rok: Int, vydavatelstvo: String = "", popis: String = "Bez popisu.",
-                      poznamky: String = "Bez poznámok.", precitana: Boolean = false, naNeskor: Boolean = false,
-                      pozicana: Boolean = false, kupena: Boolean = false, pocetStran: Int = 0, pocetPrecitanych: Int = -1,
-                      hodnotenie: Int = -1, zanreBool: List<Boolean>, vlastnostiBool: List<Boolean>, obrazok: Int = R.drawable.book) {
+fun PridajZadanuKnihu(uiState: FormularKnihyUIState) {
     val zanre = mutableListOf<Zanre>()
-    zanreBool.forEachIndexed { index, b ->
+    uiState.zanreVyber.forEachIndexed { index, b ->
         if (b) {
             zanre.add(Zanre.entries[index])
         }
     }
     val vlastnosti = mutableListOf<Vlastnosti>()
-    vlastnostiBool.forEachIndexed { index, b ->
+    uiState.vlastnostiVyber.forEachIndexed { index, b ->
         if (b) {
             vlastnosti.add(Vlastnosti.entries[index])
         }
     }
 
-    val kniha = Kniha(nazov, autor, rok, vydavatelstvo, obrazok, popis, poznamky, precitana, naNeskor, pozicana, kupena, pocetStran, pocetPrecitanych, hodnotenie)
+    val kniha = Kniha(uiState.nazov, uiState.autor, uiState.rok, uiState.vydavatelstvo,
+        R.drawable.book, uiState.popis, uiState.poznamky, uiState.precitana, uiState.naNeskor,
+        uiState.pozicana, uiState.kupena, uiState.pocetStran, uiState.pocetPrecitanych, uiState.hodnotenie)
     kniha.zanre = zanre
     kniha.vlastnosti = vlastnosti
     zoznamKnih.pridajKnihu(kniha)
 }
 
 @Composable
-fun InputPole(modifier: Modifier, value: String, placeHolder: String = "", onValueChange: (String)-> Unit, labelText: String, cisla: Boolean = false) {
+fun InputPole(modifier: Modifier, value: String = "", placeHolder: String = "", onValueChange: (String)-> Unit, labelText: String, cisla: Boolean = false) {
     TextField(
         modifier = modifier,
         label = { Text(labelText) },
