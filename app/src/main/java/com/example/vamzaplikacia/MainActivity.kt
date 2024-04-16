@@ -6,20 +6,20 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.tooling.preview.Preview
-import com.example.vamzaplikacia.grafika.formular.FormularKniha
+import com.example.vamzaplikacia.grafika.zoznamiUI.HlavnyZoznamKnihScreen
+import com.example.vamzaplikacia.grafika.zoznamiUI.VytvorZoznam
 import com.example.vamzaplikacia.logika.knihy.ZoznamKnih
 import com.example.vamzaplikacia.ui.theme.VAMZAplikaciaTheme
 
-val zoznamKnih = ZoznamKnih()
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
             VAMZAplikaciaTheme {
-                FormularKniha()
+                //LibraApp()
+                MainScreen()
             }
-
         }
     }
 }
@@ -33,6 +33,6 @@ class MainActivity : ComponentActivity() {
 @Composable
 fun AppPreview() {
     VAMZAplikaciaTheme {
-        FormularKniha()
+        MainScreen()
     }
 }
