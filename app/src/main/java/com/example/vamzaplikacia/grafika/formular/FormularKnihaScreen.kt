@@ -57,20 +57,10 @@ private val modifierTextField = Modifier
     .fillMaxWidth()
 
 @Composable
-fun FormularKnihaScreen(viewModel: FormularKnihyViewModel = viewModel()){
+fun FormularKnihaScreen(viewModel: FormularKnihyViewModel = viewModel(), uiState: FormularKnihyUIState, onClick: () -> Unit){
     var hotovo by remember { mutableStateOf(false) }
-    val uiState by viewModel.uiState.collectAsState()
 
-    if (hotovo) {
-        VypisanieKnih(zoznam = zoznamKnih)
-        PridajButton(onClick = {hotovo = (!hotovo)})
-    }
-    else {
-        Formular(viewModel, uiState, onClick = {
-            hotovo = (!hotovo)
-            PridajZadanuKnihu(uiState)
-        })
-    }
+    Formular(viewModel, uiState, onClick = onClick)
 
 }
 
@@ -90,9 +80,6 @@ fun Formular(viewModel: FormularKnihyViewModel, uiState: FormularKnihyUIState, o
         .verticalScroll(rememberScrollState())
         .safeDrawingPadding(),
         horizontalAlignment = Alignment.CenterHorizontally) {
-        Text("NOVÁ KNIHA", modifier = Modifier
-            .padding(16.dp)
-            .align(Alignment.CenterHorizontally), style = MaterialTheme.typography.headlineLarge)
         InputPole(
             modifierTextField,
             value = uiState.nazov,
@@ -220,28 +207,6 @@ fun PridajButton(onClick: () -> Unit) {
             Icon(Icons.Filled.Add, "Tlačidlo na pridanie niečoho.")
         }
     }
-}
-
-fun PridajZadanuKnihu(uiState: FormularKnihyUIState) {
-    val zanre = mutableListOf<Zanre>()
-    uiState.zanreVyber.forEachIndexed { index, b ->
-        if (b) {
-            zanre.add(Zanre.entries[index])
-        }
-    }
-    val vlastnosti = mutableListOf<Vlastnosti>()
-    uiState.vlastnostiVyber.forEachIndexed { index, b ->
-        if (b) {
-            vlastnosti.add(Vlastnosti.entries[index])
-        }
-    }
-
-    val kniha = Kniha(uiState.nazov, uiState.autor, uiState.rok, uiState.vydavatelstvo,
-        R.drawable.book, uiState.popis, uiState.poznamky, uiState.precitana, uiState.naNeskor,
-        uiState.pozicana, uiState.kupena, uiState.pocetStran, uiState.pocetPrecitanych, uiState.hodnotenie)
-    kniha.zanre = zanre
-    kniha.vlastnosti = vlastnosti
-    zoznamKnih.pridajKnihu(kniha)
 }
 
 @Composable
