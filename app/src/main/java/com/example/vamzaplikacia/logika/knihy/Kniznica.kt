@@ -3,6 +3,7 @@ package com.example.vamzaplikacia.logika.knihy
 import com.example.vamzaplikacia.R
 import com.example.vamzaplikacia.logika.enumy.Vlastnosti
 import com.example.vamzaplikacia.logika.enumy.Zanre
+import com.example.vamzaplikacia.zoznamKnih
 import java.util.Calendar
 import java.util.Date
 
@@ -19,8 +20,8 @@ data class Kniha(
     var pozicana: Boolean = false,
     var kupena: Boolean = false,
     var pocetStran: Int = 0,
-    var pocetPrecitanych: Int = -1,
-    var hodnotenie: Int = -1
+    private var pocetPrecitanych: Int = 0,
+    private var hodnotenie: Double = 0.0
 ) {
     val datumPridania: Calendar = Calendar.getInstance()
     var favorit: Boolean = false
@@ -30,6 +31,22 @@ data class Kniha(
 
     override fun toString(): String {
         return "$nazov, $autor, $rokVydania"
+    }
+
+    fun setHodnotenie(nove: Double) {
+        hodnotenie = nove
+    }
+
+    fun setPrecitaneStrany(nove: Int) {
+        pocetPrecitanych = nove
+    }
+
+    fun getHodnotenie(): Double {
+        return hodnotenie
+    }
+
+    fun getPocetPrecitanych(): Int {
+        return pocetPrecitanych
     }
 }
 
@@ -58,6 +75,10 @@ class ZoznamKnih() {
             return knihy[index]
         }
         return null
+    }
+
+    fun get(kniha: Kniha): Int {
+        return if (knihy.contains(kniha)) knihy.indexOf(kniha) else -1
     }
 
     fun getSize(): Int {

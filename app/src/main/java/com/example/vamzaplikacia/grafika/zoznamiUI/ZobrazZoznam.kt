@@ -1,6 +1,7 @@
 package com.example.vamzaplikacia.grafika.zoznamiUI
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -55,13 +56,19 @@ fun VytvorZoznam() {
         "Hobit",
         "J. R. R. Tolkien",
         1937,
-        obrazok = R.drawable.hobit
+            "Ikar",
+        obrazok = R.drawable.hobit,
+            popis = "Kniha o hobitovi Bilbovi a 13 trpaslíkoch.",
+            poznamky = "Super kniha",
+            pocetStran = 200,
+            pocetPrecitanych = 150,
+            hodnotenie = 9.9
     )
     )
 }
 
 @Composable
-fun VypisanieKnih(zoznam: ZoznamKnih) {
+fun VypisanieKnih(zoznam: ZoznamKnih, onClick: (Int) -> Unit) {
     Row (horizontalArrangement = Arrangement.SpaceBetween) {
         Column (modifier = Modifier
             .statusBarsPadding()
@@ -69,6 +76,7 @@ fun VypisanieKnih(zoznam: ZoznamKnih) {
             .padding(horizontal = 40.dp)) {
             for (kniha in zoznam.iterator()) {
                 ListItem(
+                    modifier = Modifier.clickable { onClick(zoznam.get(kniha)) },
                     headlineContent = { Text(kniha.nazov) },
                     supportingContent = { Text(kniha.autor + ", " + kniha.rokVydania) },
                     trailingContent = {
