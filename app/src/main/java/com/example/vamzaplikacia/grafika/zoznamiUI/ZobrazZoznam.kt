@@ -26,7 +26,6 @@ import com.example.vamzaplikacia.R
 import com.example.vamzaplikacia.logika.knihy.Kniha
 import com.example.vamzaplikacia.logika.knihy.ZoznamKnih
 import com.example.vamzaplikacia.zoznamKnih
-import java.util.Date
 
 fun VytvorZoznam() {
     zoznamKnih.pridajKnihu(
@@ -43,7 +42,7 @@ fun VytvorZoznam() {
         1988,
     )
     )
-    zoznamKnih.get(1)?.favorit = true;
+    zoznamKnih.get(1)?.favorit = true
     zoznamKnih.pridajKnihu(
         Kniha(
         "1984",

@@ -3,9 +3,7 @@ package com.example.vamzaplikacia.logika.knihy
 import com.example.vamzaplikacia.R
 import com.example.vamzaplikacia.logika.enumy.Vlastnosti
 import com.example.vamzaplikacia.logika.enumy.Zanre
-import com.example.vamzaplikacia.zoznamKnih
 import java.util.Calendar
-import java.util.Date
 
 data class Kniha(
     val nazov: String,
