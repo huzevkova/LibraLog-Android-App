@@ -12,10 +12,6 @@ class KnihaViewModel : ViewModel() {
     private val _uiState = MutableStateFlow(AktualizaciaKnihyUIState())
     val uiState: StateFlow<AktualizaciaKnihyUIState> = _uiState.asStateFlow()
 
-    fun resetAktualizaciaKnihy() {
-        _uiState.value = AktualizaciaKnihyUIState()
-    }
-
     fun setHodnotenie(hodnotenie: Double) {
         _uiState.update { currentState ->
             currentState.copy(hodnotenie = hodnotenie)

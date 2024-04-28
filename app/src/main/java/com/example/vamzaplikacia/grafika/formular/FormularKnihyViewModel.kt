@@ -28,7 +28,7 @@ class FormularKnihyViewModel : ViewModel() {
         }
     }
 
-    fun setRok(rok: Int) {
+    fun setRok(rok: String) {
         _uiState.update { currentState ->
             currentState.copy(rok = rok)
         }
@@ -76,19 +76,19 @@ class FormularKnihyViewModel : ViewModel() {
         }
     }
 
-    fun setPocetStran(pocetStran: Int) {
+    fun setPocetStran(pocetStran: String) {
         _uiState.update { currentState ->
             currentState.copy(pocetStran = pocetStran)
         }
     }
 
-    fun setPocetPrecitanych(pocetPrecitanych: Int) {
+    fun setPocetPrecitanych(pocetPrecitanych: String) {
         _uiState.update { currentState ->
             currentState.copy(pocetPrecitanych = pocetPrecitanych)
         }
     }
 
-    fun setHodnotenie(hodnotenie: Double) {
+    fun setHodnotenie(hodnotenie: String) {
         _uiState.update { currentState ->
             currentState.copy(hodnotenie = hodnotenie)
         }

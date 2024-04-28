@@ -9,7 +9,9 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Slider
 import androidx.compose.runtime.Composable
@@ -17,37 +19,36 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.compose.material3.Text
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.example.vamzaplikacia.grafika.formular.FormularKnihyViewModel
-import com.example.vamzaplikacia.grafika.zoznamiUI.VytvorZoznam
+import com.example.vamzaplikacia.R
 import com.example.vamzaplikacia.logika.knihy.Kniha
-import com.example.vamzaplikacia.zoznamKnih
 
 
 @Composable
-fun KnihaScreen(book: Kniha, viewModel: KnihaViewModel = viewModel()){
-    var sliderHodnoteniePosition by remember { mutableStateOf(book.getHodnotenie().toFloat() / 10) }
+fun KnihaScreen(kniha: Kniha, viewModel: KnihaViewModel = viewModel()){
+    var sliderHodnoteniePosition by remember { mutableFloatStateOf(kniha.getHodnotenie().toFloat() / 10) }
     var sliderStranyPosition by remember {
-        mutableStateOf(book.getPocetPrecitanych().toFloat() / if (book.pocetStran == 0) 1 else book.pocetStran)
+        mutableFloatStateOf(kniha.getPocetPrecitanych().toFloat() / if (kniha.pocetStran == 0) 1 else kniha.pocetStran)
     }
-    val pocetPrecitanychStran = (sliderStranyPosition * book.pocetStran).toInt()
+    val pocetPrecitanychStran = (sliderStranyPosition * kniha.pocetStran).toInt()
     val hodnotenieKnihy = sliderHodnoteniePosition.toDouble() * 10
     Column(
         modifier = Modifier
             .fillMaxSize()
             .padding(16.dp)
+            .verticalScroll(rememberScrollState())
     ) {
         Row(horizontalArrangement = Arrangement.SpaceBetween) {
             Image(
-                painter = painterResource(book.obrazok),
+                painter = painterResource(kniha.obrazok),
                 contentDescription = null,
                 contentScale = ContentScale.Crop,
                 modifier = Modifier
@@ -61,26 +62,26 @@ fun KnihaScreen(book: Kniha, viewModel: KnihaViewModel = viewModel()){
                 modifier = Modifier
                     .padding(16.dp)
             ) {
-                TextField(text = "Názov:", true)
-                TextField(text = book.nazov)
+                TextField(text = "${stringResource(id = R.string.nazov_knihy_form)}:", true)
+                TextField(text = kniha.nazov)
 
                 Spacer(modifier = Modifier.height(8.dp))
-                TextField(text = "Autor:", true)
-                TextField(text = book.autor)
+                TextField(text = "${stringResource(id = R.string.autor)}:", true)
+                TextField(text = kniha.autor)
 
                 Spacer(modifier = Modifier.height(8.dp))
-                TextField(text = "Rok vydania:", true)
-                TextField(text = book.rokVydania.toString())
+                TextField(text = "${stringResource(id = R.string.rok_vydania_form)}:", true)
+                TextField(text = kniha.rokVydania.toString())
 
                 Spacer(modifier = Modifier.height(8.dp))
-                TextField(text = "Žánre:", true)
-                TextField(text = book.zanre.joinToString(", "))
+                TextField(text = stringResource(id = R.string.zanre_knihy_form), true)
+                TextField(text = kniha.zanre.joinToString(", "))
             }
         }
 
         Spacer(modifier = Modifier.height(16.dp))
-        TextField(text = "Prečítané:    $pocetPrecitanychStran / ${book.pocetStran}", true)
-        Slider(value = sliderStranyPosition, steps = book.pocetStran, onValueChange = {
+        TextField(text = "Prečítané:    $pocetPrecitanychStran / ${kniha.pocetStran}", true)
+        Slider(value = sliderStranyPosition, steps = kniha.pocetStran, onValueChange = {
             sliderStranyPosition = it
         })
 
@@ -91,12 +92,16 @@ fun KnihaScreen(book: Kniha, viewModel: KnihaViewModel = viewModel()){
         })
 
         Spacer(modifier = Modifier.height(8.dp))
+        TextField(text = stringResource(id = R.string.vlastnosti_knihy_form), true)
+        TextField(text = kniha.vlastnosti.joinToString(", "))
+
+        Spacer(modifier = Modifier.height(8.dp))
         TextField(text = "Popis:", true)
-        TextField(text = book.popis)
+        TextField(text = kniha.popis)
 
         Spacer(modifier = Modifier.height(8.dp))
         TextField(text = "Poznámky:", true)
-        TextField(text = book.poznamky)
+        TextField(text = kniha.poznamky)
     }
 
     viewModel.setHodnotenie(hodnotenieKnihy)

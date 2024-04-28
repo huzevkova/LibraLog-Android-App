@@ -24,7 +24,9 @@ import com.example.vamzaplikacia.logika.FormularAutorUIState
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextRange
+import com.example.vamzaplikacia.R
 
 @Composable
 fun FormularAutorScreen(viewModel: FormularAutorViewModel, uiState: FormularAutorUIState, onClick: () -> Unit) {
@@ -38,7 +40,7 @@ fun FormularAutorScreen(viewModel: FormularAutorViewModel, uiState: FormularAuto
                 .padding(10.dp)
                 .fillMaxWidth(),
             value = uiState.menoAutora,
-            placeHolder = "Paulo Coelho",
+            placeHolder = stringResource(id = R.string.autor_placeholder),
             onValueChange = { viewModel.setMeno(it) },
             labelText = "Meno autora"
         )
@@ -62,21 +64,9 @@ fun FormularAutorScreen(viewModel: FormularAutorViewModel, uiState: FormularAuto
 
         Spacer(modifier = Modifier.height(8.dp))
         Button(modifier = Modifier.padding(top = 10.dp), onClick = onClick){
-            Text(text = "OK")
+            Text(text = stringResource(id = R.string.ok))
         }
     }
-}
-
-@Composable
-fun InputPole(modifier: Modifier, value: String = "", placeHolder: String = "", onValueChange: (String)-> Unit, labelText: String) {
-    TextField(
-        modifier = modifier,
-        label = { Text(labelText) },
-        value = value,
-        placeholder = { Text(text = placeHolder, color = Color.Gray) },
-        onValueChange = onValueChange,
-        singleLine = true
-    )
 }
 
 @Composable
@@ -97,15 +87,15 @@ fun DatumTextField(viewModel: FormularAutorViewModel, modifier: Modifier, narode
                 }
         },
         onValueChange = { newInput ->
-            if (newInput.text.length < textValue.text.length) {
-                textValue = newInput.copy(
+            textValue = if (newInput.text.length < textValue.text.length) {
+                newInput.copy(
                     text = newInput.text,
                     selection = newInput.selection
                 )
             } else {
                 val newValue = formatText(newInput.text)
 
-                textValue = newInput.copy(
+                newInput.copy(
                     text = newValue,
                     selection = TextRange(newValue.length)
                 )
@@ -128,7 +118,7 @@ private fun formatText(text: String): String {
         return text.substring(0, maxLength)
     }
 
-    var result = text;
+    var result = text
 
 
     if (text.length == 2) {

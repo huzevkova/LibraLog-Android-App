@@ -3,7 +3,7 @@ package com.example.vamzaplikacia.logika
 data class FormularKnihyUIState (
     val nazov: String = "",
     val autor: String = "",
-    val rok: Int = 0,
+    val rok: String = "",
     val vydavatelstvo: String = "",
     val popis: String = "",
     val poznamky: String = "",
@@ -11,9 +11,9 @@ data class FormularKnihyUIState (
     val naNeskor: Boolean = false,
     val pozicana: Boolean = false,
     val kupena: Boolean = false,
-    val pocetStran: Int = 0,
-    val pocetPrecitanych: Int = 0,
-    val hodnotenie: Double = 0.0,
-    val zanreVyber: MutableList<Boolean> = mutableListOf<Boolean>(),
-    val vlastnostiVyber: MutableList<Boolean> = mutableListOf<Boolean>()
+    val pocetStran: String = "",
+    val pocetPrecitanych: String = "",
+    val hodnotenie: String = "",
+    val zanreVyber: MutableList<Boolean> = mutableListOf(),
+    val vlastnostiVyber: MutableList<Boolean> = mutableListOf()
 )
