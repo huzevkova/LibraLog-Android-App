@@ -58,10 +58,7 @@ private val modifierTextField = Modifier
 
 @Composable
 fun FormularKnihaScreen(viewModel: FormularKnihyViewModel = viewModel(), uiState: FormularKnihyUIState, onClick: () -> Unit){
-    var hotovo by remember { mutableStateOf(false) }
-
     Formular(viewModel, uiState, onClick = onClick)
-
 }
 
 @Composable
@@ -187,24 +184,6 @@ fun VyberMoznosti(enumZoznam: List<String>, vybrane: List<Boolean>, onClick: (In
             ) {
                 Text(text = enumZoznam[index])
             }
-        }
-    }
-}
-
-@Composable
-fun PridajButton(onClick: () -> Unit) {
-    Box(modifier = Modifier.fillMaxSize()) {
-        FloatingActionButton(
-            modifier = Modifier
-                .align(Alignment.BottomEnd)
-                .padding(16.dp)
-                .wrapContentHeight(Alignment.Bottom),
-            onClick = onClick,
-            containerColor = MaterialTheme.colorScheme.secondaryContainer,
-            contentColor = MaterialTheme.colorScheme.secondary,
-            shape = CircleShape
-        ) {
-            Icon(Icons.Filled.Add, "Tlačidlo na pridanie niečoho.")
         }
     }
 }

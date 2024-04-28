@@ -88,7 +88,7 @@ class FormularKnihyViewModel : ViewModel() {
         }
     }
 
-    fun setHodnotenie(hodnotenie: Int) {
+    fun setHodnotenie(hodnotenie: Double) {
         _uiState.update { currentState ->
             currentState.copy(hodnotenie = hodnotenie)
         }

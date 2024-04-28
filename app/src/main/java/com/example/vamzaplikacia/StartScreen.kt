@@ -26,6 +26,9 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import com.example.vamzaplikacia.grafika.autor.VytvorZoznamAutorov
+import com.example.vamzaplikacia.grafika.zoznamiUI.VytvorZoznam
+import com.example.vamzaplikacia.grafika.zoznamiUI.kniznica
 import kotlinx.coroutines.delay
 
 @Composable
@@ -66,6 +69,11 @@ fun MainScreen() {
         LoadingScreen()
     } else {
         // Your main app content
+        VytvorZoznam()
+        kniznica.pridajZoznam(zoznamKnih)
+        kniznica.pridajZoznam(zoznamKnih)
+        kniznica.pridajZoznam(zoznamKnih)
+        VytvorZoznamAutorov()
         LibraApp()
     }
 }

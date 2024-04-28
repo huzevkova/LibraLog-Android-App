@@ -12,8 +12,8 @@ data class FormularKnihyUIState (
     val pozicana: Boolean = false,
     val kupena: Boolean = false,
     val pocetStran: Int = 0,
-    val pocetPrecitanych: Int = -1,
-    val hodnotenie: Int = -1,
+    val pocetPrecitanych: Int = 0,
+    val hodnotenie: Double = 0.0,
     val zanreVyber: MutableList<Boolean> = mutableListOf<Boolean>(),
     val vlastnostiVyber: MutableList<Boolean> = mutableListOf<Boolean>()
 )
