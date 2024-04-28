@@ -2,14 +2,14 @@ package com.example.vamzaplikacia.grafika.autor
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBarsPadding
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ListItem
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -24,16 +24,11 @@ import com.example.vamzaplikacia.R
 import com.example.vamzaplikacia.grafika.zoznamiUI.VytvorZoznam
 import com.example.vamzaplikacia.logika.knihy.Autor
 import com.example.vamzaplikacia.logika.knihy.ZoznamAutorov
-import java.util.Calendar
 
 val autori = ZoznamAutorov()
 
-fun VytvorZoznamAutorov() {
-    val calendar = Calendar.getInstance()
-    calendar[Calendar.YEAR] = 1892
-    calendar[Calendar.MONTH] = Calendar.JANUARY // January is 0
-    calendar[Calendar.DAY_OF_MONTH] = 3
-    val au = Autor("J. R. R. Tolkien", calendar, calendar)
+fun vytvorZoznamAutorov() {
+    val au = Autor("J. R. R. Tolkien", "03.01.1892", "01.01.1973")
     au.popis = "John Ronald Reuel Tolkien CBE FRSL bol anglický spisovateľ, autor knihy The Hobbit a jej pokračovania The Lord of the Rings, jeho najznámejšieho diela. Bol významným jazykovedcom, znalcom anglosaštiny a starej nórčiny."
     au.obrazok = R.drawable.tolkien
     autori.pridajAutora(au)
@@ -41,42 +36,40 @@ fun VytvorZoznamAutorov() {
 
 @Composable
 fun AutoriZoznamScreen(onClick: (Autor) -> Unit) {
-    Row (horizontalArrangement = Arrangement.SpaceBetween) {
-        Column (modifier = Modifier
+    Column (modifier = Modifier
             .statusBarsPadding()
+            .verticalScroll(rememberScrollState())
             .fillMaxWidth()) {
-            for (autor in autori.getZoznam()) {
-                var knihaSklonovanie = ""
-                if (autor.pocetKnih == 0 || autor.pocetKnih > 4) {
-                    knihaSklonovanie = "kníh"
-                } else if (autor.pocetKnih == 1) {
-                    knihaSklonovanie = "kniha"
-                } else {
-                    knihaSklonovanie = "knihy"
-                }
-
-                ListItem(
-                    modifier = Modifier.clickable { onClick(autor) },
-                    headlineContent = { Text(autor.meno) },
-                    supportingContent = {
-                        Text(autor.popis, maxLines = 2, overflow = TextOverflow.Ellipsis)
-                    },
-                    trailingContent = {
-                        Text(text = "${autor.pocetKnih} " + knihaSklonovanie)
-                    },
-                    leadingContent = {
-                        Image(
-                            painter = painterResource(autor.obrazok),
-                            contentDescription = null,
-                            contentScale = ContentScale.Crop,
-                            modifier = Modifier
-                                .padding(end = 8.dp)
-                                .size(40.dp)
-                                .clip(CircleShape)
-                        )
-                    }
-                )
+        for (autor in autori.getZoznam()) {
+            val knihaSklonovanie = if (autor.pocetKnih == 0 || autor.pocetKnih > 4) {
+                "kníh"
+            } else if (autor.pocetKnih == 1) {
+                "kniha"
+            } else {
+                "knihy"
             }
+
+            ListItem(
+                modifier = Modifier.clickable { onClick(autor) },
+                headlineContent = { Text(autor.meno) },
+                supportingContent = {
+                    Text(autor.popis, maxLines = 2, overflow = TextOverflow.Ellipsis)
+                },
+                trailingContent = {
+                    Text(text = "${autor.pocetKnih} " + knihaSklonovanie)
+                },
+                leadingContent = {
+                    Image(
+                        painter = painterResource(autor.obrazok),
+                        contentDescription = null,
+                        contentScale = ContentScale.Crop,
+                        modifier = Modifier
+                            .padding(end = 8.dp)
+                            .size(40.dp)
+                            .clip(CircleShape)
+                    )
+                }
+            )
         }
     }
 }
@@ -85,6 +78,6 @@ fun AutoriZoznamScreen(onClick: (Autor) -> Unit) {
 @Composable
 fun AutoriPreview() {
     VytvorZoznam()
-    VytvorZoznamAutorov()
+    vytvorZoznamAutorov()
     AutoriZoznamScreen(onClick = {})
 }

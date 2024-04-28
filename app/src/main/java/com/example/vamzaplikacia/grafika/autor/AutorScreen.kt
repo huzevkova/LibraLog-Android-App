@@ -1,6 +1,5 @@
 package com.example.vamzaplikacia.grafika.autor
 
-import android.icu.text.SimpleDateFormat
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -14,7 +13,10 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.statusBarsPadding
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -34,21 +36,24 @@ import com.example.vamzaplikacia.logika.knihy.ZoznamKnih
 
 @Composable
 fun AutorScreen(autor: Autor, onClick: (Kniha) -> Unit) {
-    BoxWithConstraints(modifier = Modifier.fillMaxWidth(1f)) {
-        Top(
-            modifier = Modifier
-                .fillMaxWidth()
-                .fillMaxHeight()
-                .align(Alignment.TopCenter)
-                .background(MaterialTheme.colorScheme.primary)
-        )
+    BoxWithConstraints(modifier = Modifier
+        .fillMaxWidth(1f)
+        .verticalScroll(rememberScrollState())
+    ) {
+        Column(modifier = Modifier
+            .fillMaxWidth()
+            .height(100.dp)
+            .align(Alignment.TopCenter)
+            .background(MaterialTheme.colorScheme.primary))
+        {
+        }
 
         Bottom(
             modifier = Modifier
                 .fillMaxWidth()
                 .fillMaxHeight()
-                .padding(top = 120.dp)
-                .align(Alignment.Center),
+                .align(Alignment.Center)
+                .padding(top = 120.dp),
             autor,
             onClick
         )
@@ -64,12 +69,6 @@ fun AutorScreen(autor: Autor, onClick: (Kniha) -> Unit) {
 }
 
 @Composable
-private fun Top(modifier: Modifier) {
-    Column(modifier = modifier) {
-    }
-}
-
-@Composable
 private fun Bottom(modifier: Modifier, autor: Autor, onClick: (Kniha) -> Unit) {
     Column(
         modifier
@@ -79,18 +78,15 @@ private fun Bottom(modifier: Modifier, autor: Autor, onClick: (Kniha) -> Unit) {
     {
         Spacer(modifier = Modifier.height(100.dp))
 
-        val dateFormat = SimpleDateFormat("dd.MM.yyyy")
         Text(text = autor.meno, style = MaterialTheme.typography.headlineMedium)
-        Text(text = "${dateFormat.format(autor.datumNarodenia?.time ?: "X")} - ${dateFormat.format(
-            autor.datumUmrtia?.time ?: "X"
-        )}", style = MaterialTheme.typography.titleMedium)
+        Text(text = "${autor.datumNarodenia} - ${autor.datumUmrtia}", style = MaterialTheme.typography.titleMedium)
 
         Spacer(modifier = Modifier.height(12.dp))
         Text(text = autor.popis, style = MaterialTheme.typography.bodyMedium, modifier = Modifier.padding(start = 20.dp, end = 20.dp))
 
         val style = MaterialTheme.typography.titleMedium
         Spacer(modifier = Modifier.height(20.dp))
-        Row() {
+        Row {
             Text(text = "Počet prečítaných kníh:",
                 style = style,
                 modifier = Modifier
@@ -105,7 +101,7 @@ private fun Bottom(modifier: Modifier, autor: Autor, onClick: (Kniha) -> Unit) {
             )
         }
 
-        Row() {
+        Row {
             Text(text = "Počet diel v knižnici:",
                 style = style,
                 modifier = Modifier
@@ -121,7 +117,11 @@ private fun Bottom(modifier: Modifier, autor: Autor, onClick: (Kniha) -> Unit) {
         }
 
         Spacer(modifier = Modifier.height(20.dp))
-        VypisanieKnih(zoznam = ZoznamKnih(zoznam = autor.knihyKniznica.toMutableList()), onClick = onClick)
+        VypisanieKnih(zoznam = ZoznamKnih(zoznam = autor.knihyKniznica.toMutableList()),modifier = Modifier
+            .statusBarsPadding()
+            .fillMaxWidth()
+            .padding(horizontal = 0.dp),onClick = onClick)
+
     }
 }
 
@@ -149,6 +149,6 @@ fun Center(modifier: Modifier, autor: Autor) {
 @Composable
 fun showAuthor() {
     VytvorZoznam()
-    VytvorZoznamAutorov()
+    vytvorZoznamAutorov()
     AutorScreen(autor = autori.getZoznam()[0], onClick = {})
 }
