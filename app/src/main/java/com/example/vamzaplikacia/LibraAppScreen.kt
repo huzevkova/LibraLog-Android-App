@@ -31,15 +31,17 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.example.vamzaplikacia.grafika.autor.AutorScreen
 import com.example.vamzaplikacia.grafika.autor.AutoriZoznamScreen
+import com.example.vamzaplikacia.grafika.autor.autori
+import com.example.vamzaplikacia.grafika.formular.FormularAutorScreen
+import com.example.vamzaplikacia.grafika.formular.FormularAutorViewModel
 import com.example.vamzaplikacia.grafika.formular.FormularKnihaScreen
 import com.example.vamzaplikacia.grafika.formular.FormularKnihyViewModel
-import com.example.vamzaplikacia.grafika.zoznamiUI.HlavnyZoznamKnihScreen
 import com.example.vamzaplikacia.grafika.kniha.KnihaScreen
 import com.example.vamzaplikacia.grafika.kniha.KnihaViewModel
 import com.example.vamzaplikacia.grafika.zoznamiUI.KnizicaKartyScreen
-import com.example.vamzaplikacia.grafika.zoznamiUI.VedlajsiZoznamKnihScreen
-import com.example.vamzaplikacia.grafika.zoznamiUI.VytvorZoznam
+import com.example.vamzaplikacia.grafika.zoznamiUI.ZoznamKnihScreen
 import com.example.vamzaplikacia.logika.AktualizaciaKnihyUIState
+import com.example.vamzaplikacia.logika.FormularAutorUIState
 import com.example.vamzaplikacia.logika.FormularKnihyUIState
 import com.example.vamzaplikacia.logika.enumy.Vlastnosti
 import com.example.vamzaplikacia.logika.enumy.Zanre
@@ -58,6 +60,7 @@ enum class LibraAppScreen(@StringRes val title: Int) {
     AutoriZoznam(title = R.string.autori_zoznam),
     VybranyAutor(title = R.string.autor),
     Formular(title = R.string.formular_knihy),
+    FormularAutor(title = R.string.novy_autor),
     VybranaKniha(title = R.string.kniha)
 }
 
@@ -118,6 +121,7 @@ fun LibraAppBar(
 fun LibraApp(
     viewModelFormular: FormularKnihyViewModel = viewModel(),
     viewModelKniha: KnihaViewModel = viewModel(),
+    viewModelAutor: FormularAutorViewModel = viewModel(),
     navController: NavHostController = rememberNavController(),
 ) {
     val backStackEntry by navController.currentBackStackEntryAsState()
@@ -127,6 +131,7 @@ fun LibraApp(
 
     val uiStateFormular by viewModelFormular.uiState.collectAsState()
     val uiStateKniha by viewModelKniha.uiState.collectAsState()
+    val uiStateAutor by viewModelAutor.uiState.collectAsState()
 
     Scaffold(
         topBar = {
@@ -135,7 +140,7 @@ fun LibraApp(
                 canNavigateBack = navController.previousBackStackEntry != null,
                 navigateUp = {
                     if (currentScreen == LibraAppScreen.VybranaKniha) {
-                        AktualizujKnihu(vyberKnihy, uiStateKniha)
+                        aktualizujKnihu(vyberKnihy, uiStateKniha)
                     }
                     navController.navigateUp()
                 },
@@ -145,9 +150,15 @@ fun LibraApp(
             )
         },
         floatingActionButton = {
-            if (currentScreen == LibraAppScreen.HlavnyZoznam) {
+            if (currentScreen == LibraAppScreen.HlavnyZoznam || currentScreen == LibraAppScreen.AutoriZoznam) {
                 FloatingActionButton(
-                    onClick = { navController.navigate(LibraAppScreen.Formular.name) },
+                    onClick = {
+                        if (currentScreen == LibraAppScreen.AutoriZoznam) {
+                            navController.navigate(LibraAppScreen.FormularAutor.name)
+                        } else {
+                            navController.navigate(LibraAppScreen.Formular.name)
+                        }
+                    },
                     containerColor = MaterialTheme.colorScheme.secondaryContainer,
                     contentColor = MaterialTheme.colorScheme.secondary,
                     shape = CircleShape
@@ -160,7 +171,7 @@ fun LibraApp(
         NavHost(
             navController = navController,
             startDestination = LibraAppScreen.Kniznica.name,
-            //startDestination = LibraAppScreen.VybranyAutor.name,
+            //startDestination = LibraAppScreen.FormularAutor.name,
             modifier = Modifier.padding(innerPadding)
         ) {
             composable(route = LibraAppScreen.Kniznica.name) {
@@ -170,18 +181,14 @@ fun LibraApp(
                 })
             }
             composable(route = LibraAppScreen.HlavnyZoznam.name) {
-                /*HlavnyZoznamKnihScreen(onClick = {
-                    vyberKnihy = it
-                    navController.navigate(LibraAppScreen.VybranaKniha.name)
-                })*/
-                VedlajsiZoznamKnihScreen(zoznam = zoznamKnih, onClick = {
+                ZoznamKnihScreen(zoznam = zoznamKnih, onClick = {
                     vyberKnihy = it
                     navController.navigate(LibraAppScreen.VybranaKniha.name)
             })
             }
             composable(route = LibraAppScreen.Formular.name) {
                 FormularKnihaScreen(viewModel = viewModelFormular, uiStateFormular, onClick = {
-                    PridajZadanuKnihu(uiState = uiStateFormular)
+                    pridajZadanuKnihu(uiState = uiStateFormular)
                     viewModelFormular.resetFormular()
                     navController.popBackStack()
                 })
@@ -201,11 +208,18 @@ fun LibraApp(
                     navController.navigate(LibraAppScreen.VybranaKniha.name)
                 })
             }
+            composable(route = LibraAppScreen.FormularAutor.name) {
+                FormularAutorScreen(viewModel = viewModelAutor, uiState = uiStateAutor, onClick = {
+                    pridajZadanehoAutora(uiState = uiStateAutor)
+                    viewModelAutor.resetFormular()
+                    navController.popBackStack()
+                })
+            }
         }
     }
 }
 
-fun PridajZadanuKnihu(uiState: FormularKnihyUIState) {
+fun pridajZadanuKnihu(uiState: FormularKnihyUIState) {
     val zanre = mutableListOf<Zanre>()
     uiState.zanreVyber.forEachIndexed { index, b ->
         if (b) {
@@ -219,15 +233,26 @@ fun PridajZadanuKnihu(uiState: FormularKnihyUIState) {
         }
     }
 
-    val kniha = Kniha(uiState.nazov, uiState.autor, uiState.rok, uiState.vydavatelstvo,
+    val rok: Int = if(uiState.rok.toIntOrNull()==null) 0 else uiState.rok.toInt()
+    val pocetStran: Int = if(uiState.pocetStran.toIntOrNull()==null) 0 else uiState.pocetStran.toInt()
+    val pocetPrecitanych: Int = if(uiState.pocetPrecitanych.toIntOrNull()==null) 0 else uiState.pocetPrecitanych.toInt()
+    val hodnotenie: Double = if(uiState.hodnotenie.toDoubleOrNull()==null) 0.0 else uiState.hodnotenie.toDouble()
+
+    val kniha = Kniha(uiState.nazov, uiState.autor, rok, uiState.vydavatelstvo,
         R.drawable.book, uiState.popis, uiState.poznamky, uiState.precitana, uiState.naNeskor,
-        uiState.pozicana, uiState.kupena, uiState.pocetStran, uiState.pocetPrecitanych, uiState.hodnotenie)
+        uiState.pozicana, uiState.kupena, pocetStran, pocetPrecitanych, hodnotenie)
     kniha.zanre = zanre
     kniha.vlastnosti = vlastnosti
     zoznamKnih.pridajKnihu(kniha)
 }
 
-fun AktualizujKnihu(kniha: Kniha, uiState: AktualizaciaKnihyUIState) {
+fun pridajZadanehoAutora(uiState: FormularAutorUIState) {
+    val autor = Autor(uiState.menoAutora, uiState.datumNar, uiState.datumUmrtia)
+    autor.popis = uiState.popis
+    autori.pridajAutora(autor)
+}
+
+fun aktualizujKnihu(kniha: Kniha, uiState: AktualizaciaKnihyUIState) {
     kniha.setHodnotenie(uiState.hodnotenie)
     kniha.setPrecitaneStrany(uiState.pocetPrecitanych)
 }

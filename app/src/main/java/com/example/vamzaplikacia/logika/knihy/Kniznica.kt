@@ -108,7 +108,7 @@ class ZoznamKnih(val obrazok: Int = R.drawable.library) {
         } else {
             println("Knihy v zozname${nazovZoznamu}:")
             this.zoradPodla { kniha1 -> kniha1.datumPridania.toString()}
-            knihy.forEachIndexed { index, kniha -> println("${index+1}. ${kniha.toString()}") }
+            knihy.forEachIndexed { index, kniha -> println("${index+1}. $kniha") }
         }
     }
 
@@ -117,12 +117,12 @@ class ZoznamKnih(val obrazok: Int = R.drawable.library) {
      */
     fun vypisZoradene() {
         println("Zoradene knihy:")
-        knihy.forEachIndexed { index, kniha -> println("${index+1}. ${kniha.toString()}") }
+        knihy.forEachIndexed { index, kniha -> println("${index+1}. $kniha") }
     }
 
     fun vratPodlaPodmienky(podmienka: (Kniha) -> Boolean): List<Kniha> {
         val skupina = knihy.groupBy(podmienka)
-        return skupina[true] ?: mutableListOf<Kniha>()
+        return skupina[true] ?: mutableListOf()
     }
 
     fun zoradPodla(podmienka: (Kniha) -> String) {
@@ -145,7 +145,7 @@ class ZoznamKnih(val obrazok: Int = R.drawable.library) {
     }
 }
 
-class Kniznica() {
+class Kniznica {
     private val zoznamy: MutableList<ZoznamKnih> = mutableListOf()
 
     fun pridajZoznam(zoznam: ZoznamKnih) {
