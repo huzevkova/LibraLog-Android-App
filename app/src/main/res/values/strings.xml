@@ -7,4 +7,24 @@
     <string name="kniznica">Moja knižnica</string>
     <string name="autori_zoznam">Obľúbení autori</string>
     <string name="autor">Autor</string>
+    <string name="novy_autor">NOVÝ AUTOR</string>
+    <string name="nazov_knihy_placeholder">Alchymista</string>
+    <string name="nazov_knihy_form">Názov knihy</string>
+    <string name="autor_placeholder">Paulo Coelho</string>
+    <string name="autor_knihy_form">Autor knihy</string>
+    <string name="rok_vydania_form">Rok vydania</string>
+    <string name="vydavatelstvo_form">Vydavateľstvo</string>
+    <string name="popis_placeholder">Sem napíšte stručný popis / obsah knihy.</string>
+    <string name="popis_knihy_form">Popis knihy</string>
+    <string name="poznamky_kniha_placeholder">Sem napíšte svoje poznámky ku knihe.</string>
+    <string name="poznamky_kniha_form">Poznámky ku knihe:</string>
+    <string name="precitana">Prečítaná</string>
+    <string name="na_neskor">Na neskôr</string>
+    <string name="pozicana">Požičaná</string>
+    <string name="kupena">Kúpená</string>
+    <string name="pocet_stran">Počet strán</string>
+    <string name="pocet_precitanych">Z toho prečítaných</string>
+    <string name="zanre_knihy_form">Žánre knihy:</string>
+    <string name="vlastnosti_knihy_form">Vlastnosti knihy:</string>
+    <string name="ok">OK</string>
 </resources>
