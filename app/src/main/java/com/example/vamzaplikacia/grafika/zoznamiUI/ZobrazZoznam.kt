@@ -67,15 +67,15 @@ fun VytvorZoznam() {
 }
 
 @Composable
-fun VypisanieKnih(zoznam: ZoznamKnih, onClick: (Int) -> Unit) {
+fun VypisanieKnih(zoznam: ZoznamKnih, onClick: (Kniha) -> Unit) {
     Row (horizontalArrangement = Arrangement.SpaceBetween) {
         Column (modifier = Modifier
             .statusBarsPadding()
             .fillMaxWidth()
-            .padding(horizontal = 40.dp)) {
+            .padding(horizontal = 0.dp)) {
             for (kniha in zoznam.iterator()) {
                 ListItem(
-                    modifier = Modifier.clickable { onClick(zoznam.get(kniha)) },
+                    modifier = Modifier.clickable { onClick(kniha) },
                     headlineContent = { Text(kniha.nazov) },
                     supportingContent = { Text(kniha.autor + ", " + kniha.rokVydania) },
                     trailingContent = {

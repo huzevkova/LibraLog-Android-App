@@ -48,12 +48,22 @@ data class Kniha(
     }
 }
 
-class ZoznamKnih() {
+class ZoznamKnih(val obrazok: Int = R.drawable.library) {
     private val knihy: MutableList<Kniha> = mutableListOf()
-    private lateinit var nazovZoznamu: String
+    private var nazovZoznamu: String = ""
 
     constructor(nazovZoznamu: String): this() {
         this.nazovZoznamu = nazovZoznamu
+    }
+
+    constructor(zoznam: MutableList<Kniha>): this() {
+        for (k in zoznam) {
+            knihy.add(k)
+        }
+    }
+
+    fun getNazov(): String {
+        return nazovZoznamu
     }
 
     fun pridajKnihu(novaKniha: Kniha) {
@@ -96,7 +106,7 @@ class ZoznamKnih() {
         if (knihy.isEmpty()) {
             println("Zoznam je prázdny.")
         } else {
-            println("Knihy v zozname${if (!this::nazovZoznamu.isInitialized) "" else " $nazovZoznamu"}:")
+            println("Knihy v zozname${nazovZoznamu}:")
             this.zoradPodla { kniha1 -> kniha1.datumPridania.toString()}
             knihy.forEachIndexed { index, kniha -> println("${index+1}. ${kniha.toString()}") }
         }
@@ -132,5 +142,17 @@ class ZoznamKnih() {
 
     fun iterator(): KnihyIterator {
         return KnihyIterator()
+    }
+}
+
+class Kniznica() {
+    private val zoznamy: MutableList<ZoznamKnih> = mutableListOf()
+
+    fun pridajZoznam(zoznam: ZoznamKnih) {
+        zoznamy.add(zoznam)
+    }
+
+    fun getZoznam(): MutableList<ZoznamKnih> {
+        return zoznamy
     }
 }

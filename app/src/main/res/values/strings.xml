@@ -3,4 +3,8 @@
     <string name="hlavny_zoznam">Zoznam kníh</string>
     <string name="formular_knihy">NOVÁ KNIHA</string>
     <string name="back_button">Go back</string>
+    <string name="kniha">Kniha</string>
+    <string name="kniznica">Moja knižnica</string>
+    <string name="autori_zoznam">Obľúbení autori</string>
+    <string name="autor">Autor</string>
 </resources>

@@ -33,8 +33,7 @@ import com.example.vamzaplikacia.zoznamKnih
 
 
 @Composable
-fun KnihaScreen(index: Int, viewModel: KnihaViewModel = viewModel()){
-    val book: Kniha = zoznamKnih.get(index)!!
+fun KnihaScreen(book: Kniha, viewModel: KnihaViewModel = viewModel()){
     var sliderHodnoteniePosition by remember { mutableStateOf(book.getHodnotenie().toFloat() / 10) }
     var sliderStranyPosition by remember {
         mutableStateOf(book.getPocetPrecitanych().toFloat() / if (book.pocetStran == 0) 1 else book.pocetStran)
@@ -102,8 +101,6 @@ fun KnihaScreen(index: Int, viewModel: KnihaViewModel = viewModel()){
 
     viewModel.setHodnotenie(hodnotenieKnihy)
     viewModel.setPocetPrecitanych(pocetPrecitanychStran)
-    //book.hodnotenie = hodnotenieKnihy
-    //book.pocetPrecitanych = pocetPrecitanychStran
 }
 
 @Composable
@@ -113,11 +110,4 @@ fun TextField(text: String, bold: Boolean = false) {
         text = text,
         style = textStyle
     )
-}
-
-@Preview
-@Composable
-fun KnihaPreview() {
-    VytvorZoznam()
-    zoznamKnih.get(3)?.let { KnihaScreen(3) }
 }
