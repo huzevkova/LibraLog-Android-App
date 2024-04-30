@@ -48,12 +48,15 @@ data class Kniha(
     }
 }
 
-class ZoznamKnih(val obrazok: Int = R.drawable.library) {
+class ZoznamKnih(nazovZoznamu: String = "") {
     private val knihy: MutableList<Kniha> = mutableListOf()
-    private var nazovZoznamu: String = ""
-
-    constructor(nazovZoznamu: String): this() {
-        this.nazovZoznamu = nazovZoznamu
+    private var nazovZoznamu: String = nazovZoznamu
+    private var obrazokCesta: String = ""
+    val obrazok: Int = R.drawable.library
+    constructor(nazovZoznamu: String, obrazok: String?) : this(nazovZoznamu) {
+        if (obrazok != null) {
+            obrazokCesta = obrazok
+        }
     }
 
     constructor(zoznam: MutableList<Kniha>): this() {
