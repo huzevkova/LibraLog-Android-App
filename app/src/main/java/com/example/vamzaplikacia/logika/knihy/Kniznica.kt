@@ -123,9 +123,9 @@ class ZoznamKnih(nazovZoznamu: String = "") {
         knihy.forEachIndexed { index, kniha -> println("${index+1}. $kniha") }
     }
 
-    fun vratPodlaPodmienky(podmienka: (Kniha) -> Boolean): List<Kniha> {
+    fun vratPodlaPodmienky(podmienka: (Kniha) -> Boolean): MutableList<Kniha> {
         val skupina = knihy.groupBy(podmienka)
-        return skupina[true] ?: mutableListOf()
+        return (skupina[true] ?: mutableListOf()) as MutableList<Kniha>
     }
 
     fun zoradPodla(podmienka: (Kniha) -> String) {
