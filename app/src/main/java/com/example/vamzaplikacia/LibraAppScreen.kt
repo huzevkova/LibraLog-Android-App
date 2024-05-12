@@ -1,17 +1,17 @@
 package com.example.vamzaplikacia
 
 import androidx.annotation.StringRes
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.Search
-import androidx.compose.material.icons.rounded.Search
+import androidx.compose.material.icons.filled.Warning
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -20,8 +20,6 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.SearchBar
-import androidx.compose.material3.SearchBarDefaults
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -33,7 +31,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.getValue
-import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
@@ -62,7 +59,7 @@ import com.example.vamzaplikacia.logika.enumy.Zanre
 import com.example.vamzaplikacia.logika.knihy.Autor
 import com.example.vamzaplikacia.logika.knihy.Kniha
 import com.example.vamzaplikacia.logika.knihy.ZoznamKnih
-import com.example.vamzaplikacia.TopSearchBar
+import com.example.vamzaplikacia.grafika.formular.VymazatKartuDialog
 
 var zoznamVsetkychKnih = ZoznamKnih("Všetko")
 var zoznamKnih = zoznamVsetkychKnih
@@ -159,16 +156,67 @@ fun LibraAppBar(
                 DropdownMenu(
                     showDropDownMenuRight, { showDropDownMenuRight = false }
                 ) {
-                    DropdownMenuItem(
-                        text = { Text(text = "Pridaj do zoznamu...")}, leadingIcon = {
-                            Icon(
-                                Icons.Filled.Add, contentDescription = "pridat do zoznamu"
+                    var showNestedMenuAdd by remember { mutableStateOf(false) }
+                    var showNestedMenuRemove by remember { mutableStateOf(false) }
+                    if (!showNestedMenuAdd && !showNestedMenuRemove) {
+                        DropdownMenuItem(
+                            text = { Text(text = "Pridaj do zoznamu...") }, leadingIcon = {
+                                Icon(
+                                    Icons.Filled.Add, contentDescription = "pridat do zoznamu"
+                                )
+                            }, onClick = {
+                                showNestedMenuAdd = true
+                            }
+                        )
+                        DropdownMenuItem(
+                            text = { Text(text = "Zmaž knihu...") }, leadingIcon = {
+                                Icon(
+                                    Icons.Filled.Delete, contentDescription = "zmazať"
+                                )
+                            }, onClick = {
+                                showNestedMenuRemove = true
+                            }
+                        )
+                    } else if (showNestedMenuAdd){
+                        for (zoznam in kniznica.KniznicaIterator()) {
+                            DropdownMenuItem(
+                                text = { Text(text = zoznam.getNazov()) }, leadingIcon = {
+                                    Icon(
+                                        Icons.Filled.Add, contentDescription = "pridat do zoznamu"
+                                    )
+                                }, onClick = {
+                                    zoznam.pridajKnihu(vyberKnihy)
+                                    showNestedMenuAdd = false
+                                    showDropDownMenuRight = false
+                                }
                             )
-                        }, onClick = {
-                            //pridat dialog
-                            showDropDownMenuRight = false
                         }
-                    )
+                    } else {
+                        DropdownMenuItem(
+                            text = { Text(text = "Zmaž všade") }, leadingIcon = {
+                                Icon(
+                                    Icons.Filled.Add, contentDescription = "zmaz vsade"
+                                )
+                            }, onClick = {
+                                zoznamVsetkychKnih.odoberKnihu(vyberKnihy)
+                                showNestedMenuRemove = false
+                                showDropDownMenuRight = false
+                                navigateUp()
+                            }
+                        )
+                        DropdownMenuItem(
+                            text = { Text(text = "Zmaž v tomto zozname") }, leadingIcon = {
+                                Icon(
+                                    Icons.Filled.Delete, contentDescription = "zmaz v zozname"
+                                )
+                            }, onClick = {
+                                zoznamKnih.odoberKnihu(vyberKnihy)
+                                showNestedMenuRemove = false
+                                showDropDownMenuRight = false
+                                navigateUp()
+                            }
+                        )
+                    }
                 }
             }
         )
@@ -199,6 +247,29 @@ fun LibraApp(
         viewModelZoznam.resetFormular()
         viewModelZoznam.dismissDialog()
     })
+
+    var vymazatDialog by remember { mutableStateOf(false) }
+    if (vymazatDialog) {
+        VymazatKartuDialog(
+            onDismissRequest = {
+                kniznica.getZoznam().remove(zoznamKnih)
+                vymazatDialog = false;
+                refresh(navController)
+            },
+            onConfirmation = {
+                var size = zoznamKnih.getSize()
+                for (i in 0..size) {
+                    zoznamVsetkychKnih.odoberKnihu(zoznamKnih.get(i))
+                }
+                kniznica.getZoznam().remove(zoznamKnih)
+                vymazatDialog = false;
+                refresh(navController)
+            },
+            dialogTitle = "Zmazanie zoznamu",
+            dialogText = "Chcete zmazať aj všetky knihy v zozname?",
+            icon = Icons.Filled.Warning
+        )
+    }
 
     Scaffold(
         topBar = {
@@ -242,14 +313,15 @@ fun LibraApp(
             modifier = Modifier.padding(innerPadding)
         ) {
             composable(route = LibraAppScreen.Kniznica.name) {
-                KnizicaKartyScreen(onClick = {
+                KnizicaKartyScreen(
+                    onClick = {
                     zoznamKnih = it
                     navController.navigate(LibraAppScreen.HlavnyZoznam.name)
                 },
                     onDeleteClick = {
-                        kniznica.getZoznam().remove(zoznamKnih)
-                        refresh(navController)
-                    })
+                        vymazatDialog = true;
+                    }
+                )
             }
             composable(route = LibraAppScreen.HlavnyZoznam.name) {
                 ZoznamKnihScreen(zoznam = zoznamKnih, onClick = {

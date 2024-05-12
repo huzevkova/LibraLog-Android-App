@@ -1,6 +1,7 @@
 package com.example.vamzaplikacia.logika.knihy
 
 import com.example.vamzaplikacia.R
+import com.example.vamzaplikacia.grafika.zoznamiUI.kniznica
 import com.example.vamzaplikacia.logika.enumy.Vlastnosti
 import com.example.vamzaplikacia.logika.enumy.Zanre
 import java.util.Calendar
@@ -81,6 +82,12 @@ class ZoznamKnih(nazovZoznamu: String = "") {
         }
     }
 
+    fun odoberKnihu(kniha: Kniha?) {
+        if (knihy.contains(kniha)) {
+            knihy.remove(kniha)
+        }
+    }
+
     fun get(index: Int): Kniha? {
         if (index in 0 until knihy.size) {
             return knihy[index]
@@ -157,5 +164,21 @@ class Kniznica {
 
     fun getZoznam(): MutableList<ZoznamKnih> {
         return zoznamy
+    }
+
+    inner class KniznicaIterator : Iterator<ZoznamKnih> {
+        private var index = 0
+
+        override fun hasNext(): Boolean {
+            return index < zoznamy.size
+        }
+
+        override fun next(): ZoznamKnih {
+            return zoznamy[index++]
+        }
+    }
+
+    fun iterator(): KniznicaIterator {
+        return KniznicaIterator()
     }
 }
