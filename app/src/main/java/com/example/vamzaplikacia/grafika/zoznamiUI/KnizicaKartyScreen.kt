@@ -21,7 +21,6 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Done
 import androidx.compose.material3.Card
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -39,6 +38,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import coil.compose.rememberAsyncImagePainter
 import com.example.vamzaplikacia.logika.knihy.Kniznica
 import com.example.vamzaplikacia.logika.knihy.ZoznamKnih
 
@@ -70,7 +70,7 @@ fun KnizicaKartyScreen (onClick: (ZoznamKnih) -> Unit, onDeleteClick: () -> Unit
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class)
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun BookListCard(zoznam: ZoznamKnih, onClick: (ZoznamKnih) -> Unit, onDeleteClick: () -> Unit, ratio: Float) {
 
@@ -110,6 +110,9 @@ fun BookListCard(zoznam: ZoznamKnih, onClick: (ZoznamKnih) -> Unit, onDeleteClic
                 }
             }
         } else {
+            val paint = if (zoznam.obrazokCesta == null) painterResource(zoznam.obrazok) else rememberAsyncImagePainter(
+                zoznam.obrazokCesta
+            )
             Column(
                 modifier = Modifier
                     .fillMaxSize()
@@ -122,7 +125,7 @@ fun BookListCard(zoznam: ZoznamKnih, onClick: (ZoznamKnih) -> Unit, onDeleteClic
                         .background(Color.LightGray)
                 ) {
                     Image(
-                        painter = painterResource(zoznam.obrazok),
+                        painter = paint,
                         contentDescription = null,
                         contentScale = ContentScale.Crop,
                         modifier = Modifier

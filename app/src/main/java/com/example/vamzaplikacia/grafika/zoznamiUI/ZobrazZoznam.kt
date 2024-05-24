@@ -18,6 +18,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import coil.compose.rememberAsyncImagePainter
 import com.example.vamzaplikacia.R
 import com.example.vamzaplikacia.logika.enumy.Zanre
 import com.example.vamzaplikacia.logika.knihy.Kniha
@@ -53,7 +54,6 @@ fun VytvorZoznam() {
         "J. R. R. Tolkien",
         1937,
             "Ikar",
-        obrazok = R.drawable.hobit,
             popis = "Kniha o hobitovi Bilbovi a 13 trpaslíkoch.",
             poznamky = "Super kniha",
             pocetStran = 200,
@@ -61,7 +61,7 @@ fun VytvorZoznam() {
             hodnotenie = 9.9,
     )
     )
-    var zanre: MutableList<Zanre> = mutableListOf()
+    val zanre: MutableList<Zanre> = mutableListOf()
     zanre.add(Zanre.FANTASY)
     zanre.add(Zanre.DOBRODRUZNE)
     zoznamKnih.get(3)?.zanre = zanre
@@ -72,6 +72,9 @@ fun VytvorZoznam() {
 fun VypisanieKnih(zoznam: ZoznamKnih, modifier: Modifier, onClick: (Kniha) -> Unit) {
     Column (modifier = modifier) {
         for (kniha in zoznam.iterator()) {
+            val paint = if (kniha.obrazok == null) painterResource(R.drawable.book) else rememberAsyncImagePainter(
+                kniha.obrazok
+            )
             ListItem(
                 modifier = Modifier.clickable { onClick(kniha) },
                 headlineContent = { Text(kniha.nazov) },
@@ -91,7 +94,7 @@ fun VypisanieKnih(zoznam: ZoznamKnih, modifier: Modifier, onClick: (Kniha) -> Un
                 },
                 leadingContent = {
                     Image(
-                        painter = painterResource(kniha.obrazok),
+                        painter = paint,
                         contentDescription = null,
                         contentScale = ContentScale.Crop,
                         modifier = Modifier

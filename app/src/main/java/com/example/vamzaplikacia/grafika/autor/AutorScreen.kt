@@ -28,6 +28,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import coil.compose.rememberAsyncImagePainter
 import com.example.vamzaplikacia.grafika.zoznamiUI.VypisanieKnih
 import com.example.vamzaplikacia.grafika.zoznamiUI.VytvorZoznam
 import com.example.vamzaplikacia.logika.knihy.Autor
@@ -129,8 +130,11 @@ private fun Bottom(modifier: Modifier, autor: Autor, onClick: (Kniha) -> Unit) {
 fun Center(modifier: Modifier, autor: Autor) {
     Column(modifier = modifier.padding(top = 50.dp))
     {
+        val paint = if (autor.obrazokCesta == null) painterResource(autor.obrazok) else rememberAsyncImagePainter(
+            autor.obrazokCesta
+        )
         Image(
-            painter = painterResource(autor.obrazok),
+            painter = paint,
             contentDescription = null,
             contentScale = ContentScale.Crop,
             modifier = Modifier

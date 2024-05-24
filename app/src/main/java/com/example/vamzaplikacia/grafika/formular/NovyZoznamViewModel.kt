@@ -1,7 +1,7 @@
 package com.example.vamzaplikacia.grafika.formular
 
+import android.net.Uri
 import androidx.lifecycle.ViewModel
-import com.example.vamzaplikacia.logika.FormularKnihyUIState
 import com.example.vamzaplikacia.logika.NovyZoznamUIState
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -18,7 +18,7 @@ class NovyZoznamViewModel : ViewModel() {
         }
     }
 
-    fun setObrazov(cesta: String) {
+    fun setObrazok(cesta: Uri) {
         _uiState.update { currentState ->
             currentState.copy(obrazok = cesta)
         }
@@ -27,7 +27,6 @@ class NovyZoznamViewModel : ViewModel() {
     fun resetFormular() {
         _uiState.value = NovyZoznamUIState()
     }
-
 
     fun openDialog() {
         _uiState.value = _uiState.value.copy(showDialog = true)

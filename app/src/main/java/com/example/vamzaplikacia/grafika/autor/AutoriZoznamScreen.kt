@@ -20,6 +20,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import coil.compose.rememberAsyncImagePainter
 import com.example.vamzaplikacia.R
 import com.example.vamzaplikacia.grafika.zoznamiUI.VytvorZoznam
 import com.example.vamzaplikacia.logika.knihy.Autor
@@ -49,6 +50,10 @@ fun AutoriZoznamScreen(onClick: (Autor) -> Unit) {
                 "knihy"
             }
 
+            val paint = if (autor.obrazokCesta == null) painterResource(autor.obrazok) else rememberAsyncImagePainter(
+                autor.obrazokCesta
+            )
+
             ListItem(
                 modifier = Modifier.clickable { onClick(autor) },
                 headlineContent = { Text(autor.meno) },
@@ -60,7 +65,7 @@ fun AutoriZoznamScreen(onClick: (Autor) -> Unit) {
                 },
                 leadingContent = {
                     Image(
-                        painter = painterResource(autor.obrazok),
+                        painter = paint,
                         contentDescription = null,
                         contentScale = ContentScale.Crop,
                         modifier = Modifier

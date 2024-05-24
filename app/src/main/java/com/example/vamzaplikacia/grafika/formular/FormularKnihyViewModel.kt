@@ -1,5 +1,6 @@
 package com.example.vamzaplikacia.grafika.formular
 
+import android.net.Uri
 import androidx.lifecycle.ViewModel
 import com.example.vamzaplikacia.logika.FormularKnihyUIState
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -103,6 +104,12 @@ class FormularKnihyViewModel : ViewModel() {
     fun setVlastnostiVyber(vlastnostiVyber: MutableList<Boolean>) {
         _uiState.update { currentState ->
             currentState.copy(vlastnostiVyber = vlastnostiVyber)
+        }
+    }
+
+    fun setObrazok(obrazok: Uri) {
+        _uiState.update { currentState ->
+            currentState.copy(obrazok = obrazok)
         }
     }
 }

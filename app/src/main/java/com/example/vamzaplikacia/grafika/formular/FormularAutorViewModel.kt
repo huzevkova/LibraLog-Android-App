@@ -1,5 +1,6 @@
 package com.example.vamzaplikacia.grafika.formular
 
+import android.net.Uri
 import androidx.lifecycle.ViewModel
 import com.example.vamzaplikacia.logika.FormularAutorUIState
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -40,7 +41,7 @@ class FormularAutorViewModel : ViewModel() {
         }
     }
 
-    fun setObrazok(cestaObrazok: String) {
+    fun setObrazok(cestaObrazok: Uri) {
         _uiState.update { currentState ->
             currentState.copy(obrazok = cestaObrazok)
         }

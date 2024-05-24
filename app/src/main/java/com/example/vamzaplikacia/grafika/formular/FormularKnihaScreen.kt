@@ -1,5 +1,6 @@
 package com.example.vamzaplikacia.grafika.formular
 
+import FilePickerButton
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
@@ -87,7 +88,7 @@ fun Formular(viewModel: FormularKnihyViewModel, uiState: FormularKnihyUIState, o
         )
         InputPole(
             modifierTextField,
-            value = uiState.rok.toString(),
+            value = uiState.rok,
             onValueChange = {
                 viewModel.setRok(it) },
             labelText = stringResource(R.string.rok_vydania_form),
@@ -99,13 +100,8 @@ fun Formular(viewModel: FormularKnihyViewModel, uiState: FormularKnihyUIState, o
             onValueChange = { viewModel.setVydavatelstvo(it) },
             labelText = stringResource(R.string.vydavatelstvo_form),
         )
-        /*InputPole(
-            modifierTextField,
-            value = uiState.hodnotenie.toString(),
-            onValueChange = { viewModel.setHodnotenie(it) },
-            labelText = "Hodnotenie (0 - 10)",
-            cisla = true
-        )*/
+        Spacer(modifier = Modifier.height(8.dp))
+        FilePickerButton{viewModel.setObrazok(it)}
         Spacer(modifier = Modifier.height(8.dp))
         com.example.vamzaplikacia.grafika.kniha.TextField(
             text = "Hodnotenie:  " + "%.1f".format(

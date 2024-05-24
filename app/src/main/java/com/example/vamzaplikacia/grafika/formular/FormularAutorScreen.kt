@@ -1,5 +1,6 @@
 package com.example.vamzaplikacia.grafika.formular
 
+import FilePickerButton
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -51,6 +52,10 @@ fun FormularAutorScreen(viewModel: FormularAutorViewModel, uiState: FormularAuto
         DatumTextField(viewModel = viewModel, modifier = Modifier
             .padding(10.dp)
             .fillMaxWidth(), false)
+
+        FilePickerButton {
+            viewModel.setObrazok(it)
+        }
 
         Spacer(modifier = Modifier.height(8.dp))
         InputPole(
