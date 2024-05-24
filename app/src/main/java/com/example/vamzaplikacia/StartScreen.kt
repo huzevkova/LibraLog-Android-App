@@ -48,6 +48,8 @@ fun LoadingScreen() {
     }
 }
 
+private var start = true
+
 @Composable
 fun MainScreen() {
     var isLoading by remember { mutableStateOf(true) }
@@ -56,14 +58,19 @@ fun MainScreen() {
         isLoading = false
     }
 
-    if (isLoading) {
-        LoadingScreen()
+    if (start) {
+        if (isLoading) {
+            LoadingScreen()
+        } else {
+            VytvorZoznam()
+            kniznica.pridajZoznam(zoznamKnih)
+            kniznica.pridajZoznam(zoznamKnih)
+            kniznica.pridajZoznam(zoznamKnih)
+            vytvorZoznamAutorov()
+            start = false
+            LibraApp()
+        }
     } else {
-        VytvorZoznam()
-        kniznica.pridajZoznam(zoznamKnih)
-        kniznica.pridajZoznam(zoznamKnih)
-        kniznica.pridajZoznam(zoznamKnih)
-        vytvorZoznamAutorov()
         LibraApp()
     }
 }

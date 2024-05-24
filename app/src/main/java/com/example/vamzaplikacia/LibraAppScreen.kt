@@ -1,5 +1,6 @@
 package com.example.vamzaplikacia
 
+import android.net.Uri
 import androidx.annotation.StringRes
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.CircleShape
@@ -83,8 +84,8 @@ fun LibraAppBar(
     currentScreen: LibraAppScreen,
     canNavigateBack: Boolean,
     navigateUp: () -> Unit,
-    navController: NavHostController,
-    modifier: Modifier = Modifier)
+    navController: NavHostController
+)
 {
     var showDropDownMenuLeft by remember { mutableStateOf(false) }
     var showDropDownMenuRight by remember { mutableStateOf(false) }
@@ -246,23 +247,24 @@ fun LibraApp(
         pridajZoznam(uiStateZoznam.nazov, uiStateZoznam.obrazok)
         viewModelZoznam.resetFormular()
         viewModelZoznam.dismissDialog()
-    })
+    }
+    )
 
     var vymazatDialog by remember { mutableStateOf(false) }
     if (vymazatDialog) {
         VymazatKartuDialog(
             onDismissRequest = {
                 kniznica.getZoznam().remove(zoznamKnih)
-                vymazatDialog = false;
+                vymazatDialog = false
                 refresh(navController)
             },
             onConfirmation = {
-                var size = zoznamKnih.getSize()
+                val size = zoznamKnih.getSize()
                 for (i in 0..size) {
                     zoznamVsetkychKnih.odoberKnihu(zoznamKnih.get(i))
                 }
                 kniznica.getZoznam().remove(zoznamKnih)
-                vymazatDialog = false;
+                vymazatDialog = false
                 refresh(navController)
             },
             dialogTitle = "Zmazanie zoznamu",
@@ -289,12 +291,16 @@ fun LibraApp(
             if (currentScreen == LibraAppScreen.HlavnyZoznam || currentScreen == LibraAppScreen.AutoriZoznam || currentScreen == LibraAppScreen.Kniznica) {
                 FloatingActionButton(
                     onClick = {
-                        if (currentScreen == LibraAppScreen.AutoriZoznam) {
-                            navController.navigate(LibraAppScreen.FormularAutor.name)
-                        } else if (currentScreen == LibraAppScreen.HlavnyZoznam){
-                            navController.navigate(LibraAppScreen.Formular.name)
-                        } else {
-                            viewModelZoznam.openDialog()
+                        when (currentScreen) {
+                            LibraAppScreen.AutoriZoznam -> {
+                                navController.navigate(LibraAppScreen.FormularAutor.name)
+                            }
+                            LibraAppScreen.HlavnyZoznam -> {
+                                navController.navigate(LibraAppScreen.Formular.name)
+                            }
+                            else -> {
+                                viewModelZoznam.openDialog()
+                            }
                         }
                     },
                     containerColor = MaterialTheme.colorScheme.secondaryContainer,
@@ -319,7 +325,7 @@ fun LibraApp(
                     navController.navigate(LibraAppScreen.HlavnyZoznam.name)
                 },
                     onDeleteClick = {
-                        vymazatDialog = true;
+                        vymazatDialog = true
                     }
                 )
             }
@@ -382,7 +388,7 @@ fun pridajZadanuKnihu(uiState: FormularKnihyUIState) {
     val hodnotenie: Double = if(uiState.hodnotenie.toDoubleOrNull()==null) 0.0 else uiState.hodnotenie.toDouble()
 
     val kniha = Kniha(uiState.nazov, uiState.autor, rok, uiState.vydavatelstvo,
-        R.drawable.book, uiState.popis, uiState.poznamky, uiState.precitana, uiState.naNeskor,
+        uiState.obrazok, uiState.popis, uiState.poznamky, uiState.precitana, uiState.naNeskor,
         uiState.pozicana, uiState.kupena, pocetStran, pocetPrecitanych, hodnotenie)
     kniha.zanre = zanre
     kniha.vlastnosti = vlastnosti
@@ -391,7 +397,7 @@ fun pridajZadanuKnihu(uiState: FormularKnihyUIState) {
 }
 
 fun pridajZadanehoAutora(uiState: FormularAutorUIState) {
-    val autor = Autor(uiState.menoAutora, uiState.datumNar, uiState.datumUmrtia)
+    val autor = Autor(uiState.menoAutora, uiState.datumNar, uiState.datumUmrtia, obrazokCesta = uiState.obrazok)
     autor.popis = uiState.popis
     autori.pridajAutora(autor)
 }
@@ -401,7 +407,7 @@ fun aktualizujKnihu(kniha: Kniha, uiState: AktualizaciaKnihyUIState) {
     kniha.setPrecitaneStrany(uiState.pocetPrecitanych)
 }
 
-fun pridajZoznam(nazov: String, obrazok: String? = null) {
+fun pridajZoznam(nazov: String, obrazok: Uri? = null) {
     kniznica.getZoznam().add(ZoznamKnih(nazov, obrazok = obrazok))
 }
 

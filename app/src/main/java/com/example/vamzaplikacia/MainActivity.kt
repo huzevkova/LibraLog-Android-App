@@ -8,18 +8,17 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.vamzaplikacia.ui.theme.VAMZAplikaciaTheme
 
-
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
             VAMZAplikaciaTheme {
-                //LibraApp()
                 MainScreen()
             }
         }
     }
 }
+
 
 //@Preview(name = "Light Mode")
 @Preview(

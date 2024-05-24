@@ -1,7 +1,7 @@
 package com.example.vamzaplikacia.logika.knihy
 
+import android.net.Uri
 import com.example.vamzaplikacia.R
-import com.example.vamzaplikacia.grafika.zoznamiUI.kniznica
 import com.example.vamzaplikacia.logika.enumy.Vlastnosti
 import com.example.vamzaplikacia.logika.enumy.Zanre
 import java.util.Calendar
@@ -11,7 +11,7 @@ data class Kniha(
     val autor: String,
     val rokVydania: Int,
     val vydavatelstvo: String = "Neznáme",
-    val obrazok: Int = R.drawable.book,
+    val obrazok: Uri? = null,
     var popis: String = "Bez popisu.",
     var poznamky: String = "Bez poznámok.",
     var precitana: Boolean = false,
@@ -52,9 +52,9 @@ data class Kniha(
 class ZoznamKnih(nazovZoznamu: String = "") {
     private val knihy: MutableList<Kniha> = mutableListOf()
     private var nazovZoznamu: String = nazovZoznamu
-    private var obrazokCesta: String = ""
+    var obrazokCesta: Uri? = null
     val obrazok: Int = R.drawable.library
-    constructor(nazovZoznamu: String, obrazok: String?) : this(nazovZoznamu) {
+    constructor(nazovZoznamu: String, obrazok: Uri?) : this(nazovZoznamu) {
         if (obrazok != null) {
             obrazokCesta = obrazok
         }

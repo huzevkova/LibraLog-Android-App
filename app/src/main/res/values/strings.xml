@@ -27,4 +27,5 @@
     <string name="zanre_knihy_form">Žánre knihy:</string>
     <string name="vlastnosti_knihy_form">Vlastnosti knihy:</string>
     <string name="ok">OK</string>
+    <string name="fileprovider">com.example.vamzaplikacia.fileprovider</string>
 </resources>
