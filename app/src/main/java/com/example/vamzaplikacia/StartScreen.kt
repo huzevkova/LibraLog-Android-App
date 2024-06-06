@@ -20,9 +20,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import com.example.vamzaplikacia.data.AppContainer
 import com.example.vamzaplikacia.grafika.autor.vytvorZoznamAutorov
-import com.example.vamzaplikacia.grafika.zoznamiUI.VytvorZoznam
-import com.example.vamzaplikacia.grafika.zoznamiUI.kniznica
+import com.example.vamzaplikacia.grafika.formular.FormularKnihyViewModel
 import kotlinx.coroutines.delay
 
 @Composable
@@ -51,26 +51,27 @@ fun LoadingScreen() {
 private var start = true
 
 @Composable
-fun MainScreen() {
+fun MainScreen(container: AppContainer) {
     var isLoading by remember { mutableStateOf(true) }
     LaunchedEffect(Unit) {
         delay(2000)
         isLoading = false
     }
 
+    var repo = container.knihyRepository
     if (start) {
         if (isLoading) {
             LoadingScreen()
         } else {
-            VytvorZoznam()
+            /*VytvorZoznam()
             kniznica.pridajZoznam(zoznamKnih)
             kniznica.pridajZoznam(zoznamKnih)
-            kniznica.pridajZoznam(zoznamKnih)
+            kniznica.pridajZoznam(zoznamKnih)*/
             vytvorZoznamAutorov()
             start = false
-            LibraApp()
+            LibraApp(viewModelFormular = FormularKnihyViewModel(container.knihyRepository), container = container)
         }
     } else {
-        LibraApp()
+        LibraApp(viewModelFormular = FormularKnihyViewModel(container.knihyRepository), container = container)
     }
 }

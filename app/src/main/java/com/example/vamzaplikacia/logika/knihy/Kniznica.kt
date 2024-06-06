@@ -1,11 +1,14 @@
 package com.example.vamzaplikacia.logika.knihy
 
 import android.net.Uri
+import androidx.room.Entity
+import androidx.room.PrimaryKey
 import com.example.vamzaplikacia.R
 import com.example.vamzaplikacia.logika.enumy.Vlastnosti
 import com.example.vamzaplikacia.logika.enumy.Zanre
 import java.util.Calendar
 
+@Entity(tableName = "knihy")
 data class Kniha(
     val nazov: String,
     val autor: String,
@@ -19,10 +22,12 @@ data class Kniha(
     var pozicana: Boolean = false,
     var kupena: Boolean = false,
     var pocetStran: Int = 0,
-    private var pocetPrecitanych: Int = 0,
-    private var hodnotenie: Double = 0.0
+    var pocetPrecitanych: Int = 0,
+    var hodnotenie: Double = 0.0,
+    val datumPridania: Calendar = Calendar.getInstance(),
+    @PrimaryKey(autoGenerate = true)
+    val id_knihy: Int = 0
 ) {
-    val datumPridania: Calendar = Calendar.getInstance()
     var favorit: Boolean = false
 
     var vlastnosti: MutableList<Vlastnosti> = mutableListOf()
@@ -30,22 +35,6 @@ data class Kniha(
 
     override fun toString(): String {
         return "$nazov, $autor, $rokVydania"
-    }
-
-    fun setHodnotenie(nove: Double) {
-        hodnotenie = nove
-    }
-
-    fun setPrecitaneStrany(nove: Int) {
-        pocetPrecitanych = nove
-    }
-
-    fun getHodnotenie(): Double {
-        return hodnotenie
-    }
-
-    fun getPocetPrecitanych(): Int {
-        return pocetPrecitanych
     }
 }
 
