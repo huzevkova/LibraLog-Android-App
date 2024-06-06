@@ -19,5 +19,7 @@ fun FilePickerButton(onImagePicked: (Uri) -> Unit) {
     }) {
         Text("Vyber obrázok")
     }
+
+
 }
 

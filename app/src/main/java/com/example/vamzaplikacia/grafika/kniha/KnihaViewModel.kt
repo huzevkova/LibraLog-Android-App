@@ -1,13 +1,15 @@
 package com.example.vamzaplikacia.grafika.kniha
 
 import androidx.lifecycle.ViewModel
+import com.example.vamzaplikacia.data.KnihyRepository
 import com.example.vamzaplikacia.logika.AktualizaciaKnihyUIState
+import com.example.vamzaplikacia.logika.knihy.Kniha
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 
-class KnihaViewModel : ViewModel() {
+class KnihaViewModel() : ViewModel() {
 
     private val _uiState = MutableStateFlow(AktualizaciaKnihyUIState())
     val uiState: StateFlow<AktualizaciaKnihyUIState> = _uiState.asStateFlow()

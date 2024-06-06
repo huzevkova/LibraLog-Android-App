@@ -35,12 +35,13 @@ import com.example.vamzaplikacia.logika.knihy.Kniha
 
 @Composable
 fun KnihaScreen(kniha: Kniha, viewModel: KnihaViewModel = viewModel()){
-    var sliderHodnoteniePosition by remember { mutableFloatStateOf(kniha.getHodnotenie().toFloat() / 10) }
+    var sliderHodnoteniePosition by remember { mutableFloatStateOf(kniha.hodnotenie.toFloat() / 10) }
     var sliderStranyPosition by remember {
-        mutableFloatStateOf(kniha.getPocetPrecitanych().toFloat() / if (kniha.pocetStran == 0) 1 else kniha.pocetStran)
+        mutableFloatStateOf(kniha.pocetPrecitanych.toFloat() / if (kniha.pocetStran == 0) 1 else kniha.pocetStran)
     }
     val pocetPrecitanychStran = (sliderStranyPosition * kniha.pocetStran).toInt()
     val hodnotenieKnihy = sliderHodnoteniePosition.toDouble() * 10
+
     Column(
         modifier = Modifier
             .fillMaxSize()

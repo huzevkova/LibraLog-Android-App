@@ -36,12 +36,16 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Slider
 import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableStateListOf
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavHostController
 import com.example.vamzaplikacia.R
 import com.example.vamzaplikacia.logika.FormularKnihyUIState
 import com.example.vamzaplikacia.logika.enumy.Vlastnosti
 import com.example.vamzaplikacia.logika.enumy.Zanre
+import com.example.vamzaplikacia.pridajZadanuKnihu
+import kotlinx.coroutines.launch
 
 
 private val modifierTextField = Modifier
@@ -49,12 +53,17 @@ private val modifierTextField = Modifier
     .fillMaxWidth()
 
 @Composable
-fun FormularKnihaScreen(viewModel: FormularKnihyViewModel = viewModel(), uiState: FormularKnihyUIState, onClick: () -> Unit){
-    Formular(viewModel, uiState, onClick = onClick)
+fun FormularKnihaScreen(
+    viewModel: FormularKnihyViewModel = viewModel(),
+    uiState: FormularKnihyUIState,
+    popBack: () -> Unit
+)
+{
+    Formular(viewModel, uiState, popBack)
 }
 
 @Composable
-fun Formular(viewModel: FormularKnihyViewModel, uiState: FormularKnihyUIState, onClick: () -> Unit) {
+fun Formular(viewModel: FormularKnihyViewModel, uiState: FormularKnihyUIState, popBack: () -> Unit) {
 
     val vybraneZanre = remember {mutableStateListOf<Boolean>()}
     for (i in Zanre.entries) {
@@ -67,6 +76,8 @@ fun Formular(viewModel: FormularKnihyViewModel, uiState: FormularKnihyUIState, o
 
     var sliderHodnoteniePosition by remember { mutableFloatStateOf(0f) }
     val hodnotenieKnihy = sliderHodnoteniePosition.toDouble() * 10
+
+    val coroutineScope = rememberCoroutineScope()
 
     Column(modifier = Modifier
         .verticalScroll(rememberScrollState())
@@ -164,7 +175,15 @@ fun Formular(viewModel: FormularKnihyViewModel, uiState: FormularKnihyUIState, o
                 .align(Alignment.Start),
             style = MaterialTheme.typography.labelLarge)
         VyberMoznosti(Vlastnosti.entries.map {it.pridMeno}, vybraneVlastnosti, onClick = {vybraneVlastnosti[it] = !vybraneVlastnosti[it]})
-        Button(modifier = Modifier.padding(top = 10.dp), onClick = onClick){
+        Button(modifier = Modifier.padding(top = 10.dp), onClick =
+        {
+            val kniha = pridajZadanuKnihu(uiState = uiState)
+            viewModel.resetFormular()
+            popBack()
+            coroutineScope.launch {
+                viewModel.saveKniha(kniha)
+            }
+        }){
             Text(text = stringResource(R.string.ok))
         }
     }

@@ -32,12 +32,14 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import com.example.vamzaplikacia.data.AppContainer
 import com.example.vamzaplikacia.grafika.autor.AutorScreen
 import com.example.vamzaplikacia.grafika.autor.AutoriZoznamScreen
 import com.example.vamzaplikacia.grafika.autor.autori
@@ -61,10 +63,11 @@ import com.example.vamzaplikacia.logika.knihy.Autor
 import com.example.vamzaplikacia.logika.knihy.Kniha
 import com.example.vamzaplikacia.logika.knihy.ZoznamKnih
 import com.example.vamzaplikacia.grafika.formular.VymazatKartuDialog
+import kotlinx.coroutines.launch
 
 var zoznamVsetkychKnih = ZoznamKnih("Všetko")
 var zoznamKnih = zoznamVsetkychKnih
-var vyberKnihy: Kniha = Kniha("", "", 0)
+var vyberKnihy: Kniha = Kniha(nazov = "", autor = "", rokVydania = 0)
 var vyberAutora: Autor = Autor("")
 
 enum class LibraAppScreen(@StringRes val title: Int) {
@@ -84,12 +87,15 @@ fun LibraAppBar(
     currentScreen: LibraAppScreen,
     canNavigateBack: Boolean,
     navigateUp: () -> Unit,
-    navController: NavHostController
+    navController: NavHostController,
+    container: AppContainer
 )
 {
     var showDropDownMenuLeft by remember { mutableStateOf(false) }
     var showDropDownMenuRight by remember { mutableStateOf(false) }
     var searchEnable by remember { mutableStateOf(false) }
+
+    val coroutineScope = rememberCoroutineScope()
 
     if (searchEnable) {
         TopSearchBar(onClick = {
@@ -202,6 +208,9 @@ fun LibraAppBar(
                                 zoznamVsetkychKnih.odoberKnihu(vyberKnihy)
                                 showNestedMenuRemove = false
                                 showDropDownMenuRight = false
+                                coroutineScope.launch {
+                                    container.knihyRepository.deleteItem(vyberKnihy)
+                                }
                                 navigateUp()
                             }
                         )
@@ -214,6 +223,9 @@ fun LibraAppBar(
                                 zoznamKnih.odoberKnihu(vyberKnihy)
                                 showNestedMenuRemove = false
                                 showDropDownMenuRight = false
+                                coroutineScope.launch {
+                                    container.knihyRepository.deleteItem(vyberKnihy)
+                                }
                                 navigateUp()
                             }
                         )
@@ -226,11 +238,12 @@ fun LibraAppBar(
 
 @Composable
 fun LibraApp(
-    viewModelFormular: FormularKnihyViewModel = viewModel(),
+    viewModelFormular: FormularKnihyViewModel,
     viewModelKniha: KnihaViewModel = viewModel(),
     viewModelAutor: FormularAutorViewModel = viewModel(),
     viewModelZoznam: NovyZoznamViewModel = viewModel(),
     navController: NavHostController = rememberNavController(),
+    container: AppContainer
 ) {
     val backStackEntry by navController.currentBackStackEntryAsState()
     val currentScreen = LibraAppScreen.valueOf(
@@ -284,7 +297,8 @@ fun LibraApp(
                     }
                     navController.navigateUp()
                 },
-                navController = navController
+                navController = navController,
+                container = container
             )
         },
         floatingActionButton = {
@@ -336,11 +350,7 @@ fun LibraApp(
                 })
             }
             composable(route = LibraAppScreen.Formular.name) {
-                FormularKnihaScreen(viewModel = viewModelFormular, uiStateFormular, onClick = {
-                    pridajZadanuKnihu(uiState = uiStateFormular)
-                    viewModelFormular.resetFormular()
-                    navController.popBackStack()
-                })
+                FormularKnihaScreen(viewModel = viewModelFormular, uiStateFormular) { navController.popBackStack() }
             }
             composable(route = LibraAppScreen.VybranaKniha.name) {
                 KnihaScreen(vyberKnihy, viewModelKniha)
@@ -368,7 +378,7 @@ fun LibraApp(
     }
 }
 
-fun pridajZadanuKnihu(uiState: FormularKnihyUIState) {
+fun pridajZadanuKnihu(uiState: FormularKnihyUIState): Kniha {
     val zanre = mutableListOf<Zanre>()
     uiState.zanreVyber.forEachIndexed { index, b ->
         if (b) {
@@ -394,6 +404,7 @@ fun pridajZadanuKnihu(uiState: FormularKnihyUIState) {
     kniha.vlastnosti = vlastnosti
     zoznamVsetkychKnih.pridajKnihu(kniha)
     zoznamKnih.pridajKnihu(kniha)
+    return kniha
 }
 
 fun pridajZadanehoAutora(uiState: FormularAutorUIState) {
@@ -403,8 +414,8 @@ fun pridajZadanehoAutora(uiState: FormularAutorUIState) {
 }
 
 fun aktualizujKnihu(kniha: Kniha, uiState: AktualizaciaKnihyUIState) {
-    kniha.setHodnotenie(uiState.hodnotenie)
-    kniha.setPrecitaneStrany(uiState.pocetPrecitanych)
+    kniha.hodnotenie = uiState.hodnotenie
+    kniha.pocetPrecitanych = uiState.pocetPrecitanych
 }
 
 fun pridajZoznam(nazov: String, obrazok: Uri? = null) {
