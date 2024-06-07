@@ -26,11 +26,9 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import coil.compose.rememberAsyncImagePainter
 import com.example.vamzaplikacia.grafika.zoznamiUI.VypisanieKnih
-import com.example.vamzaplikacia.grafika.zoznamiUI.VytvorZoznam
 import com.example.vamzaplikacia.logika.knihy.Autor
 import com.example.vamzaplikacia.logika.knihy.Kniha
 import com.example.vamzaplikacia.logika.knihy.ZoznamKnih
@@ -147,12 +145,4 @@ fun Center(modifier: Modifier, autor: Autor) {
                 .clip(CircleShape)
         )
     }
-}
-
-@Preview
-@Composable
-fun showAuthor() {
-    VytvorZoznam()
-    vytvorZoznamAutorov()
-    AutorScreen(autor = autori.getZoznam()[0], onClick = {})
 }

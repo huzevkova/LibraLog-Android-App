@@ -56,14 +56,14 @@ private val modifierTextField = Modifier
 fun FormularKnihaScreen(
     viewModel: FormularKnihyViewModel = viewModel(),
     uiState: FormularKnihyUIState,
-    popBack: () -> Unit
+    onClick: () -> Unit
 )
 {
-    Formular(viewModel, uiState, popBack)
+    Formular(viewModel, uiState, onClick)
 }
 
 @Composable
-fun Formular(viewModel: FormularKnihyViewModel, uiState: FormularKnihyUIState, popBack: () -> Unit) {
+fun Formular(viewModel: FormularKnihyViewModel, uiState: FormularKnihyUIState, onClick: () -> Unit) {
 
     val vybraneZanre = remember {mutableStateListOf<Boolean>()}
     for (i in Zanre.entries) {
@@ -175,15 +175,7 @@ fun Formular(viewModel: FormularKnihyViewModel, uiState: FormularKnihyUIState, p
                 .align(Alignment.Start),
             style = MaterialTheme.typography.labelLarge)
         VyberMoznosti(Vlastnosti.entries.map {it.pridMeno}, vybraneVlastnosti, onClick = {vybraneVlastnosti[it] = !vybraneVlastnosti[it]})
-        Button(modifier = Modifier.padding(top = 10.dp), onClick =
-        {
-            val kniha = pridajZadanuKnihu(uiState = uiState)
-            viewModel.resetFormular()
-            popBack()
-            coroutineScope.launch {
-                viewModel.saveKniha(kniha)
-            }
-        }){
+        Button(modifier = Modifier.padding(top = 10.dp), onClick = onClick){
             Text(text = stringResource(R.string.ok))
         }
     }

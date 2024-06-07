@@ -5,7 +5,6 @@ import androidx.room.Entity
 import androidx.room.Ignore
 import androidx.room.PrimaryKey
 import com.example.vamzaplikacia.R
-import com.example.vamzaplikacia.zoznamKnih
 
 @Entity(tableName = "autori")
 class Autor(
@@ -19,11 +18,17 @@ class Autor(
     val id_autora: Int = 0)
 {
     @Ignore
-    var knihyKniznica = zoznamKnih.vratPodlaPodmienky { it.autor == meno }
+    var knihyKniznica: MutableList<Kniha> = mutableListOf()
     @Ignore
-    var pocetKnih = knihyKniznica.size
+    var pocetKnih = 0
     @Ignore
-    var pocetPrecitanych = knihyKniznica.sortedBy { it.precitana }.size
+    var pocetPrecitanych = 0
+
+    fun nastavKnihy(zoznamKnih: ZoznamKnih) {
+        knihyKniznica = zoznamKnih.vratPodlaPodmienky { it.autor == meno }
+        pocetKnih = knihyKniznica.size
+        pocetPrecitanych = knihyKniznica.sortedBy { it.precitana }.size
+    }
 }
 
 class ZoznamAutorov {
@@ -37,5 +42,9 @@ class ZoznamAutorov {
 
     fun getZoznam(): MutableList<Autor> {
         return zoznam
+    }
+
+    fun odoberAutora(autor: Autor) {
+        zoznam.remove(autor)
     }
 }

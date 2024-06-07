@@ -2,13 +2,15 @@ package com.example.vamzaplikacia.grafika.formular
 
 import android.net.Uri
 import androidx.lifecycle.ViewModel
+import com.example.vamzaplikacia.data.AutoriRepository
 import com.example.vamzaplikacia.logika.FormularAutorUIState
+import com.example.vamzaplikacia.logika.knihy.Autor
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 
-class FormularAutorViewModel : ViewModel() {
+class FormularAutorViewModel(private val autoriRepository: AutoriRepository) : ViewModel() {
 
     private val _uiState = MutableStateFlow(FormularAutorUIState())
     val uiState: StateFlow<FormularAutorUIState> = _uiState.asStateFlow()
@@ -45,5 +47,9 @@ class FormularAutorViewModel : ViewModel() {
         _uiState.update { currentState ->
             currentState.copy(obrazok = cestaObrazok)
         }
+    }
+
+    suspend fun saveAutora(autor: Autor) {
+        autoriRepository.insertItem(autor)
     }
 }

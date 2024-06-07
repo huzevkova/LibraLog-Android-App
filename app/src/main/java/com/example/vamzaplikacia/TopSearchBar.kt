@@ -24,6 +24,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import com.example.vamzaplikacia.grafika.zoznamiUI.kniznica
 import com.example.vamzaplikacia.logika.knihy.Kniha
 
 @Composable
@@ -32,6 +33,7 @@ fun TopSearchBar(onClick: (Kniha) -> Unit, onChange: (Boolean) -> Unit, onBackCl
     var text by rememberSaveable { mutableStateOf("") }
     var active by rememberSaveable { mutableStateOf(false) }
 
+    var zoznamVsetkychKnih = kniznica.getZoznamVsetkych()
     var results by rememberSaveable { mutableStateOf(zoznamVsetkychKnih.vratPodlaPodmienky {
         it.nazov.contains(text) || it.autor.contains(text) || it.popis.contains(text) || it.poznamky.contains(text) }
     )  }
