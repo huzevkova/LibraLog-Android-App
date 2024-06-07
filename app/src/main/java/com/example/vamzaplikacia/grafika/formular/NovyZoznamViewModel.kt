@@ -2,13 +2,16 @@ package com.example.vamzaplikacia.grafika.formular
 
 import android.net.Uri
 import androidx.lifecycle.ViewModel
+import com.example.vamzaplikacia.data.PolickyRepository
 import com.example.vamzaplikacia.logika.NovyZoznamUIState
+import com.example.vamzaplikacia.logika.knihy.PolickaKniznice
+import com.example.vamzaplikacia.logika.knihy.ZoznamKnih
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 
-class NovyZoznamViewModel : ViewModel() {
+class NovyZoznamViewModel(private val polickyRepository: PolickyRepository) : ViewModel() {
     private val _uiState = MutableStateFlow(NovyZoznamUIState())
     val uiState: StateFlow<NovyZoznamUIState> = _uiState.asStateFlow()
 
@@ -35,4 +38,10 @@ class NovyZoznamViewModel : ViewModel() {
     fun dismissDialog() {
         _uiState.value = _uiState.value.copy(showDialog = false)
     }
+
+    suspend fun saveZoznam(zoznam: ZoznamKnih) {
+        polickyRepository.insertItem(PolickaKniznice(nazov = zoznam.getNazov()))
+    }
+
+
 }

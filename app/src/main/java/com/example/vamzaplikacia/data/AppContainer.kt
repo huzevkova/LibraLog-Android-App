@@ -8,6 +8,7 @@ import android.content.Context
 interface AppContainer {
     val knihyRepository: KnihyRepository
     val autoriRepository: AutoriRepository
+    val polickyRepository: PolickyRepository
 }
 
 /**
@@ -22,6 +23,10 @@ class AppDataContainer(private val context: Context) : AppContainer {
     }
 
     override val autoriRepository: AutoriRepository by lazy {
-        OfflineAutoriRepository(AutoriDatabase.getDatabase(context).autoriDAO())
+        OfflineAutoriRepository(KniznicaDatabase.getDatabase(context).autoriDAO())
+    }
+
+    override val polickyRepository: PolickyRepository by lazy {
+        OfflinePolickyRepository(KniznicaDatabase.getDatabase(context).polickyDAO())
     }
 }

@@ -1,6 +1,7 @@
 package com.example.vamzaplikacia.data
 import com.example.vamzaplikacia.logika.knihy.Autor
 import com.example.vamzaplikacia.logika.knihy.Kniha
+import com.example.vamzaplikacia.logika.knihy.PolickaKniznice
 import kotlinx.coroutines.flow.Flow
 
 class OfflineKniznicaRepository(private val knihaDao: KnihaDAO) : KnihyRepository {
@@ -28,3 +29,14 @@ class OfflineAutoriRepository(private val autorDao: AutorDAO) : AutoriRepository
     override suspend fun updateItem(autor: Autor) = autorDao.update(autor)
 }
 
+class OfflinePolickyRepository(private val polickaDAO: PolickaDAO) : PolickyRepository {
+    override fun getAllItemsStream(): Flow<List<PolickaKniznice>> = polickaDAO.getAllItems()
+
+    override fun getItemStream(id: Int): Flow<PolickaKniznice?> = polickaDAO.getItem(id)
+
+    override suspend fun insertItem(policka: PolickaKniznice) = polickaDAO.insert(policka)
+
+    override suspend fun deleteItem(policka: PolickaKniznice) = polickaDAO.delete(policka)
+
+    override suspend fun updateItem(policka: PolickaKniznice) = polickaDAO.update(policka)
+}

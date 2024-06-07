@@ -24,6 +24,7 @@ data class Kniha(
     var pocetStran: Int = 0,
     var pocetPrecitanych: Int = 0,
     var hodnotenie: Double = 0.0,
+    var policka: String = "Všetko",
     val datumPridania: Calendar = Calendar.getInstance(),
     @PrimaryKey(autoGenerate = true)
     val id_knihy: Int = 0
@@ -37,6 +38,13 @@ data class Kniha(
         return "$nazov, $autor, $rokVydania"
     }
 }
+
+@Entity(tableName = "policky")
+data class PolickaKniznice(
+    val nazov: String,
+    @PrimaryKey(autoGenerate = true)
+    val id_policky: Int = 0
+)
 
 class ZoznamKnih(nazovZoznamu: String = "") {
     private val knihy: MutableList<Kniha> = mutableListOf()
@@ -145,14 +153,31 @@ class ZoznamKnih(nazovZoznamu: String = "") {
 }
 
 class Kniznica {
+    private val zoznamVsetkychKnih: ZoznamKnih = ZoznamKnih("Všetko")
     private val zoznamy: MutableList<ZoznamKnih> = mutableListOf()
+    private val autoriKniznice: ZoznamAutorov = ZoznamAutorov()
+
+    constructor() {
+        zoznamy.add(zoznamVsetkychKnih)
+    }
+    fun pridajAutora(autor: Autor) {
+        autoriKniznice.pridajAutora(autor)
+    }
 
     fun pridajZoznam(zoznam: ZoznamKnih) {
         zoznamy.add(zoznam)
     }
 
-    fun getZoznam(): MutableList<ZoznamKnih> {
+    fun getVsetkyZoznamy(): MutableList<ZoznamKnih> {
         return zoznamy
+    }
+
+    fun getZoznamVsetkych(): ZoznamKnih {
+        return zoznamVsetkychKnih
+    }
+
+    fun getZoznamAutorov(): ZoznamAutorov {
+        return autoriKniznice
     }
 
     inner class KniznicaIterator : Iterator<ZoznamKnih> {
@@ -169,5 +194,9 @@ class Kniznica {
 
     fun iterator(): KniznicaIterator {
         return KniznicaIterator()
+    }
+
+    fun odoberAutora(autor: Autor) {
+        autoriKniznice.odoberAutora(autor)
     }
 }

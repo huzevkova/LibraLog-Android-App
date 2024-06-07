@@ -42,7 +42,6 @@ import androidx.navigation.compose.rememberNavController
 import com.example.vamzaplikacia.data.AppContainer
 import com.example.vamzaplikacia.grafika.autor.AutorScreen
 import com.example.vamzaplikacia.grafika.autor.AutoriZoznamScreen
-import com.example.vamzaplikacia.grafika.autor.autori
 import com.example.vamzaplikacia.grafika.formular.FormularAutorScreen
 import com.example.vamzaplikacia.grafika.formular.FormularAutorViewModel
 import com.example.vamzaplikacia.grafika.formular.FormularKnihaScreen
@@ -65,8 +64,7 @@ import com.example.vamzaplikacia.logika.knihy.ZoznamKnih
 import com.example.vamzaplikacia.grafika.formular.VymazatKartuDialog
 import kotlinx.coroutines.launch
 
-var zoznamVsetkychKnih = ZoznamKnih("Všetko")
-var zoznamKnih = zoznamVsetkychKnih
+var zoznamKnih = kniznica.getZoznamVsetkych()
 var vyberKnihy: Kniha = Kniha(nazov = "", autor = "", rokVydania = 0)
 var vyberAutora: Autor = Autor("")
 
@@ -166,22 +164,32 @@ fun LibraAppBar(
                     var showNestedMenuAdd by remember { mutableStateOf(false) }
                     var showNestedMenuRemove by remember { mutableStateOf(false) }
                     if (!showNestedMenuAdd && !showNestedMenuRemove) {
+                        if (currentScreen == LibraAppScreen.VybranaKniha) {
+                            DropdownMenuItem(
+                                text = { Text(text = "Pridaj do zoznamu...") }, leadingIcon = {
+                                    Icon(
+                                        Icons.Filled.Add, contentDescription = "pridat do zoznamu"
+                                    )
+                                }, onClick = {
+                                    showNestedMenuAdd = true
+                                }
+                            )
+                        }
                         DropdownMenuItem(
-                            text = { Text(text = "Pridaj do zoznamu...") }, leadingIcon = {
-                                Icon(
-                                    Icons.Filled.Add, contentDescription = "pridat do zoznamu"
-                                )
-                            }, onClick = {
-                                showNestedMenuAdd = true
-                            }
-                        )
-                        DropdownMenuItem(
-                            text = { Text(text = "Zmaž knihu...") }, leadingIcon = {
+                            text = { Text(text = "Zmaž...") }, leadingIcon = {
                                 Icon(
                                     Icons.Filled.Delete, contentDescription = "zmazať"
                                 )
                             }, onClick = {
-                                showNestedMenuRemove = true
+                                if (currentScreen == LibraAppScreen.VybranyAutor) {
+                                    kniznica.odoberAutora(vyberAutora)
+                                    coroutineScope.launch {
+                                        container.autoriRepository.deleteItem(vyberAutora)
+                                    }
+                                    navigateUp()
+                                } else {
+                                    showNestedMenuRemove = true
+                                }
                             }
                         )
                     } else if (showNestedMenuAdd){
@@ -199,36 +207,38 @@ fun LibraAppBar(
                             )
                         }
                     } else {
-                        DropdownMenuItem(
-                            text = { Text(text = "Zmaž všade") }, leadingIcon = {
-                                Icon(
-                                    Icons.Filled.Add, contentDescription = "zmaz vsade"
-                                )
-                            }, onClick = {
-                                zoznamVsetkychKnih.odoberKnihu(vyberKnihy)
-                                showNestedMenuRemove = false
-                                showDropDownMenuRight = false
-                                coroutineScope.launch {
-                                    container.knihyRepository.deleteItem(vyberKnihy)
+                        if (currentScreen == LibraAppScreen.VybranaKniha) {
+                            DropdownMenuItem(
+                                text = { Text(text = "Zmaž všade") }, leadingIcon = {
+                                    Icon(
+                                        Icons.Filled.Add, contentDescription = "zmaz vsade"
+                                    )
+                                }, onClick = {
+                                    kniznica.getZoznamVsetkych().odoberKnihu(vyberKnihy)
+                                    showNestedMenuRemove = false
+                                    showDropDownMenuRight = false
+                                    coroutineScope.launch {
+                                        container.knihyRepository.deleteItem(vyberKnihy)
+                                    }
+                                    navigateUp()
                                 }
-                                navigateUp()
-                            }
-                        )
-                        DropdownMenuItem(
-                            text = { Text(text = "Zmaž v tomto zozname") }, leadingIcon = {
-                                Icon(
-                                    Icons.Filled.Delete, contentDescription = "zmaz v zozname"
-                                )
-                            }, onClick = {
-                                zoznamKnih.odoberKnihu(vyberKnihy)
-                                showNestedMenuRemove = false
-                                showDropDownMenuRight = false
-                                coroutineScope.launch {
-                                    container.knihyRepository.deleteItem(vyberKnihy)
+                            )
+                            DropdownMenuItem(
+                                text = { Text(text = "Zmaž v tomto zozname") }, leadingIcon = {
+                                    Icon(
+                                        Icons.Filled.Delete, contentDescription = "zmaz v zozname"
+                                    )
+                                }, onClick = {
+                                    zoznamKnih.odoberKnihu(vyberKnihy)
+                                    showNestedMenuRemove = false
+                                    showDropDownMenuRight = false
+                                    coroutineScope.launch {
+                                        container.knihyRepository.deleteItem(vyberKnihy)
+                                    }
+                                    navigateUp()
                                 }
-                                navigateUp()
-                            }
-                        )
+                            )
+                        }
                     }
                 }
             }
@@ -240,11 +250,12 @@ fun LibraAppBar(
 fun LibraApp(
     viewModelFormular: FormularKnihyViewModel,
     viewModelKniha: KnihaViewModel = viewModel(),
-    viewModelAutor: FormularAutorViewModel = viewModel(),
-    viewModelZoznam: NovyZoznamViewModel = viewModel(),
+    viewModelAutor: FormularAutorViewModel,
+    viewModelZoznam: NovyZoznamViewModel,
     navController: NavHostController = rememberNavController(),
     container: AppContainer
 ) {
+
     val backStackEntry by navController.currentBackStackEntryAsState()
     val currentScreen = LibraAppScreen.valueOf(
         backStackEntry?.destination?.route ?: LibraAppScreen.Start.name
@@ -254,12 +265,16 @@ fun LibraApp(
     val uiStateKniha by viewModelKniha.uiState.collectAsState()
     val uiStateAutor by viewModelAutor.uiState.collectAsState()
 
+    val coroutineScope = rememberCoroutineScope()
 
     val uiStateZoznam by viewModelZoznam.uiState.collectAsState()
     NovyZoznamDialog(viewModel = viewModelZoznam, uiState = uiStateZoznam, onClickOK = {
-        pridajZoznam(uiStateZoznam.nazov, uiStateZoznam.obrazok)
+        val zoznam = pridajZoznam(uiStateZoznam.nazov, uiStateZoznam.obrazok)
         viewModelZoznam.resetFormular()
         viewModelZoznam.dismissDialog()
+        coroutineScope.launch {
+            viewModelZoznam.saveZoznam(zoznam)
+        }
     }
     )
 
@@ -267,16 +282,16 @@ fun LibraApp(
     if (vymazatDialog) {
         VymazatKartuDialog(
             onDismissRequest = {
-                kniznica.getZoznam().remove(zoznamKnih)
+                kniznica.getVsetkyZoznamy().remove(zoznamKnih)
                 vymazatDialog = false
                 refresh(navController)
             },
             onConfirmation = {
                 val size = zoznamKnih.getSize()
                 for (i in 0..size) {
-                    zoznamVsetkychKnih.odoberKnihu(zoznamKnih.get(i))
+                    kniznica.getZoznamVsetkych().odoberKnihu(zoznamKnih.get(i))
                 }
-                kniznica.getZoznam().remove(zoznamKnih)
+                kniznica.getVsetkyZoznamy().remove(zoznamKnih)
                 vymazatDialog = false
                 refresh(navController)
             },
@@ -329,7 +344,6 @@ fun LibraApp(
         NavHost(
             navController = navController,
             startDestination = LibraAppScreen.Kniznica.name,
-            //startDestination = LibraAppScreen.FormularAutor.name,
             modifier = Modifier.padding(innerPadding)
         ) {
             composable(route = LibraAppScreen.Kniznica.name) {
@@ -350,18 +364,26 @@ fun LibraApp(
                 })
             }
             composable(route = LibraAppScreen.Formular.name) {
-                FormularKnihaScreen(viewModel = viewModelFormular, uiStateFormular) { navController.popBackStack() }
+                FormularKnihaScreen(viewModel = viewModelFormular, uiStateFormular) {
+                    val kniha = pridajZadanuKnihu(uiStateFormular)
+                    viewModelFormular.resetFormular()
+                    navController.popBackStack()
+                    coroutineScope.launch {
+                        viewModelFormular.saveKniha(kniha)
+                    }
+                }
             }
             composable(route = LibraAppScreen.VybranaKniha.name) {
                 KnihaScreen(vyberKnihy, viewModelKniha)
             }
             composable(route = LibraAppScreen.AutoriZoznam.name) {
-                AutoriZoznamScreen(onClick = {
+                AutoriZoznamScreen(kniznica.getZoznamAutorov(), onClick = {
                     vyberAutora = it
                     navController.navigate(LibraAppScreen.VybranyAutor.name)
                 })
             }
             composable(route = LibraAppScreen.VybranyAutor.name) {
+                vyberAutora.nastavKnihy(kniznica.getZoznamVsetkych())
                 AutorScreen(autor = vyberAutora, onClick = {
                     vyberKnihy = it
                     navController.navigate(LibraAppScreen.VybranaKniha.name)
@@ -369,9 +391,12 @@ fun LibraApp(
             }
             composable(route = LibraAppScreen.FormularAutor.name) {
                 FormularAutorScreen(viewModel = viewModelAutor, uiState = uiStateAutor, onClick = {
-                    pridajZadanehoAutora(uiState = uiStateAutor)
+                    val autor = pridajZadanehoAutora(uiState = uiStateAutor)
                     viewModelAutor.resetFormular()
                     navController.popBackStack()
+                    coroutineScope.launch {
+                        viewModelAutor.saveAutora(autor)
+                    }
                 })
             }
         }
@@ -399,18 +424,20 @@ fun pridajZadanuKnihu(uiState: FormularKnihyUIState): Kniha {
 
     val kniha = Kniha(uiState.nazov, uiState.autor, rok, uiState.vydavatelstvo,
         uiState.obrazok, uiState.popis, uiState.poznamky, uiState.precitana, uiState.naNeskor,
-        uiState.pozicana, uiState.kupena, pocetStran, pocetPrecitanych, hodnotenie)
+        uiState.pozicana, uiState.kupena, pocetStran, pocetPrecitanych, hodnotenie, zoznamKnih.getNazov())
     kniha.zanre = zanre
     kniha.vlastnosti = vlastnosti
-    zoznamVsetkychKnih.pridajKnihu(kniha)
+    kniznica.getZoznamVsetkych().pridajKnihu(kniha)
     zoznamKnih.pridajKnihu(kniha)
     return kniha
 }
 
-fun pridajZadanehoAutora(uiState: FormularAutorUIState) {
+fun pridajZadanehoAutora(uiState: FormularAutorUIState): Autor {
     val autor = Autor(uiState.menoAutora, uiState.datumNar, uiState.datumUmrtia, obrazokCesta = uiState.obrazok)
     autor.popis = uiState.popis
-    autori.pridajAutora(autor)
+    autor.nastavKnihy(kniznica.getZoznamVsetkych())
+    kniznica.getZoznamAutorov().pridajAutora(autor)
+    return autor
 }
 
 fun aktualizujKnihu(kniha: Kniha, uiState: AktualizaciaKnihyUIState) {
@@ -418,8 +445,10 @@ fun aktualizujKnihu(kniha: Kniha, uiState: AktualizaciaKnihyUIState) {
     kniha.pocetPrecitanych = uiState.pocetPrecitanych
 }
 
-fun pridajZoznam(nazov: String, obrazok: Uri? = null) {
-    kniznica.getZoznam().add(ZoznamKnih(nazov, obrazok = obrazok))
+fun pridajZoznam(nazov: String, obrazok: Uri? = null): ZoznamKnih {
+    var zoznam = ZoznamKnih(nazov, obrazok = obrazok)
+    kniznica.getVsetkyZoznamy().add(zoznam)
+    return zoznam
 }
 
 fun refresh(navController: NavHostController){

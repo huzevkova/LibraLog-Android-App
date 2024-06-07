@@ -62,8 +62,8 @@ fun KnizicaKartyScreen (onClick: (ZoznamKnih) -> Unit, onDeleteClick: () -> Unit
             columns = GridCells.Fixed(pocetCol),
             modifier = Modifier.fillMaxSize()
         ) {
-            items(kniznica.getZoznam().size) { index ->
-                val zoznam = kniznica.getZoznam()[index]
+            items(kniznica.getVsetkyZoznamy().size) { index ->
+                val zoznam = kniznica.getVsetkyZoznamy()[index]
                 BookListCard(zoznam = zoznam, onClick, onDeleteClick = onDeleteClick, ratio = ratio)
             }
         }
