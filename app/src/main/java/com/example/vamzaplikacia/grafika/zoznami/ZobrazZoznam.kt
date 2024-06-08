@@ -1,11 +1,15 @@
-package com.example.vamzaplikacia.grafika.zoznamiUI
+package com.example.vamzaplikacia.grafika.zoznami
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.statusBarsPadding
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.Info
@@ -20,51 +24,17 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import coil.compose.rememberAsyncImagePainter
 import com.example.vamzaplikacia.R
-import com.example.vamzaplikacia.logika.enumy.Zanre
 import com.example.vamzaplikacia.logika.knihy.Kniha
 import com.example.vamzaplikacia.logika.knihy.ZoznamKnih
-import com.example.vamzaplikacia.zoznamKnih
 
-fun VytvorZoznam() {
-    zoznamKnih.pridajKnihu(
-        Kniha(
-        "Veľký Gatsby",
-        "F. Scott Fitzgerald",
-        1925,
-    )
-    )
-    zoznamKnih.pridajKnihu(
-        Kniha(
-        "Alchymista",
-        "Paulo Coelho",
-        1988,
-    )
-    )
-    zoznamKnih.get(1)?.favorit = true
-    zoznamKnih.pridajKnihu(
-        Kniha(
-        "1984",
-        "George Orwell",
-        1949
-    )
-    )
-    zoznamKnih.pridajKnihu(
-        Kniha(
-        "Hobit",
-        "J. R. R. Tolkien",
-        1937,
-            "Ikar",
-            popis = "Kniha o hobitovi Bilbovi a 13 trpaslíkoch.",
-            poznamky = "Super kniha",
-            pocetStran = 200,
-            pocetPrecitanych = 150,
-            hodnotenie = 9.9,
-    )
-    )
-    val zanre: MutableList<Zanre> = mutableListOf()
-    zanre.add(Zanre.FANTASY)
-    zanre.add(Zanre.DOBRODRUZNE)
-    zoznamKnih.get(3)?.zanre = zanre
+@Composable
+fun ZoznamKnihScreen(zoznam: ZoznamKnih, onClick: (Kniha) -> Unit) {
+    VypisanieKnih(zoznam = zoznam, modifier = Modifier
+        .statusBarsPadding()
+        .fillMaxWidth()
+        .verticalScroll(rememberScrollState())
+        .padding(horizontal = 0.dp),
+        onClick)
 }
 
 

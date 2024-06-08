@@ -1,6 +1,6 @@
 package com.example.vamzaplikacia.grafika.formular
 
-import FilePickerButton
+import VyberObrazkuButton
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -15,7 +15,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.dp
-import com.example.vamzaplikacia.logika.NovyZoznamUIState
+import com.example.vamzaplikacia.grafika.UIState.NovyZoznamUIState
 
 @Composable
 fun NovyZoznamDialog(
@@ -38,7 +38,7 @@ fun NovyZoznamDialog(
                         modifier = Modifier.fillMaxWidth()
                     )
                     Spacer(modifier = Modifier.height(16.dp))
-                    FilePickerButton{viewModel.setObrazok(it)}
+                    VyberObrazkuButton{viewModel.setObrazok(it)}
                 }
             },
             confirmButton = {

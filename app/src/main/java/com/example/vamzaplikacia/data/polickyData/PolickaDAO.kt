@@ -1,4 +1,4 @@
-package com.example.vamzaplikacia.data
+package com.example.vamzaplikacia.data.polickyData
 
 import androidx.room.Dao
 import androidx.room.Delete

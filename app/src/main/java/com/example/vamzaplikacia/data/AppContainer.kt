@@ -1,6 +1,9 @@
 package com.example.vamzaplikacia.data
 
 import android.content.Context
+import com.example.vamzaplikacia.data.autoriData.AutoriRepository
+import com.example.vamzaplikacia.data.knihyData.KnihyRepository
+import com.example.vamzaplikacia.data.polickyData.PolickyRepository
 
 /**
  * App container for Dependency injection.

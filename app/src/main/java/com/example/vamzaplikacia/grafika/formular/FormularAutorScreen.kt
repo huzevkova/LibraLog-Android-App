@@ -1,6 +1,6 @@
 package com.example.vamzaplikacia.grafika.formular
 
-import FilePickerButton
+import VyberObrazkuButton
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -21,7 +21,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
-import com.example.vamzaplikacia.logika.FormularAutorUIState
+import com.example.vamzaplikacia.grafika.UIState.FormularAutorUIState
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
@@ -53,7 +53,7 @@ fun FormularAutorScreen(viewModel: FormularAutorViewModel, uiState: FormularAuto
             .padding(10.dp)
             .fillMaxWidth(), false)
 
-        FilePickerButton {
+        VyberObrazkuButton {
             viewModel.setObrazok(it)
         }
 

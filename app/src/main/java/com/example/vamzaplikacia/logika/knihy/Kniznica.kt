@@ -1,43 +1,12 @@
 package com.example.vamzaplikacia.logika.knihy
 
+import android.content.Context
+import android.content.res.Resources
 import android.net.Uri
+import androidx.core.content.ContextCompat.getString
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import com.example.vamzaplikacia.R
-import com.example.vamzaplikacia.logika.enumy.Vlastnosti
-import com.example.vamzaplikacia.logika.enumy.Zanre
-import java.util.Calendar
-
-@Entity(tableName = "knihy")
-data class Kniha(
-    val nazov: String,
-    val autor: String,
-    val rokVydania: Int,
-    val vydavatelstvo: String = "Neznáme",
-    val obrazok: Uri? = null,
-    var popis: String = "Bez popisu.",
-    var poznamky: String = "Bez poznámok.",
-    var precitana: Boolean = false,
-    var naNeskor: Boolean = false,
-    var pozicana: Boolean = false,
-    var kupena: Boolean = false,
-    var pocetStran: Int = 0,
-    var pocetPrecitanych: Int = 0,
-    var hodnotenie: Double = 0.0,
-    var policka: String = "Všetko",
-    val datumPridania: Calendar = Calendar.getInstance(),
-    @PrimaryKey(autoGenerate = true)
-    val id_knihy: Int = 0
-) {
-    var favorit: Boolean = false
-
-    var vlastnosti: MutableList<Vlastnosti> = mutableListOf()
-    var zanre: MutableList<Zanre> = mutableListOf()
-
-    override fun toString(): String {
-        return "$nazov, $autor, $rokVydania"
-    }
-}
 
 @Entity(tableName = "policky")
 data class PolickaKniznice(
@@ -73,12 +42,6 @@ class ZoznamKnih(nazovZoznamu: String = "") {
         }
     }
 
-    fun odoberKnihu(index: Int) {
-        if (index in 0 until knihy.size) {
-            knihy.removeAt(index)
-        }
-    }
-
     fun odoberKnihu(kniha: Kniha?) {
         if (knihy.contains(kniha)) {
             knihy.remove(kniha)
@@ -106,27 +69,6 @@ class ZoznamKnih(nazovZoznamu: String = "") {
         }
     }
 
-    /**
-     * Vypise zoznam v poradi v akom boli knihy pridavane - originalny zoznam.
-     */
-    fun vypisZoznam() {
-        if (knihy.isEmpty()) {
-            println("Zoznam je prázdny.")
-        } else {
-            println("Knihy v zozname${nazovZoznamu}:")
-            this.zoradPodla { kniha1 -> kniha1.datumPridania.toString()}
-            knihy.forEachIndexed { index, kniha -> println("${index+1}. $kniha") }
-        }
-    }
-
-    /**
-     * Vypise zoznam zoradení podľa posledného zoradenia.
-     */
-    fun vypisZoradene() {
-        println("Zoradene knihy:")
-        knihy.forEachIndexed { index, kniha -> println("${index+1}. $kniha") }
-    }
-
     fun vratPodlaPodmienky(podmienka: (Kniha) -> Boolean): MutableList<Kniha> {
         val skupina = knihy.groupBy(podmienka)
         return (skupina[true] ?: mutableListOf()) as MutableList<Kniha>
@@ -135,6 +77,7 @@ class ZoznamKnih(nazovZoznamu: String = "") {
     fun zoradPodla(podmienka: (Kniha) -> String) {
         knihy.sortBy(podmienka)
     }
+
     inner class KnihyIterator : Iterator<Kniha> {
         private var index = 0
 
@@ -152,20 +95,25 @@ class ZoznamKnih(nazovZoznamu: String = "") {
     }
 }
 
-class Kniznica {
-    private val zoznamVsetkychKnih: ZoznamKnih = ZoznamKnih("Všetko")
+class Kniznica(context: Context) {
+    private val zoznamVsetkychKnih: ZoznamKnih
     private val zoznamy: MutableList<ZoznamKnih> = mutableListOf()
     private val autoriKniznice: ZoznamAutorov = ZoznamAutorov()
 
-    constructor() {
+    init {
+        zoznamVsetkychKnih = ZoznamKnih(getString(context, R.string.vsetko))
         zoznamy.add(zoznamVsetkychKnih)
     }
     fun pridajAutora(autor: Autor) {
-        autoriKniznice.pridajAutora(autor)
+        if (autoriKniznice.getZoznam().find { _autor -> _autor.meno == autor.meno } == null) {
+            autoriKniznice.pridajAutora(autor)
+        }
     }
 
     fun pridajZoznam(zoznam: ZoznamKnih) {
-        zoznamy.add(zoznam)
+        if (zoznamy.find { _zoznam -> _zoznam.getNazov() == zoznam.getNazov() } == null) {
+            zoznamy.add(zoznam)
+        }
     }
 
     fun getVsetkyZoznamy(): MutableList<ZoznamKnih> {
@@ -198,5 +146,9 @@ class Kniznica {
 
     fun odoberAutora(autor: Autor) {
         autoriKniznice.odoberAutora(autor)
+    }
+
+    fun getZoznam(policka: String): ZoznamKnih? {
+        return zoznamy.find { zoznamKnih ->  zoznamKnih.getNazov() == policka}
     }
 }

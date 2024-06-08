@@ -1,4 +1,4 @@
-package com.example.vamzaplikacia.logika
+package com.example.vamzaplikacia.grafika.UIState
 
 
 data class AktualizaciaKnihyUIState (

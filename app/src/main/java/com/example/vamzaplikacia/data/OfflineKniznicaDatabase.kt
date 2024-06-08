@@ -1,4 +1,10 @@
 package com.example.vamzaplikacia.data
+import com.example.vamzaplikacia.data.autoriData.AutorDAO
+import com.example.vamzaplikacia.data.autoriData.AutoriRepository
+import com.example.vamzaplikacia.data.knihyData.KnihaDAO
+import com.example.vamzaplikacia.data.knihyData.KnihyRepository
+import com.example.vamzaplikacia.data.polickyData.PolickaDAO
+import com.example.vamzaplikacia.data.polickyData.PolickyRepository
 import com.example.vamzaplikacia.logika.knihy.Autor
 import com.example.vamzaplikacia.logika.knihy.Kniha
 import com.example.vamzaplikacia.logika.knihy.PolickaKniznice

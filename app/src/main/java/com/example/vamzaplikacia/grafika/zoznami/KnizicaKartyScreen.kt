@@ -1,4 +1,4 @@
-package com.example.vamzaplikacia.grafika.zoznamiUI
+package com.example.vamzaplikacia.grafika.zoznami
 
 import android.content.res.Configuration
 import androidx.compose.foundation.ExperimentalFoundationApi
@@ -37,15 +37,15 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import coil.compose.rememberAsyncImagePainter
+import com.example.vamzaplikacia.R
 import com.example.vamzaplikacia.logika.knihy.Kniznica
 import com.example.vamzaplikacia.logika.knihy.ZoznamKnih
 
-val kniznica = Kniznica()
-
 @Composable
-fun KnizicaKartyScreen (onClick: (ZoznamKnih) -> Unit, onDeleteClick: () -> Unit) {
+fun KnizicaKartyScreen (onClick: (ZoznamKnih) -> Unit, onDeleteClick: (ZoznamKnih) -> Unit, kniznica: Kniznica) {
     var pocetCol = 2
     var ratio = 0.8f
 
@@ -72,9 +72,9 @@ fun KnizicaKartyScreen (onClick: (ZoznamKnih) -> Unit, onDeleteClick: () -> Unit
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun BookListCard(zoznam: ZoznamKnih, onClick: (ZoznamKnih) -> Unit, onDeleteClick: () -> Unit, ratio: Float) {
+fun BookListCard(zoznam: ZoznamKnih, onClick: (ZoznamKnih) -> Unit, onDeleteClick: (ZoznamKnih) -> Unit, ratio: Float) {
 
-    var remove by rememberSaveable { mutableStateOf(false) }
+    var odstran by rememberSaveable { mutableStateOf(false) }
 
     Card(
         shape = MaterialTheme.shapes.medium,
@@ -83,27 +83,27 @@ fun BookListCard(zoznam: ZoznamKnih, onClick: (ZoznamKnih) -> Unit, onDeleteClic
             .aspectRatio(ratio)
             .combinedClickable(
                 onClick = {
-                    if (!remove) {
+                    if (!odstran) {
                         onClick(zoznam)
                     }
                 },
                 onLongClick = {
-                    remove = true
+                    odstran = true
                 }
             )
     ) {
-        if (remove) {
+        if (odstran) {
             Row(modifier = Modifier
                 .fillMaxSize()) {
                 IconButton(onClick = {
-                    onDeleteClick()
-                    remove = false
+                    onDeleteClick(zoznam)
+                    odstran = false
                                      }, modifier = Modifier
                     .align(Alignment.CenterVertically)
                     .weight(1f)) {
                     Icon(Icons.Filled.Delete, contentDescription = "Delete", modifier = Modifier.fillMaxSize())
                 }
-                IconButton(onClick = {remove = false}, modifier = Modifier
+                IconButton(onClick = {odstran = false}, modifier = Modifier
                     .align(Alignment.CenterVertically)
                     .weight(1f)) {
                     Icon(Icons.Filled.Done, contentDescription = "Done", modifier = Modifier.fillMaxSize())
@@ -145,7 +145,7 @@ fun BookListCard(zoznam: ZoznamKnih, onClick: (ZoznamKnih) -> Unit, onDeleteClic
                 Spacer(modifier = Modifier.height(8.dp))
 
                 Text(
-                    text = "${zoznam.getSize()} položiek",
+                    text = stringResource(R.string.poloziek, zoznam.getSize()),
                     style = MaterialTheme.typography.bodyMedium,
                     modifier = Modifier.fillMaxWidth()
                 )

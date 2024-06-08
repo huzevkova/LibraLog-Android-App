@@ -1,10 +1,9 @@
-package com.example.vamzaplikacia.data
+package com.example.vamzaplikacia.data.knihyData
 
 import android.net.Uri
 import androidx.room.TypeConverter
 import com.example.vamzaplikacia.logika.enumy.Vlastnosti
 import com.example.vamzaplikacia.logika.enumy.Zanre
-import com.example.vamzaplikacia.logika.knihy.Kniha
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import java.util.Calendar

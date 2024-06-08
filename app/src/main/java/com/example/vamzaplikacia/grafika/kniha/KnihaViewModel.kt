@@ -1,9 +1,7 @@
 package com.example.vamzaplikacia.grafika.kniha
 
 import androidx.lifecycle.ViewModel
-import com.example.vamzaplikacia.data.KnihyRepository
-import com.example.vamzaplikacia.logika.AktualizaciaKnihyUIState
-import com.example.vamzaplikacia.logika.knihy.Kniha
+import com.example.vamzaplikacia.grafika.UIState.AktualizaciaKnihyUIState
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow

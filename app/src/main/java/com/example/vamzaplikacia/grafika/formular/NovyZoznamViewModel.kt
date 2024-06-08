@@ -2,8 +2,8 @@ package com.example.vamzaplikacia.grafika.formular
 
 import android.net.Uri
 import androidx.lifecycle.ViewModel
-import com.example.vamzaplikacia.data.PolickyRepository
-import com.example.vamzaplikacia.logika.NovyZoznamUIState
+import com.example.vamzaplikacia.data.polickyData.PolickyRepository
+import com.example.vamzaplikacia.grafika.UIState.NovyZoznamUIState
 import com.example.vamzaplikacia.logika.knihy.PolickaKniznice
 import com.example.vamzaplikacia.logika.knihy.ZoznamKnih
 import kotlinx.coroutines.flow.MutableStateFlow

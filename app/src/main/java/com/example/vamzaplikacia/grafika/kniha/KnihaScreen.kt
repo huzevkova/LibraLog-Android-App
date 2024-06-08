@@ -28,7 +28,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 
 import androidx.lifecycle.viewmodel.compose.viewModel
-import coil.compose.rememberImagePainter
+import coil.compose.rememberAsyncImagePainter
 import com.example.vamzaplikacia.R
 import com.example.vamzaplikacia.logika.knihy.Kniha
 
@@ -49,7 +49,9 @@ fun KnihaScreen(kniha: Kniha, viewModel: KnihaViewModel = viewModel()){
             .verticalScroll(rememberScrollState())
     ) {
         Row(horizontalArrangement = Arrangement.SpaceBetween) {
-            var paint = if (kniha.obrazok == null) painterResource(R.drawable.book) else rememberImagePainter(kniha.obrazok)
+            val paint = if (kniha.obrazok == null) painterResource(R.drawable.book) else rememberAsyncImagePainter(
+                kniha.obrazok
+            )
             Image(
                 painter = paint,
                 contentDescription = null,

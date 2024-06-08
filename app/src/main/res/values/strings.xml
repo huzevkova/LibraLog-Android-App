@@ -28,4 +28,18 @@
     <string name="vlastnosti_knihy_form">Vlastnosti knihy:</string>
     <string name="ok">OK</string>
     <string name="fileprovider">com.example.vamzaplikacia.fileprovider</string>
+    <string name="search_placeholder">Zadajte vyhľadávaný text</string>
+    <string name="vsetko">Všetko</string>
+    <string name="vyber_obrazok">Vyber obrázok</string>
+    <string name="image_moznost">image/*</string>
+    <string name="menu">Menu</string>
+    <string name="oblubeni_autori">Obľúbení autori</string>
+    <string name="autori">autori</string>
+    <string name="vyhladavanie">Vyhľadavanie</string>
+    <string name="pridaj_do_zoznamu">Pridaj do zoznamu...</string>
+    <string name="zmaz">Zmaž...</string>
+    <string name="zmazanie">zmazanie</string>
+    <string name="zmas_vsade">Zmaž všade</string>
+    <string name="zmaz_v_tomto_zozname">Zmaž v tomto zozname</string>
+    <string name="poloziek">%1$s položiek</string>
 </resources>

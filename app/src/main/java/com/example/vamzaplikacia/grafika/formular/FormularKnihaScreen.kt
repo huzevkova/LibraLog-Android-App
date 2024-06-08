@@ -1,6 +1,6 @@
 package com.example.vamzaplikacia.grafika.formular
 
-import FilePickerButton
+import VyberObrazkuButton
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
@@ -39,13 +39,10 @@ import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.navigation.NavHostController
 import com.example.vamzaplikacia.R
-import com.example.vamzaplikacia.logika.FormularKnihyUIState
+import com.example.vamzaplikacia.grafika.UIState.FormularKnihyUIState
 import com.example.vamzaplikacia.logika.enumy.Vlastnosti
 import com.example.vamzaplikacia.logika.enumy.Zanre
-import com.example.vamzaplikacia.pridajZadanuKnihu
-import kotlinx.coroutines.launch
 
 
 private val modifierTextField = Modifier
@@ -112,7 +109,7 @@ fun Formular(viewModel: FormularKnihyViewModel, uiState: FormularKnihyUIState, o
             labelText = stringResource(R.string.vydavatelstvo_form),
         )
         Spacer(modifier = Modifier.height(8.dp))
-        FilePickerButton{viewModel.setObrazok(it)}
+        VyberObrazkuButton{viewModel.setObrazok(it)}
         Spacer(modifier = Modifier.height(8.dp))
         com.example.vamzaplikacia.grafika.kniha.TextField(
             text = "Hodnotenie:  " + "%.1f".format(

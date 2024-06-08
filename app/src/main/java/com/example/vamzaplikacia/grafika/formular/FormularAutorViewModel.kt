@@ -2,8 +2,8 @@ package com.example.vamzaplikacia.grafika.formular
 
 import android.net.Uri
 import androidx.lifecycle.ViewModel
-import com.example.vamzaplikacia.data.AutoriRepository
-import com.example.vamzaplikacia.logika.FormularAutorUIState
+import com.example.vamzaplikacia.data.autoriData.AutoriRepository
+import com.example.vamzaplikacia.grafika.UIState.FormularAutorUIState
 import com.example.vamzaplikacia.logika.knihy.Autor
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
