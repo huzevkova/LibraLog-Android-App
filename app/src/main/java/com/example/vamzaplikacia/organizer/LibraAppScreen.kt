@@ -15,10 +15,12 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import com.example.vamzaplikacia.R
 import com.example.vamzaplikacia.data.AppContainer
 import com.example.vamzaplikacia.grafika.formular.FormularAutorViewModel
 import com.example.vamzaplikacia.grafika.formular.FormularKnihyViewModel
@@ -125,8 +127,8 @@ fun LibraApp(
                 vymazatDialog = false
                 refresh(navController)
             },
-            dialogTitle = "Zmazanie zoznamu",
-            dialogText = "Chcete zmazať aj všetky knihy v zozname?",
+            dialogTitle = stringResource(R.string.zmazanie_zoznamu),
+            dialogText = stringResource(R.string.zmazat_vsetky_knihy),
             icon = Icons.Filled.Warning
         )
     }
@@ -170,7 +172,7 @@ fun LibraApp(
                     contentColor = MaterialTheme.colorScheme.secondary,
                     shape = CircleShape
                 ) {
-                    Icon(Icons.Filled.Add, "Tlačidlo na pridanie niečoho.")
+                    Icon(Icons.Filled.Add, stringResource(R.string.tlacidlo_na_pridanie))
                 }
             }
         }

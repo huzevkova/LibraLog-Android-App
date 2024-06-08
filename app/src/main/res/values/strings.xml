@@ -43,4 +43,7 @@
     <string name="zmaz_v_tomto_zozname">Zmaž v tomto zozname</string>
     <string name="poloziek">%1$s položiek</string>
     <string name="ikona_pozor">ikona_pozor</string>
+    <string name="tlacidlo_na_pridanie">Tlačidlo na pridanie niečoho.</string>
+    <string name="zmazanie_zoznamu">Zmazanie zoznamu</string>
+    <string name="zmazat_vsetky_knihy">Chcete zmazať aj všetky knihy v zozname?</string>
 </resources>
