@@ -1,5 +1,8 @@
 package com.example.vamzaplikacia.logika.enumy
 
+/**
+ * Enumerátor možných vlastností kníhy
+ */
 enum class Vlastnosti (val pridMeno: String) {
     ZABAVNE("zábavné"),
     PUTAVE("pútavé"),

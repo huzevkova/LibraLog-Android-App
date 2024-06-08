@@ -33,6 +33,16 @@ import com.example.vamzaplikacia.organizer.Premenne
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
+/**
+ * Horná lišta aplikácie, otvára menu možnosti, alebo vyhľadávanie
+ *
+ * @param aktualnaObrazovka obrazovka na ktorej sa aplikácia nachádza
+ * @param canNavigateBack či sa môže pohnuť späť
+ * @param navigateUp funkcia ktorou sa možno pohnúť späť
+ * @param navController navigácia
+ * @param container kontainer s repozitármi
+ * @param kniznica knižnica aplikácie
+ */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun LibraAppBar(
@@ -75,14 +85,12 @@ fun LibraAppBar(
                 )
             },
             actions = {
-                AppBarActions(
+                AppBarAkcie(
                     aktualnaObrazovka = aktualnaObrazovka,
                     canNavigateBack = canNavigateBack,
-                    vyhladavanieEnable = vyhladavanieEnable,
                     setVyhladavanieEnable = { vyhladavanieEnable = it },
                     otvorPraveDropDownMenu = otvorPraveDropDownMenu,
                     setOtvorPraveDropDownMenu = { otvorPraveDropDownMenu = it },
-                    navController = navController,
                     navigateUp = navigateUp,
                     coroutineScope = coroutineScope,
                     container = container,
@@ -93,6 +101,11 @@ fun LibraAppBar(
     }
 }
 
+/**
+ * Nadpis hornej lišty
+ *
+ * @param aktualnaObrazovka obrazovka na ktorej sa aplikácia nachádza
+ */
 @Composable
 fun AppBarTitle(aktualnaObrazovka: LibraAppScreen) {
     if (aktualnaObrazovka == LibraAppScreen.VybranaKniha) {
@@ -102,6 +115,16 @@ fun AppBarTitle(aktualnaObrazovka: LibraAppScreen) {
     }
 }
 
+
+/**
+ * Ikona navigácie hornej lišty
+ *
+ * @param canNavigateBack či sa môže pohnuť späť
+ * @param navigateUp funkcia ktorou sa možno pohnúť späť
+ * @param otvorLaveDropDownMenu či sa má otvoriť menu naľavo
+ * @param setOtvorLaveDropDownMenu funkcia čo sa má vykonať pri zmene otvorenie ľavého menu
+ * @param navController navigácia
+ */
 @Composable
 fun AppBarNavigationIcon(
     canNavigateBack: Boolean,
@@ -134,15 +157,26 @@ fun AppBarNavigationIcon(
     }
 }
 
+/**
+ * Vykonávanie rôznyhc akcií na základe vstupov
+ *
+ * @param aktualnaObrazovka obrazovka na ktorej sa aplikácia nachádza
+ * @param canNavigateBack či sa môže pohnuť späť
+ * @param setVyhladavanieEnable či s aide vyhľadávať
+ * @param otvorPraveDropDownMenu či sa má otvoriť menu napravo
+ * @param setOtvorPraveDropDownMenu funkcia čo sa má vykonať pri zmene otvorenie pravého menu
+ * @param navigateUp funkcia ktorou sa možno pohnúť späť
+ * @param coroutineScope priestor pre korutinu
+ * @param container kontainer s repozitármi
+ * @param kniznica knižnica aplikácie
+ */
 @Composable
-fun AppBarActions(
+fun AppBarAkcie(
     aktualnaObrazovka: LibraAppScreen,
     canNavigateBack: Boolean,
-    vyhladavanieEnable: Boolean,
     setVyhladavanieEnable: (Boolean) -> Unit,
     otvorPraveDropDownMenu: Boolean,
     setOtvorPraveDropDownMenu: (Boolean) -> Unit,
-    navController: NavHostController,
     navigateUp: () -> Unit,
     coroutineScope: CoroutineScope,
     container: AppContainer,
@@ -162,7 +196,6 @@ fun AppBarActions(
         AppBarDropdownItems(
             aktualnaObrazovka = aktualnaObrazovka,
             setOtvorPraveDropDownMenu = setOtvorPraveDropDownMenu,
-            navController = navController,
             navigateUp = navigateUp,
             coroutineScope = coroutineScope,
             container = container,
@@ -171,11 +204,20 @@ fun AppBarActions(
     }
 }
 
+/**
+ * Možnosti pri otvorení menu
+ *
+ * @param aktualnaObrazovka obrazovka na ktorej sa aplikácia nachádza
+ * @param setOtvorPraveDropDownMenu funkcia čo sa má vykonať pri zmene otvorenie pravého menu
+ * @param navigateUp funkcia ktorou sa možno pohnúť späť
+ * @param coroutineScope priestor pre korutinu
+ * @param container kontainer s repozitármi
+ * @param kniznica knižnica aplikácie
+ */
 @Composable
 fun AppBarDropdownItems(
     aktualnaObrazovka: LibraAppScreen,
     setOtvorPraveDropDownMenu: (Boolean) -> Unit,
-    navController: NavHostController,
     navigateUp: () -> Unit,
     coroutineScope: CoroutineScope,
     container: AppContainer,

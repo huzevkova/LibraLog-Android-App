@@ -10,6 +10,12 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 
+
+/**
+ * ViewModel pre formulár novej knihy
+ *
+ * @param knihyRepository repozitár kníh
+ */
 class FormularKnihyViewModel(private val knihyRepository: KnihyRepository) : ViewModel() {
 
     private val _uiState = MutableStateFlow(FormularKnihyUIState())

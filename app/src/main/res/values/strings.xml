@@ -42,4 +42,5 @@
     <string name="zmas_vsade">Zmaž všade</string>
     <string name="zmaz_v_tomto_zozname">Zmaž v tomto zozname</string>
     <string name="poloziek">%1$s položiek</string>
+    <string name="ikona_pozor">ikona_pozor</string>
 </resources>

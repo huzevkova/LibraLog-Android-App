@@ -28,6 +28,15 @@ import com.example.vamzaplikacia.R
 import com.example.vamzaplikacia.logika.knihy.Kniha
 import com.example.vamzaplikacia.logika.knihy.Kniznica
 
+/**
+ * Vyhľadávacia horná lišta na hľadanie podľa zadaného textu v názve, autoroch a popise,
+ * vypíše aspoň 10 záznamo ak existujú
+ *
+ * @param onClick funkcia s knihou ktorá sa vykoná po kliknutí na knihu
+ * @param onChange funkcia s boolean ktorá sa vykoná po zmene zadaného textu
+ * @param onBackClick funkcia s knihou ktorá sa vykoná po kliknutí späť
+ * @param kniznica
+ */
 @Composable
 @OptIn(ExperimentalMaterial3Api::class)
 fun TopSearchBar(onClick: (Kniha) -> Unit, onChange: (Boolean) -> Unit, onBackClick: () -> Unit, kniznica: Kniznica) {

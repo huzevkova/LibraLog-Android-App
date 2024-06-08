@@ -8,15 +8,17 @@ import androidx.room.TypeConverters
 import androidx.room.migration.Migration
 import androidx.sqlite.db.SupportSQLiteDatabase
 import com.example.vamzaplikacia.data.autoriData.AutorDAO
-import com.example.vamzaplikacia.data.knihyData.Converters
 import com.example.vamzaplikacia.data.knihyData.KnihaDAO
 import com.example.vamzaplikacia.data.polickyData.PolickaDAO
 import com.example.vamzaplikacia.logika.knihy.Autor
 import com.example.vamzaplikacia.logika.knihy.Kniha
 import com.example.vamzaplikacia.logika.knihy.PolickaKniznice
 
+/**
+ * Databáza aplikácie
+ */
 @Database(entities = [Kniha::class, Autor::class, PolickaKniznice::class], version = 2, exportSchema = false)
-@TypeConverters(Converters::class)
+@TypeConverters(Konvertory::class)
 abstract class KniznicaDatabase : RoomDatabase() {
     abstract fun knihaDAO() : KnihaDAO
     abstract fun autoriDAO() : AutorDAO

@@ -1,6 +1,6 @@
 package com.example.vamzaplikacia.grafika.formular
 
-import VyberObrazkuButton
+import com.example.vamzaplikacia.organizer.pomocne_fun.VyberObrazkuButton
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -14,9 +14,18 @@ import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import com.example.vamzaplikacia.R
 import com.example.vamzaplikacia.grafika.UIState.NovyZoznamUIState
 
+/**
+ * Dialógové okno na pridanie nového zoznamu
+ *
+ * @param viewModel viewModel ktorého sa to týka
+ * @param uiState stav formuláru
+ * @param onClickOK funkcia čo sa vykoná po kliknutí OK
+ */
 @Composable
 fun NovyZoznamDialog(
     viewModel: NovyZoznamViewModel,
@@ -55,6 +64,15 @@ fun NovyZoznamDialog(
     }
 }
 
+/**
+ * Dialóg na zmazanie karty
+ *
+ * @param onDismissRequest funkcia čo sa vykoná po odmietnutí
+ * @param onConfirmation funkcia čo sa vykoná po potvrdení
+ * @param dialogTitle nadpis dialógu
+ * @param dialogText text dialógu
+ * @param icon obrázok dialógu
+ */
 @Composable
 fun VymazatKartuDialog(
     onDismissRequest: () -> Unit,
@@ -65,7 +83,7 @@ fun VymazatKartuDialog(
 ) {
     AlertDialog(
         icon = {
-            Icon(icon, contentDescription = "Example Icon")
+            Icon(icon, contentDescription = stringResource(R.string.ikona_pozor))
         },
         title = {
             Text(text = dialogTitle)

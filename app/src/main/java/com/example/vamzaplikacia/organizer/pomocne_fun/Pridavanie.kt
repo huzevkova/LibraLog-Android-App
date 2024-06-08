@@ -12,6 +12,12 @@ import com.example.vamzaplikacia.logika.knihy.Kniznica
 import com.example.vamzaplikacia.logika.knihy.ZoznamKnih
 import com.example.vamzaplikacia.organizer.Premenne
 
+/**
+ * Pridanie zadanej knihy do knižnice
+ *
+ * @param uiState stav knihy
+ * @param kniznica knižnica aplikácie
+ */
 fun pridajZadanuKnihu(uiState: FormularKnihyUIState, kniznica: Kniznica): Kniha {
     val zanre = mutableListOf<Zanre>()
     uiState.zanreVyber.forEachIndexed { index, b ->
@@ -41,6 +47,12 @@ fun pridajZadanuKnihu(uiState: FormularKnihyUIState, kniznica: Kniznica): Kniha 
     return kniha
 }
 
+/**
+ * Pridanie nového autora do knižnice
+ *
+ * @param uiState stav autora
+ * @param kniznica knižnica aplikácie
+ */
 fun pridajZadanehoAutora(uiState: FormularAutorUIState, kniznica: Kniznica): Autor {
     val autor = Autor(uiState.menoAutora, uiState.datumNar, uiState.datumUmrtia, obrazokCesta = uiState.obrazok)
     autor.popis = uiState.popis
@@ -49,12 +61,25 @@ fun pridajZadanehoAutora(uiState: FormularAutorUIState, kniznica: Kniznica): Aut
     return autor
 }
 
+/**
+ * Aktualizácia knihy v knižnici
+ *
+ * @param kniha
+ * @param uiState stav aktualizovanej knihy
+ */
 fun aktualizujKnihu(kniha: Kniha, uiState: AktualizaciaKnihyUIState) {
     kniha.hodnotenie = uiState.hodnotenie
     kniha.pocetPrecitanych = uiState.pocetPrecitanych
 
 }
 
+/**
+ * Pridanie nového zoznamu do knižnice
+ *
+ * @param nazov
+ * @param obrazok
+ * @param kniznica
+ */
 fun pridajZoznam(nazov: String, obrazok: Uri? = null, kniznica: Kniznica): ZoznamKnih {
     var zoznam = ZoznamKnih(nazov, obrazok = obrazok)
     kniznica.getVsetkyZoznamy().add(zoznam)

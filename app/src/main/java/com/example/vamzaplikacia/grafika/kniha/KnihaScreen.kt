@@ -32,7 +32,12 @@ import coil.compose.rememberAsyncImagePainter
 import com.example.vamzaplikacia.R
 import com.example.vamzaplikacia.logika.knihy.Kniha
 
-
+/**
+ * Obrazovka pre detail knihy
+ *
+ * @param kniha kniha ktorej sa má zobraziť
+ * @param viewModel viewModel knihy
+ */
 @Composable
 fun KnihaScreen(kniha: Kniha, viewModel: KnihaViewModel = viewModel()){
     var sliderHodnoteniePosition by remember { mutableFloatStateOf(kniha.hodnotenie.toFloat() / 10) }
@@ -113,6 +118,12 @@ fun KnihaScreen(kniha: Kniha, viewModel: KnihaViewModel = viewModel()){
     viewModel.setPocetPrecitanych(pocetPrecitanychStran)
 }
 
+/**
+ * Textové pole
+ *
+ * @param text text pola
+ * @param bold či je text nahrubo alebo nie
+ */
 @Composable
 fun TextField(text: String, bold: Boolean = false) {
     val textStyle = if (bold) MaterialTheme.typography.titleSmall else MaterialTheme.typography.bodySmall

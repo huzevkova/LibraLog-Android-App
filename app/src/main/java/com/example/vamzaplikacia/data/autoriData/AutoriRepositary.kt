@@ -4,7 +4,9 @@ import com.example.vamzaplikacia.logika.knihy.Autor
 import com.example.vamzaplikacia.logika.knihy.Kniha
 import kotlinx.coroutines.flow.Flow
 
-
+/**
+ * Repozitár pre autorov
+ */
 interface AutoriRepository {
 
     fun getAllItemsStream(): Flow<List<Autor>>

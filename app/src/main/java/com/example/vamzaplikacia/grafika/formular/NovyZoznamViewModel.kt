@@ -11,6 +11,11 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 
+/**
+ * ViewModel pre dialóg nového zoznamu
+ *
+ * @param polickyRepository repozitár poličiek / zoznamov
+ */
 class NovyZoznamViewModel(private val polickyRepository: PolickyRepository) : ViewModel() {
     private val _uiState = MutableStateFlow(NovyZoznamUIState())
     val uiState: StateFlow<NovyZoznamUIState> = _uiState.asStateFlow()

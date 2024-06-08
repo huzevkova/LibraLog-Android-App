@@ -33,6 +33,11 @@ import com.example.vamzaplikacia.logika.knihy.Autor
 import com.example.vamzaplikacia.logika.knihy.Kniha
 import com.example.vamzaplikacia.logika.knihy.ZoznamKnih
 
+/**
+ * Obrazovka zobrazujúca detail autora - obrázok, meno, roky, popis, počet kníh a zoznam kníh.
+ * @param autor autor ktorého sa to týka
+ * @param onClick funkcia s knihou čo sa vykoná po kliknutí
+ */
 @Composable
 fun AutorScreen(autor: Autor, onClick: (Kniha) -> Unit) {
     BoxWithConstraints(modifier = Modifier
@@ -67,6 +72,13 @@ fun AutorScreen(autor: Autor, onClick: (Kniha) -> Unit) {
     }
 }
 
+/**
+ * UI pre spodnú časť obrazovky - informácie
+ *
+ * @param modifier modifikátor
+ * @param autor autor ktorého sa to týka
+ * @param onClick funkcia s knihou čo sa vykoná po kliknutí
+ */
 @Composable
 private fun Bottom(modifier: Modifier, autor: Autor, onClick: (Kniha) -> Unit) {
     Column(
@@ -124,6 +136,12 @@ private fun Bottom(modifier: Modifier, autor: Autor, onClick: (Kniha) -> Unit) {
     }
 }
 
+/**
+ * UI pre strednú časť obrazovky - obrázok.
+ *
+ *  * @param modifier modifikátor
+ *  * @param autor autor ktorého sa to týka
+ */
 @Composable
 fun Center(modifier: Modifier, autor: Autor) {
     Column(modifier = modifier.padding(top = 50.dp))

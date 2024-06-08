@@ -5,9 +5,6 @@ import com.example.vamzaplikacia.data.autoriData.AutoriRepository
 import com.example.vamzaplikacia.data.knihyData.KnihyRepository
 import com.example.vamzaplikacia.data.polickyData.PolickyRepository
 
-/**
- * App container for Dependency injection.
- */
 interface AppContainer {
     val knihyRepository: KnihyRepository
     val autoriRepository: AutoriRepository
@@ -15,12 +12,12 @@ interface AppContainer {
 }
 
 /**
- * [AppContainer] implementation that provides instance of [OfflineKniznicaRepository]
+ * Implementácia AppContainer ktorá sprístupňuje offline repozitáre
+ *
+ * @param context kontext v ktorom sa repozitár otvorí
  */
 class AppDataContainer(private val context: Context) : AppContainer {
-    /**
-     * Implementation for [KnihyRepository]
-     */
+
     override val knihyRepository: KnihyRepository by lazy {
         OfflineKniznicaRepository(KniznicaDatabase.getDatabase(context).knihaDAO())
     }

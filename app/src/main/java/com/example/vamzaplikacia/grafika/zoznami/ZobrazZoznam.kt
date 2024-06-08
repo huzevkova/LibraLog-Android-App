@@ -27,6 +27,12 @@ import com.example.vamzaplikacia.R
 import com.example.vamzaplikacia.logika.knihy.Kniha
 import com.example.vamzaplikacia.logika.knihy.ZoznamKnih
 
+/**
+ * Obrazovka zobrazujúca zoznam kníh
+ *
+ * @param zoznam zoznam knih
+ * @param onClick funkcia s knihou ktorá sa vykoná po kliknutí na knihu
+ */
 @Composable
 fun ZoznamKnihScreen(zoznam: ZoznamKnih, onClick: (Kniha) -> Unit) {
     VypisanieKnih(zoznam = zoznam, modifier = Modifier
@@ -37,7 +43,13 @@ fun ZoznamKnihScreen(zoznam: ZoznamKnih, onClick: (Kniha) -> Unit) {
         onClick)
 }
 
-
+/**
+ * Vypísanie kníh v zozname
+ *
+ * @param zoznam zoznam knih
+ * @param modifier modifikátor
+ * @param onClick funkcia s knihou ktorá sa vykoná po kliknutí na knihu
+ */
 @Composable
 fun VypisanieKnih(zoznam: ZoznamKnih, modifier: Modifier, onClick: (Kniha) -> Unit) {
     Column (modifier = modifier) {

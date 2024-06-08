@@ -9,6 +9,9 @@ import androidx.room.Update
 import com.example.vamzaplikacia.logika.knihy.Autor
 import kotlinx.coroutines.flow.Flow
 
+/**
+ * DAO pre autorov
+ */
 @Dao
 interface AutorDAO {
     @Insert(onConflict = OnConflictStrategy.IGNORE)

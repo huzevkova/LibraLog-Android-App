@@ -2,6 +2,9 @@ package com.example.vamzaplikacia.grafika.UIState
 
 import android.net.Uri
 
+/**
+ * UI state pre novú knihu
+ */
 data class FormularKnihyUIState (
     val nazov: String = "",
     val autor: String = "",

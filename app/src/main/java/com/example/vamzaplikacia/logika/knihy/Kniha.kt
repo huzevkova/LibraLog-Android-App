@@ -7,6 +7,27 @@ import com.example.vamzaplikacia.logika.enumy.Vlastnosti
 import com.example.vamzaplikacia.logika.enumy.Zanre
 import java.util.Calendar
 
+/**
+ * Trieda pre knihu, ukľadjúca si všetky informácie o knihe, zároveň tabuľka
+ *
+ * @param nazov
+ * @param autor
+ * @param rokVydania
+ * @param vydavatelstvo
+ * @param obrazok
+ * @param popis
+ * @param poznamky
+ * @param precitana
+ * @param naNeskor
+ * @param pozicana
+ * @param kupena
+ * @param pocetStran
+ * @param pocetPrecitanych
+ * @param hodnotenie
+ * @param policka
+ * @param datumPridania aktuálny dátum
+ * @param id_knihy
+ */
 @Entity(tableName = "knihy")
 data class Kniha(
     val nazov: String,

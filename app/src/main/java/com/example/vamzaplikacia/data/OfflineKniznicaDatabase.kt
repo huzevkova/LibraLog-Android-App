@@ -10,6 +10,11 @@ import com.example.vamzaplikacia.logika.knihy.Kniha
 import com.example.vamzaplikacia.logika.knihy.PolickaKniznice
 import kotlinx.coroutines.flow.Flow
 
+/**
+ * Offline repozitár kníh
+ *
+ * @param knihaDao
+ */
 class OfflineKniznicaRepository(private val knihaDao: KnihaDAO) : KnihyRepository {
     override fun getAllItemsStream(): Flow<List<Kniha>> = knihaDao.getAllItems()
 
@@ -22,7 +27,11 @@ class OfflineKniznicaRepository(private val knihaDao: KnihaDAO) : KnihyRepositor
     override suspend fun updateItem(kniha: Kniha) = knihaDao.update(kniha)
 }
 
-
+/**
+ * Offline repozitár autorov
+ *
+ * @param autorDao
+ */
 class OfflineAutoriRepository(private val autorDao: AutorDAO) : AutoriRepository {
     override fun getAllItemsStream(): Flow<List<Autor>> = autorDao.getAllItems()
 
@@ -35,6 +44,11 @@ class OfflineAutoriRepository(private val autorDao: AutorDAO) : AutoriRepository
     override suspend fun updateItem(autor: Autor) = autorDao.update(autor)
 }
 
+/**
+ * Offline repozitár poličiek (zoznamov)
+ *
+ * @param polickaDAO
+ */
 class OfflinePolickyRepository(private val polickaDAO: PolickaDAO) : PolickyRepository {
     override fun getAllItemsStream(): Flow<List<PolickaKniznice>> = polickaDAO.getAllItems()
 

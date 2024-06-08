@@ -27,6 +27,11 @@ import com.example.vamzaplikacia.organizer.pomocne_fun.pridajZadanuKnihu
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
+/**
+ * Enum možných cieľov pre navigáciu
+ *
+ * @param title nazov obrazovky
+ */
 enum class LibraAppScreen(@StringRes val title: Int) {
     Start(title = R.string.app_name),
     Kniznica(title = R.string.kniznica),
@@ -38,7 +43,20 @@ enum class LibraAppScreen(@StringRes val title: Int) {
     VybranaKniha(title = R.string.kniha)
 }
 
-
+/**
+ * Navigácia aplikácie, využívajúca NavHostController na presúvanie sa medzi obrazovkami
+ *
+ * @param navController
+ * @param viewModelFormular
+ * @param viewModelKniha
+ * @param viewModelAutor
+ * @param coroutineScope korutina
+ * @param onVymazatKartu funkcia ktorá sa vykoná pri zmazaní karty
+ * @param uiStateAutor stav autora
+ * @param uiStateFormular stav knihy
+ * @param innerPadding padding ktorý sa má použiť
+ * @param kniznica knižnica aplikácia
+ */
 @Composable
 fun LibraNavHost(
     navController: NavHostController,

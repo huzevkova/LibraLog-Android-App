@@ -9,6 +9,9 @@ import androidx.room.Update
 import com.example.vamzaplikacia.logika.knihy.PolickaKniznice
 import kotlinx.coroutines.flow.Flow
 
+/**
+ * DAO pre poličky (zoznamy)
+ */
 @Dao
 interface PolickaDAO {
 

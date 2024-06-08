@@ -10,6 +10,11 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 
+/**
+ * ViewModel pre formulár nového autora
+ *
+ * @param autoriRepository repozitár autorov
+ */
 class FormularAutorViewModel(private val autoriRepository: AutoriRepository) : ViewModel() {
 
     private val _uiState = MutableStateFlow(FormularAutorUIState())

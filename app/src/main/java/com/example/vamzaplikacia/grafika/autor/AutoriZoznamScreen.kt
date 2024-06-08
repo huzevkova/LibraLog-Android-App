@@ -23,6 +23,12 @@ import coil.compose.rememberAsyncImagePainter
 import com.example.vamzaplikacia.logika.knihy.Autor
 import com.example.vamzaplikacia.logika.knihy.ZoznamAutorov
 
+/**
+ * Obrazovka zobrazujúca zoznam autorov - meno, obrázok, ukážka popisu, počet kníh.
+ *
+ * @param autori zoznam autorov
+ * @param onClick funkcia s autorom čo sa vykoná po kliknutí
+ */
 @Composable
 fun AutoriZoznamScreen(autori: ZoznamAutorov, onClick: (Autor) -> Unit) {
     Column (modifier = Modifier

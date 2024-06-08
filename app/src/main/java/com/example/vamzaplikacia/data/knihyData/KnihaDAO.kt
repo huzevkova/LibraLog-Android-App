@@ -9,6 +9,9 @@ import androidx.room.Update
 import com.example.vamzaplikacia.logika.knihy.Kniha
 import kotlinx.coroutines.flow.Flow
 
+/**
+ * DAO pre knihy
+ */
 @Dao
 interface KnihaDAO {
 

@@ -3,6 +3,9 @@ package com.example.vamzaplikacia.data.polickyData
 import com.example.vamzaplikacia.logika.knihy.PolickaKniznice
 import kotlinx.coroutines.flow.Flow
 
+/**
+ * Repozitár pre poličky (zoznamy)
+ */
 interface PolickyRepository {
 
     fun getAllItemsStream(): Flow<List<PolickaKniznice>>

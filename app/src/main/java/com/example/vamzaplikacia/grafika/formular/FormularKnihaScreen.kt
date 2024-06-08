@@ -1,6 +1,6 @@
 package com.example.vamzaplikacia.grafika.formular
 
-import VyberObrazkuButton
+import com.example.vamzaplikacia.organizer.pomocne_fun.VyberObrazkuButton
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
@@ -36,9 +36,7 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Slider
 import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableStateListOf
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.res.stringResource
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.vamzaplikacia.R
 import com.example.vamzaplikacia.grafika.UIState.FormularKnihyUIState
 import com.example.vamzaplikacia.logika.enumy.Vlastnosti
@@ -49,18 +47,15 @@ private val modifierTextField = Modifier
     .padding(bottom = 16.dp)
     .fillMaxWidth()
 
+/**
+ * Obrazovka zobrazujúca formulár pre novú knihu
+ *
+ * @param viewModel viewModel ktorého sa to týka
+ * @param uiState stav formuláru
+ * @param onClick funkcia čo sa vykoná po kliknutí
+ */
 @Composable
-fun FormularKnihaScreen(
-    viewModel: FormularKnihyViewModel = viewModel(),
-    uiState: FormularKnihyUIState,
-    onClick: () -> Unit
-)
-{
-    Formular(viewModel, uiState, onClick)
-}
-
-@Composable
-fun Formular(viewModel: FormularKnihyViewModel, uiState: FormularKnihyUIState, onClick: () -> Unit) {
+fun FormularKnihaScreen(viewModel: FormularKnihyViewModel, uiState: FormularKnihyUIState, onClick: () -> Unit) {
 
     val vybraneZanre = remember {mutableStateListOf<Boolean>()}
     for (i in Zanre.entries) {
@@ -73,8 +68,6 @@ fun Formular(viewModel: FormularKnihyViewModel, uiState: FormularKnihyUIState, o
 
     var sliderHodnoteniePosition by remember { mutableFloatStateOf(0f) }
     val hodnotenieKnihy = sliderHodnoteniePosition.toDouble() * 10
-
-    val coroutineScope = rememberCoroutineScope()
 
     Column(modifier = Modifier
         .verticalScroll(rememberScrollState())
@@ -182,6 +175,13 @@ fun Formular(viewModel: FormularKnihyViewModel, uiState: FormularKnihyUIState, o
     viewModel.setHodnotenie(hodnotenieKnihy.toString())
 }
 
+/**
+ * Zobrazenie kliknuteľných možností z listu
+ *
+ * @param enumZoznam zoznam možností
+ * @param vybrane zoznam vybratých možností
+ * @param onClick funkcia s číslom čo sa vykoná po kliknutí
+ */
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
 fun VyberMoznosti(enumZoznam: List<String>, vybrane: List<Boolean>, onClick: (Int) -> Unit) {
@@ -206,6 +206,16 @@ fun VyberMoznosti(enumZoznam: List<String>, vybrane: List<Boolean>, onClick: (In
     }
 }
 
+/**
+ * Pole na vloženie nejakého textu
+ *
+ * @param modifier modifikátor
+ * @param value hodnota pola
+ * @param placeHolder prvotná dočasná hodnota pola
+ * @param onValueChange funkcia čo sa vykoná po zmene hodnoty
+ * @param labelText text popisu pola
+ * @param cisla či pôjde o pole ktoré bude príjmať len čísla alebo nie
+ */
 @Composable
 fun InputPole(modifier: Modifier, value: String = "", placeHolder: String = "", onValueChange: (String)-> Unit, labelText: String, cisla: Boolean = false) {
     TextField(
@@ -221,6 +231,12 @@ fun InputPole(modifier: Modifier, value: String = "", placeHolder: String = "", 
     )
 }
 
+/**
+ * Vytvorenie checkboxu s nejakým popisom
+ *
+ * @param text text pri checkboxe
+ * @param onValueChange funkcia čo sa vykoná po zmene hodnoty
+ */
 @Composable
 fun CheckboxWithText(text: String, onValueChange: (Boolean) -> Unit) {
     var checkedState by remember { mutableStateOf(false) }

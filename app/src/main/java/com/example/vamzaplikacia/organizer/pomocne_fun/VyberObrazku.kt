@@ -1,4 +1,4 @@
-import android.content.res.Resources
+package com.example.vamzaplikacia.organizer.pomocne_fun
 import android.net.Uri
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
@@ -10,6 +10,11 @@ import androidx.compose.ui.res.stringResource
 import androidx.core.content.ContextCompat.getString
 import com.example.vamzaplikacia.R
 
+/**
+ * Otvorí dialóg na vybratie obrázku zo zariadenia
+ *
+ * @param onImagePicked funkcia s adresou ktorá sa vykoná po yvbratí obrázku
+ */
 @Composable
 fun VyberObrazkuButton(onImagePicked: (Uri) -> Unit) {
 
@@ -26,7 +31,5 @@ fun VyberObrazkuButton(onImagePicked: (Uri) -> Unit) {
     }) {
         Text(stringResource(R.string.vyber_obrazok))
     }
-
-
 }
 

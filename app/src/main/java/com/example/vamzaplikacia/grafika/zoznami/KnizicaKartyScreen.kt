@@ -44,6 +44,13 @@ import com.example.vamzaplikacia.R
 import com.example.vamzaplikacia.logika.knihy.Kniznica
 import com.example.vamzaplikacia.logika.knihy.ZoznamKnih
 
+/**
+ * Obrazovka zobrazujúca karty predstavujúce zoznamy kníh.
+ *
+ * @param onClick funkcia so zoznamom ktorá sa vykoná po kliknutí na zoznam
+ * @param onDeleteClick funkcia so zoznamom ktorá sa vykoná  po kliknutí na vymazanie zoznamu
+ * @param kniznica kniznica aplikácie
+ */
 @Composable
 fun KnizicaKartyScreen (onClick: (ZoznamKnih) -> Unit, onDeleteClick: (ZoznamKnih) -> Unit, kniznica: Kniznica) {
     var pocetCol = 2
@@ -64,15 +71,23 @@ fun KnizicaKartyScreen (onClick: (ZoznamKnih) -> Unit, onDeleteClick: (ZoznamKni
         ) {
             items(kniznica.getVsetkyZoznamy().size) { index ->
                 val zoznam = kniznica.getVsetkyZoznamy()[index]
-                BookListCard(zoznam = zoznam, onClick, onDeleteClick = onDeleteClick, ratio = ratio)
+                ZoznamListCard(zoznam = zoznam, onClick, onDeleteClick = onDeleteClick, ratio = ratio)
             }
         }
     }
 }
 
+/**
+ * ListCard pre konkrétny zoznam s možnosťou zmazania pri dlhom podržaní
+ *
+ * @param zoznam zoznam knih
+ * @param onClick funkcia so zoznamom ktorá sa vykoná po kliknutí na zoznam
+ * @param onDeleteClick funkcia so zoznamom ktorá sa vykoná  po kliknutí na vymazanie zoznamu
+ * @param ratio pomer pri otočení obrazovky
+ */
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun BookListCard(zoznam: ZoznamKnih, onClick: (ZoznamKnih) -> Unit, onDeleteClick: (ZoznamKnih) -> Unit, ratio: Float) {
+fun ZoznamListCard(zoznam: ZoznamKnih, onClick: (ZoznamKnih) -> Unit, onDeleteClick: (ZoznamKnih) -> Unit, ratio: Float) {
 
     var odstran by rememberSaveable { mutableStateOf(false) }
 

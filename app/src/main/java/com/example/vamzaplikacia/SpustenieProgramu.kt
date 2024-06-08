@@ -39,6 +39,9 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 
+/**
+ * Obrazovka predstavujúca načítanie s načítacím kolieskom
+ */
 @Composable
 fun NacitanieScreen() {
     Box(
@@ -65,6 +68,12 @@ fun NacitanieScreen() {
 private var start = true
 private var _kniznica: Kniznica? = null
 
+/**
+ * Načíta dáta z databázy a spustí aplikáciu
+ *
+ * @param container kontajner s repozitármi
+ * @param kniznica knižnica aplikácie
+ */
 @Composable
 fun SpustenieProgramu(container: AppContainer, kniznica: Kniznica) {
     _kniznica = kniznica
@@ -93,6 +102,11 @@ fun SpustenieProgramu(container: AppContainer, kniznica: Kniznica) {
 }
 
 
+/**
+ * Pri spustení načíta dáta do knižnice
+ *
+ * @param container kontajner s repozitármi
+ */
 class SpustenieViewModel(private val container: AppContainer) : ViewModel() {
     private val _nacitaSa1 = MutableStateFlow(true)
     private val _nacitaSa2 = MutableStateFlow(true)

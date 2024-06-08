@@ -1,6 +1,6 @@
 package com.example.vamzaplikacia.grafika.formular
 
-import VyberObrazkuButton
+import com.example.vamzaplikacia.organizer.pomocne_fun.VyberObrazkuButton
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -29,6 +29,13 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextRange
 import com.example.vamzaplikacia.R
 
+/**
+ * Obrazovka pre formulár na zadanie nového autora - meno, roky, obrázok.
+ *
+ * @param viewModel viewModel ktorého sa to týka
+ * @param uiState stav formuláru
+ * @param onClick funkcia čo sa vykoná po kliknutí
+ */
 @Composable
 fun FormularAutorScreen(viewModel: FormularAutorViewModel, uiState: FormularAutorUIState, onClick: () -> Unit) {
 
@@ -74,6 +81,13 @@ fun FormularAutorScreen(viewModel: FormularAutorViewModel, uiState: FormularAuto
     }
 }
 
+/**
+ * TextField na zadanie dátumu narodenia alebo úmrtia
+ *
+ * @param viewModel viewModel ktorého sa to týka
+ * @param modifier modifikátor
+ * @param narodenie či ide o narodenie alebo nie (úmrtie)
+ */
 @Composable
 fun DatumTextField(viewModel: FormularAutorViewModel, modifier: Modifier, narodenie: Boolean) {
     val keyboardOptions = KeyboardOptions(
@@ -116,6 +130,11 @@ fun DatumTextField(viewModel: FormularAutorViewModel, modifier: Modifier, narode
 
 }
 
+/**
+ * Funkcia na formátovanie dátumového textu
+ *
+ * @param text text na formátovanie
+ */
 private fun formatText(text: String): String {
     val maxLength = 10 // DD.MM.YYYY
 

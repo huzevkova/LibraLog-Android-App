@@ -7,7 +7,10 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 
-class KnihaViewModel() : ViewModel() {
+/**
+ * ViewModel pre knihu
+ */
+class KnihaViewModel : ViewModel() {
 
     private val _uiState = MutableStateFlow(AktualizaciaKnihyUIState())
     val uiState: StateFlow<AktualizaciaKnihyUIState> = _uiState.asStateFlow()

@@ -1,5 +1,8 @@
 package com.example.vamzaplikacia.logika.enumy
 
+/**
+ * Enumerátor možných žánrov knihy
+ */
 enum class Zanre(val zaner: String) {
     SCIFI("sci-fi"),
     FANTASY("fantasy"),

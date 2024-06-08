@@ -6,6 +6,17 @@ import androidx.room.Ignore
 import androidx.room.PrimaryKey
 import com.example.vamzaplikacia.R
 
+/**
+ * Trieda pre autora, ukladajúca si všetky informácie o autorovi, zároveň aj tabuľka
+ *
+ * @param meno
+ * @param datumNarodenia
+ * @param datumUmrtia
+ * @param obrazokCesta
+ * @param popis
+ * @param obrazok má defaultnú hodnotu
+ * @param id_autora
+ */
 @Entity(tableName = "autori")
 class Autor(
     val meno: String,
@@ -31,6 +42,9 @@ class Autor(
     }
 }
 
+/**
+ * Trieda obaľujúca zoznam autorov
+ */
 class ZoznamAutorov {
     private val zoznam: MutableList<Autor> = mutableListOf()
 

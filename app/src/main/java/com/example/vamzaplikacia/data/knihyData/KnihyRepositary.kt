@@ -3,7 +3,9 @@ package com.example.vamzaplikacia.data.knihyData
 import com.example.vamzaplikacia.logika.knihy.Kniha
 import kotlinx.coroutines.flow.Flow
 
-
+/**
+ * Repozitár pre knihy
+ */
 interface KnihyRepository {
 
     fun getAllItemsStream(): Flow<List<Kniha>>

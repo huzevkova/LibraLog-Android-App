@@ -8,6 +8,12 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 import com.example.vamzaplikacia.R
 
+/**
+ * Trieda predstavujúca poličku, zároveň tabuľka, využitá na ukladanie do databázy
+ *
+ * @param nazov
+ * @param id_policky
+ */
 @Entity(tableName = "policky")
 data class PolickaKniznice(
     val nazov: String,
@@ -15,6 +21,11 @@ data class PolickaKniznice(
     val id_policky: Int = 0
 )
 
+/**
+ * Trieda obaľujúca zoznam kníh a potrebné funkcie
+ *
+ * @param nazovZoznamu
+ */
 class ZoznamKnih(nazovZoznamu: String = "") {
     private val knihy: MutableList<Kniha> = mutableListOf()
     private var nazovZoznamu: String = nazovZoznamu
@@ -95,6 +106,11 @@ class ZoznamKnih(nazovZoznamu: String = "") {
     }
 }
 
+/**
+ * Trieda pre celú knižnicu aplikácie so všetkými knihy a autormi
+ *
+ * @param context kontext v ktorom je vytvorená
+ */
 class Kniznica(context: Context) {
     private val zoznamVsetkychKnih: ZoznamKnih
     private val zoznamy: MutableList<ZoznamKnih> = mutableListOf()

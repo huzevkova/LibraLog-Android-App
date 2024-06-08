@@ -37,12 +37,26 @@ import com.example.vamzaplikacia.organizer.pomocne_fun.pridajZoznam
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
 
+/**
+ * Premenné využívané naprieč aplikáciou pre aktuálny zoznam kníh, autora a knhu
+ */
 object Premenne {
     var zoznamKnih = ZoznamKnih("")
     var vyberKnihy: Kniha = Kniha(nazov = "", autor = "", rokVydania = 0)
     var vyberAutora: Autor = Autor("")
 }
 
+/**
+ * Hlavná funkcionalita aplikácie spúšťajúca navigáciu a ovládajúca stavy.
+ *
+ * @param viewModelFormular
+ * @param viewModelKniha
+ * @param viewModelAutor
+ * @param viewModelZoznam
+ * @param navController kontrolér navigácie
+ * @param container kontajner s repozitármi
+ * @param kniznica knižnica aplikácie
+ */
 @Composable
 fun LibraApp(
     viewModelFormular: FormularKnihyViewModel,
@@ -178,6 +192,11 @@ fun LibraApp(
     }
 }
 
+/**
+ * Explicitiné obnovenie stavu obrazovky cez navigáciu
+ *
+ * @param navController
+ */
 fun refresh(navController: NavHostController){
     val id = navController.currentDestination?.id
     navController.popBackStack(id!!,true)
