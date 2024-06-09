@@ -46,4 +46,10 @@
     <string name="tlacidlo_na_pridanie">Tlačidlo na pridanie niečoho.</string>
     <string name="zmazanie_zoznamu">Zmazanie zoznamu</string>
     <string name="zmazat_vsetky_knihy">Chcete zmazať aj všetky knihy v zozname?</string>
+    <string name="nazov_kanalu">notifikacia libra app</string>
+    <string name="popis_kanalu">kanál pre notifikáciu - knižný výrok</string>
+    <string name="knizny_vyrok_dna">Knižný výrok dňa!</string>
+    <string name="denna_notifikacia_kanal">denna_notifikacia_kanal</string>
+    <string name="notifikacia_po_zavreti">notifikácia po zavretí</string>
+    <string name="kanal_pre_notifikaciu_apky">kanál pre notifikikáciu aplikácie</string>
 </resources>
