@@ -128,7 +128,7 @@ class SpustenieViewModel(private val container: AppContainer) : ViewModel() {
                 policky.collect { polickyList ->
                     polickyList.forEach { policka ->
                         if (_nacitaSa1.value) {
-                            _kniznica!!.pridajZoznam(ZoznamKnih(policka.nazov))
+                            _kniznica!!.pridajZoznam(ZoznamKnih(policka.nazov, policka.obrazok))
                         }
                     }
                     _nacitaSa1.value = false

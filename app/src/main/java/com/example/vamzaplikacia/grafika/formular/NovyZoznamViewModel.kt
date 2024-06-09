@@ -45,8 +45,6 @@ class NovyZoznamViewModel(private val polickyRepository: PolickyRepository) : Vi
     }
 
     suspend fun saveZoznam(zoznam: ZoznamKnih) {
-        polickyRepository.insertItem(PolickaKniznice(nazov = zoznam.getNazov()))
+        polickyRepository.insertItem(PolickaKniznice(nazov = zoznam.getNazov(), obrazok = zoznam.obrazokCesta))
     }
-
-
 }

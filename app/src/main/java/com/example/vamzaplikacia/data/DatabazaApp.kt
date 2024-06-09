@@ -17,7 +17,7 @@ import com.example.vamzaplikacia.logika.knihy.PolickaKniznice
 /**
  * Databáza aplikácie
  */
-@Database(entities = [Kniha::class, Autor::class, PolickaKniznice::class], version = 2, exportSchema = false)
+@Database(entities = [Kniha::class, Autor::class, PolickaKniznice::class], version = 3, exportSchema = false)
 @TypeConverters(Konvertory::class)
 abstract class KniznicaDatabase : RoomDatabase() {
     abstract fun knihaDAO() : KnihaDAO
@@ -31,7 +31,7 @@ abstract class KniznicaDatabase : RoomDatabase() {
         fun getDatabase(context: Context): KniznicaDatabase {
             return Instance ?: synchronized(this) {
                 Room.databaseBuilder(context, KniznicaDatabase::class.java, "app_database")
-                    .addMigrations(MIGRATION_1_2)
+                    .addMigrations(MIGRATION_2_3)
                     .fallbackToDestructiveMigration()
                     .build()
                     .also { Instance = it }
@@ -51,5 +51,11 @@ val MIGRATION_1_2 = object : Migration(1, 2) {
                 PRIMARY KEY(`id_policky`)
             )
         """)
+    }
+}
+
+val MIGRATION_2_3 = object : Migration(2, 3) {
+    override fun migrate(database: SupportSQLiteDatabase) {
+        database.execSQL("ALTER TABLE policky ADD COLUMN obrazok TEXT NULL")
     }
 }

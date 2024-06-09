@@ -17,6 +17,7 @@ import com.example.vamzaplikacia.R
 @Entity(tableName = "policky")
 data class PolickaKniznice(
     val nazov: String,
+    val obrazok: Uri? = null,
     @PrimaryKey(autoGenerate = true)
     val id_policky: Int = 0
 )
