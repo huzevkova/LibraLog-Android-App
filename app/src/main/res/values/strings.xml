@@ -54,4 +54,6 @@
     <string name="kanal_pre_notifikaciu_apky">kanál pre notifikikáciu aplikácie</string>
     <string name="oblubene">Obľúbené</string>
     <string name="oblubena_kniha">Obľúbená kniha</string>
+    <string name="pocet_diel_v_kniznici">Počet diel v knižnici:</string>
+    <string name="pocet_precitanych_knih">Počet prečítaných kníh:</string>
 </resources>

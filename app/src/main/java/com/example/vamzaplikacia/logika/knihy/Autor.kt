@@ -20,8 +20,8 @@ import com.example.vamzaplikacia.R
 @Entity(tableName = "autori")
 class Autor(
     val meno: String,
-    val datumNarodenia: String = "X",
-    val datumUmrtia: String = "X",
+    var datumNarodenia: String = "X",
+    var datumUmrtia: String = "X",
     var obrazokCesta: Uri? = null,
     var popis: String = "",
     var obrazok: Int = R.drawable.person,
@@ -41,6 +41,24 @@ class Autor(
         pocetPrecitanych = knihyKniznica.sortedBy { it.precitana }.size
     }
 }
+
+/**
+ * Pomocne Data triedy pre prácu s OpenLibraryAPI a vyhľadávanie informácii o autoroch z internetu.
+ */
+data class AutorData(
+    val name: String,
+    val birth_date: String?,
+    val death_date: String?
+)
+
+data class VyhladaniAutori(
+    val docs: List<VysledokHladaniaAutor>
+)
+
+data class VysledokHladaniaAutor(
+    val key: String,
+    val name: String
+)
 
 /**
  * Trieda obaľujúca zoznam autorov

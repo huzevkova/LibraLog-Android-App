@@ -19,7 +19,6 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -27,11 +26,17 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.rememberAsyncImagePainter
 import com.example.vamzaplikacia.grafika.zoznami.VypisanieKnih
 import com.example.vamzaplikacia.logika.knihy.Autor
 import com.example.vamzaplikacia.logika.knihy.Kniha
 import com.example.vamzaplikacia.logika.knihy.ZoznamKnih
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.ui.res.stringResource
+import com.example.vamzaplikacia.R
 
 /**
  * Obrazovka zobrazujúca detail autora - obrázok, meno, roky, popis, počet kníh a zoznam kníh.
@@ -40,6 +45,23 @@ import com.example.vamzaplikacia.logika.knihy.ZoznamKnih
  */
 @Composable
 fun AutorScreen(autor: Autor, onClick: (Kniha) -> Unit) {
+
+    if (autor.datumNarodenia == "" && autor.datumUmrtia == "") {
+        val viewModel: AutorViewModel = viewModel()
+        val authorInfo by viewModel.authorInfo
+
+        LaunchedEffect(autor.meno) {
+            viewModel.fetchAuthorInfo(autor.meno)
+        }
+
+        when {
+            authorInfo != null -> {
+                autor.datumNarodenia = skonvertujDatum(authorInfo!!.birth_date!!)
+                autor.datumUmrtia = skonvertujDatum(authorInfo!!.death_date!!)
+            }
+        }
+    }
+
     BoxWithConstraints(modifier = Modifier
         .fillMaxWidth(1f)
         .verticalScroll(rememberScrollState())
@@ -57,14 +79,14 @@ fun AutorScreen(autor: Autor, onClick: (Kniha) -> Unit) {
                 .fillMaxWidth()
                 .fillMaxHeight()
                 .align(Alignment.Center)
-                .padding(top = 120.dp),
+                .padding(top = 100.dp),
             autor,
             onClick
         )
 
         Center(
             modifier = Modifier
-                .padding(start = 10.dp, end = 10.dp, bottom = 500.dp)
+                .padding(start = 10.dp, end = 10.dp, bottom = 300.dp)
                 .fillMaxWidth()
                 .align(Alignment.Center),
             autor
@@ -87,7 +109,7 @@ private fun Bottom(modifier: Modifier, autor: Autor, onClick: (Kniha) -> Unit) {
             .fillMaxHeight(),
         horizontalAlignment = Alignment.CenterHorizontally)
     {
-        Spacer(modifier = Modifier.height(100.dp))
+        Spacer(modifier = Modifier.height(80.dp))
 
         Text(text = autor.meno, style = MaterialTheme.typography.headlineMedium)
         Text(text = "${autor.datumNarodenia} - ${autor.datumUmrtia}", style = MaterialTheme.typography.titleMedium)
@@ -98,7 +120,7 @@ private fun Bottom(modifier: Modifier, autor: Autor, onClick: (Kniha) -> Unit) {
         val style = MaterialTheme.typography.titleMedium
         Spacer(modifier = Modifier.height(20.dp))
         Row {
-            Text(text = "Počet prečítaných kníh:",
+            Text(text = stringResource(R.string.pocet_precitanych_knih),
                 style = style,
                 modifier = Modifier
                     .padding(start = 20.dp)
@@ -113,7 +135,7 @@ private fun Bottom(modifier: Modifier, autor: Autor, onClick: (Kniha) -> Unit) {
         }
 
         Row {
-            Text(text = "Počet diel v knižnici:",
+            Text(text = stringResource(R.string.pocet_diel_v_kniznici),
                 style = style,
                 modifier = Modifier
                     .weight(3f)
@@ -146,7 +168,7 @@ private fun Bottom(modifier: Modifier, autor: Autor, onClick: (Kniha) -> Unit) {
  */
 @Composable
 fun Center(modifier: Modifier, autor: Autor) {
-    Column(modifier = modifier.padding(top = 50.dp))
+    Column(modifier = modifier)
     {
         val paint = if (autor.obrazokCesta == null) painterResource(autor.obrazok) else rememberAsyncImagePainter(
             autor.obrazokCesta
@@ -165,4 +187,28 @@ fun Center(modifier: Modifier, autor: Autor) {
                 .clip(CircleShape)
         )
     }
+}
+
+private fun skonvertujDatum(datum: String) : String {
+
+    val mesiacAnj = datum.substring(datum.indexOf(" ")+1, datum.lastIndexOf(" "))
+
+    val mesiacCislo = when (mesiacAnj) {
+        "January" -> "1"
+        "February" -> "2"
+        "March" -> "3"
+        "April" -> "4"
+        "May" -> "5"
+        "June" -> "6"
+        "July" -> "7"
+        "August" -> "8"
+        "September" -> "9"
+        "October" -> "10"
+        "November" -> "11"
+        "December" -> "12"
+        else -> ""
+    }
+
+    var datumNovy = datum.replace(" ", ".")
+    return datumNovy.replace(mesiacAnj, mesiacCislo)
 }
