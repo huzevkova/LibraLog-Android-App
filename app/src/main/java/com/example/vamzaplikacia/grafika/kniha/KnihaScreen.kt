@@ -93,12 +93,14 @@ fun KnihaScreen(kniha: Kniha, viewModel: KnihaViewModel = viewModel()){
         TextField(text = "Prečítané:    $pocetPrecitanychStran / ${kniha.pocetStran}", true)
         Slider(value = sliderStranyPosition, steps = kniha.pocetStran, onValueChange = {
             sliderStranyPosition = it
+            viewModel.zmena()
         })
 
         Spacer(modifier = Modifier.height(8.dp))
         TextField(text = "Hodnotenie:  " + "%.1f".format(hodnotenieKnihy),true)
         Slider(value = sliderHodnoteniePosition, steps = 100, onValueChange = {
             sliderHodnoteniePosition = it
+            viewModel.zmena()
         })
 
         Spacer(modifier = Modifier.height(8.dp))

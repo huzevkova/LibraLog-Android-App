@@ -1,7 +1,6 @@
 package com.example.vamzaplikacia.logika.knihy
 
 import android.content.Context
-import android.content.res.Resources
 import android.net.Uri
 import androidx.core.content.ContextCompat.getString
 import androidx.room.Entity
@@ -27,9 +26,8 @@ data class PolickaKniznice(
  *
  * @param nazovZoznamu
  */
-class ZoznamKnih(nazovZoznamu: String = "") {
+class ZoznamKnih(private var nazovZoznamu: String = "") {
     private val knihy: MutableList<Kniha> = mutableListOf()
-    private var nazovZoznamu: String = nazovZoznamu
     var obrazokCesta: Uri? = null
     var obrazok: Int = R.drawable.library
     constructor(nazovZoznamu: String, obrazok: Uri?) : this(nazovZoznamu) {

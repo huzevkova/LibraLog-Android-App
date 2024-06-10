@@ -14,7 +14,7 @@ import java.util.Calendar
  */
 class Notifikacia {
 
-    fun zavolanie(context: Context, intent: Intent) {
+    fun zavolanie(context: Context) {
         vytvorKanalNotifikacie(context)
         zobrazNotifikaciu(context)
     }
@@ -25,17 +25,15 @@ class Notifikacia {
      * @param context
      */
     private fun vytvorKanalNotifikacie(context: Context) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            val name = context.getString(R.string.notifikacia_po_zavreti)
-            val descriptionText = context.getString(R.string.kanal_pre_notifikaciu_apky)
-            val importance = NotificationManager.IMPORTANCE_HIGH
-            val channel = NotificationChannel(context.getString(R.string.denna_notifikacia_kanal), name, importance).apply {
-                description = descriptionText
-            }
-            val notificationManager: NotificationManager =
-                context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-            notificationManager.createNotificationChannel(channel)
+        val name = context.getString(R.string.notifikacia_po_zavreti)
+        val descriptionText = context.getString(R.string.kanal_pre_notifikaciu_apky)
+        val importance = NotificationManager.IMPORTANCE_HIGH
+        val channel = NotificationChannel(context.getString(R.string.denna_notifikacia_kanal), name, importance).apply {
+            description = descriptionText
         }
+        val notificationManager: NotificationManager =
+            context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+        notificationManager.createNotificationChannel(channel)
     }
 
     /**

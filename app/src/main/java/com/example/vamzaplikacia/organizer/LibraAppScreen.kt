@@ -1,6 +1,5 @@
 package com.example.vamzaplikacia.organizer
 
-import android.net.Uri
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
@@ -18,7 +17,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
@@ -38,7 +36,6 @@ import com.example.vamzaplikacia.logika.knihy.ZoznamKnih
 import com.example.vamzaplikacia.organizer.pomocne_fun.LibraAppBar
 import com.example.vamzaplikacia.organizer.pomocne_fun.aktualizujKnihu
 import com.example.vamzaplikacia.organizer.pomocne_fun.pridajZoznam
-import com.example.vamzaplikacia.organizer.pomocne_fun.ulozObrazokDoInternehoUloziska
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
 

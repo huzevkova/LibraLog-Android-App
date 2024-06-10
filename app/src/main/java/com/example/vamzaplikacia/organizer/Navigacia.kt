@@ -97,12 +97,16 @@ fun LibraNavHost(
                 navController.navigate(LibraAppScreen.VybranaKniha.name)
                 },
                 onLongClick = {
-                    it.favorit = !it.favorit
                     Premenne.vyberKnihy = it
+                    Premenne.vyberKnihy.favorit = !Premenne.vyberKnihy.favorit
                     if (it.favorit) {
                         kniznica.getZoznamOblubenych().pridajKnihu(it)
                     } else {
                         kniznica.getZoznamOblubenych().odoberKnihu(it)
+                    }
+                    viewModelKniha.zmena()
+                    coroutineScope.launch {
+                        viewModelKniha.updateKniha(Premenne.vyberKnihy)
                     }
                     onLongClick()
                 })

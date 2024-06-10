@@ -16,12 +16,11 @@ import com.example.vamzaplikacia.data.AppDataContainer
 import com.example.vamzaplikacia.logika.knihy.Kniznica
 import com.example.vamzaplikacia.ui.theme.VAMZAplikaciaTheme
 
-private var prveSpustenie = true
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        var container = AppDataContainer(this)
-        var kniznica = Kniznica(applicationContext)
+        val container = AppDataContainer(this)
+        val kniznica = Kniznica(applicationContext)
 
         createNotificationChannel(this)
 
@@ -43,7 +42,7 @@ class MainActivity : ComponentActivity() {
         val receiver = Notifikacia()
         val context = this
         val intent = Intent("com.your.package.SHOW_NOTIFICATION")
-        receiver.zavolanie(context, intent)
+        receiver.zavolanie(context)
         super.onDestroy()
     }
 
@@ -65,17 +64,15 @@ class MainActivity : ComponentActivity() {
     }
 
     private fun createNotificationChannel(context: Context) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            val name = context.getString(R.string.notifikacia_po_zavreti)
-            val descriptionText = context.getString(R.string.kanal_pre_notifikaciu_apky)
-            val importance = NotificationManager.IMPORTANCE_HIGH
-            val channel = NotificationChannel(context.getString(R.string.denna_notifikacia_kanal), name, importance).apply {
-                description = descriptionText
-            }
-            val notificationManager: NotificationManager =
-                getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-            notificationManager.createNotificationChannel(channel)
+        val name = context.getString(R.string.notifikacia_po_zavreti)
+        val descriptionText = context.getString(R.string.kanal_pre_notifikaciu_apky)
+        val importance = NotificationManager.IMPORTANCE_HIGH
+        val channel = NotificationChannel(context.getString(R.string.denna_notifikacia_kanal), name, importance).apply {
+            description = descriptionText
         }
+        val notificationManager: NotificationManager =
+            getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+        notificationManager.createNotificationChannel(channel)
     }
 
 }

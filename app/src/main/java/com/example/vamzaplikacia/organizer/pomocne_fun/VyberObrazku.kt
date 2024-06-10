@@ -39,8 +39,7 @@ fun VyberObrazkuButton(onImagePicked: (Uri) -> Unit) {
 
 fun ulozObrazokDoInternehoUloziska(context: Context, uri: Uri, fileName: String): Uri {
     val inputStream = context.contentResolver.openInputStream(uri)
-    val fileName = "${fileName}.jpg"
-    val file = File(context.filesDir, fileName)
+    val file = File(context.filesDir, "${fileName}.jpg")
     val outputStream = FileOutputStream(file)
     inputStream?.copyTo(outputStream)
     inputStream?.close()
