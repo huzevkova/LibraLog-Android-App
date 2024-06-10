@@ -60,7 +60,7 @@ fun KnizicaKartyScreen (onClick: (ZoznamKnih) -> Unit, onDeleteClick: (ZoznamKni
     when (configuration.orientation) {
         Configuration.ORIENTATION_LANDSCAPE -> {
             pocetCol = 3
-            ratio = 1.2f
+            ratio = 0.8f
         }
     }
 

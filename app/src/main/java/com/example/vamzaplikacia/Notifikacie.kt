@@ -20,7 +20,7 @@ class Notifikacia {
     }
 
     /**
-     * Kanál notifikácie pre Android 8.0+.
+     * Kanál notifikácie.
      *
      * @param context
      */
@@ -52,6 +52,9 @@ class Notifikacia {
                 .setContentTitle(context.getString(R.string.knizny_vyrok_dna))
                 .setContentText(notifikaciaText)
                 .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+                .setStyle(NotificationCompat.BigTextStyle()
+                    .bigText(notifikaciaText))
+
 
             with(NotificationManagerCompat.from(context)) {
                 notify(1, builder.build())

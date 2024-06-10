@@ -27,6 +27,7 @@ import com.example.vamzaplikacia.data.AppContainer
 import com.example.vamzaplikacia.grafika.formular.FormularAutorViewModel
 import com.example.vamzaplikacia.grafika.formular.FormularKnihyViewModel
 import com.example.vamzaplikacia.grafika.formular.NovyZoznamViewModel
+import com.example.vamzaplikacia.grafika.kniha.KnihaViewModel
 import com.example.vamzaplikacia.logika.knihy.Autor
 import com.example.vamzaplikacia.logika.knihy.Kniha
 import com.example.vamzaplikacia.logika.knihy.Kniznica
@@ -93,6 +94,7 @@ fun SpustenieProgramu(container: AppContainer, kniznica: Kniznica) {
         start = false
         LibraApp(
             viewModelFormular = FormularKnihyViewModel(container.knihyRepository),
+            viewModelKniha = KnihaViewModel(container.knihyRepository),
             viewModelAutor = FormularAutorViewModel(container.autoriRepository),
             viewModelZoznam = NovyZoznamViewModel(container.polickyRepository),
             container = container,
@@ -143,6 +145,9 @@ class SpustenieViewModel(private val container: AppContainer) : ViewModel() {
                             _kniznica!!.getZoznamVsetkych().pridajKnihu(kniha)
                             if (kniha.policka != _kniznica!!.getZoznamVsetkych().getNazov()) {
                                 _kniznica!!.getZoznam(kniha.policka)?.pridajKnihu(kniha)
+                            }
+                            if (kniha.favorit) {
+                                _kniznica!!.getZoznamOblubenych().pridajKnihu(kniha)
                             }
                         }
                     }

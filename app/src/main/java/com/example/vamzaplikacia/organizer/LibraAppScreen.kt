@@ -1,5 +1,6 @@
 package com.example.vamzaplikacia.organizer
 
+import android.net.Uri
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
@@ -15,6 +16,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
@@ -36,6 +38,7 @@ import com.example.vamzaplikacia.logika.knihy.ZoznamKnih
 import com.example.vamzaplikacia.organizer.pomocne_fun.LibraAppBar
 import com.example.vamzaplikacia.organizer.pomocne_fun.aktualizujKnihu
 import com.example.vamzaplikacia.organizer.pomocne_fun.pridajZoznam
+import com.example.vamzaplikacia.organizer.pomocne_fun.ulozObrazokDoInternehoUloziska
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
 
@@ -62,7 +65,7 @@ object Premenne {
 @Composable
 fun LibraApp(
     viewModelFormular: FormularKnihyViewModel,
-    viewModelKniha: KnihaViewModel = viewModel(),
+    viewModelKniha: KnihaViewModel,
     viewModelAutor: FormularAutorViewModel,
     viewModelZoznam: NovyZoznamViewModel,
     navController: NavHostController = rememberNavController(),
@@ -82,8 +85,10 @@ fun LibraApp(
 
     var vymazatDialog by remember { mutableStateOf(false) }
 
+    val context = LocalContext.current
+
     NovyZoznamDialog(viewModel = viewModelZoznam, uiState = uiStateZoznam, onClickOK = {
-        val zoznam = pridajZoznam(uiStateZoznam.nazov, uiStateZoznam.obrazok, kniznica)
+        val zoznam = pridajZoznam(uiStateZoznam.nazov, uiStateZoznam.obrazok, kniznica, context)
         viewModelZoznam.resetFormular()
         viewModelZoznam.dismissDialog()
         coroutineScope.launch {
@@ -142,7 +147,7 @@ fun LibraApp(
                     if (currentScreen == LibraAppScreen.VybranaKniha) {
                         aktualizujKnihu(Premenne.vyberKnihy, uiStateKniha)
                         coroutineScope.launch {
-                            container.knihyRepository.updateItem(Premenne.vyberKnihy)
+                            viewModelKniha.updateKniha(Premenne.vyberKnihy)
                         }
                     }
                     navController.navigateUp()
@@ -153,7 +158,7 @@ fun LibraApp(
             )
         },
         floatingActionButton = {
-            if (currentScreen == LibraAppScreen.HlavnyZoznam || currentScreen == LibraAppScreen.AutoriZoznam || currentScreen == LibraAppScreen.Kniznica) {
+            if (currentScreen == LibraAppScreen.HlavnyZoznam || currentScreen == LibraAppScreen.AutoriZoznam || currentScreen == LibraAppScreen.Start) {
                 FloatingActionButton(
                     onClick = {
                         when (currentScreen) {
@@ -185,6 +190,11 @@ fun LibraApp(
             coroutineScope = coroutineScope,
             onVymazatKartu = {
                 vymazatDialog = true
+            },
+            onLongClick = {
+                coroutineScope.launch {
+                    container.knihyRepository.updateItem(Premenne.vyberKnihy)
+                }
             },
             uiStateAutor = uiStateAutor,
             uiStateFormular = uiStateFormular,

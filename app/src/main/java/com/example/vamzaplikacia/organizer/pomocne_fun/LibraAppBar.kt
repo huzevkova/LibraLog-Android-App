@@ -111,7 +111,10 @@ fun AppBarTitle(aktualnaObrazovka: LibraAppScreen) {
     if (aktualnaObrazovka == LibraAppScreen.VybranaKniha) {
         Text(Premenne.vyberKnihy.nazov)
     } else {
-        Text(stringResource(id = aktualnaObrazovka.title))
+        Text(
+            text = stringResource(id = aktualnaObrazovka.title),
+            style = MaterialTheme.typography.titleMedium
+        )
     }
 }
 
@@ -244,6 +247,7 @@ fun AppBarDropdownItems(
                         container.autoriRepository.deleteItem(Premenne.vyberAutora)
                     }
                     navigateUp()
+                    setOtvorPraveDropDownMenu(false)
                 } else {
                     otvorOdstranNestedMenu = true
                 }
@@ -256,6 +260,10 @@ fun AppBarDropdownItems(
                     Icon(Icons.Filled.Add, contentDescription = stringResource(R.string.pridaj_do_zoznamu))
                 }, onClick = {
                     zoznam.pridajKnihu(Premenne.vyberKnihy)
+                    Premenne.vyberKnihy.policka = zoznam.getNazov()
+                    coroutineScope.launch {
+                        container.knihyRepository.updateItem(Premenne.vyberKnihy)
+                    }
                     otvorPridajNestedMenu = false
                     setOtvorPraveDropDownMenu(false)
                 }
@@ -267,7 +275,7 @@ fun AppBarDropdownItems(
                 text = { Text(text = stringResource(R.string.zmas_vsade)) }, leadingIcon = {
                     Icon(Icons.Filled.Add, contentDescription = stringResource(R.string.zmas_vsade))
                 }, onClick = {
-                    kniznica.getZoznamVsetkych().odoberKnihu(Premenne.vyberKnihy)
+                    kniznica.zmazKnihuVsade(Premenne.vyberKnihy)
                     otvorOdstranNestedMenu = false
                     setOtvorPraveDropDownMenu(false)
                     coroutineScope.launch {

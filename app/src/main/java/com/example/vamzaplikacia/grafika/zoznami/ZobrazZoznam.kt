@@ -1,7 +1,10 @@
 package com.example.vamzaplikacia.grafika.zoznami
 
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.combinedClickable
+import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -17,8 +20,14 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.ListItem
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableFloatStateOf
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
@@ -34,13 +43,15 @@ import com.example.vamzaplikacia.logika.knihy.ZoznamKnih
  * @param onClick funkcia s knihou ktorá sa vykoná po kliknutí na knihu
  */
 @Composable
-fun ZoznamKnihScreen(zoznam: ZoznamKnih, onClick: (Kniha) -> Unit) {
+fun ZoznamKnihScreen(zoznam: ZoznamKnih, onClick: (Kniha) -> Unit, onLongClick: (Kniha) -> Unit) {
+
     VypisanieKnih(zoznam = zoznam, modifier = Modifier
         .statusBarsPadding()
         .fillMaxWidth()
         .verticalScroll(rememberScrollState())
         .padding(horizontal = 0.dp),
-        onClick)
+        onClick,
+        onLongClick)
 }
 
 /**
@@ -50,26 +61,37 @@ fun ZoznamKnihScreen(zoznam: ZoznamKnih, onClick: (Kniha) -> Unit) {
  * @param modifier modifikátor
  * @param onClick funkcia s knihou ktorá sa vykoná po kliknutí na knihu
  */
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun VypisanieKnih(zoznam: ZoznamKnih, modifier: Modifier, onClick: (Kniha) -> Unit) {
-    Column (modifier = modifier) {
+fun VypisanieKnih(zoznam: ZoznamKnih, modifier: Modifier, onClick: (Kniha) -> Unit, onLongClick: (Kniha) -> Unit) {
+
+    Column(modifier = modifier) {
         for (kniha in zoznam.iterator()) {
-            val paint = if (kniha.obrazok == null) painterResource(R.drawable.book) else rememberAsyncImagePainter(
-                kniha.obrazok
-            )
+            var icon by remember { mutableStateOf(if (kniha.favorit) Icons.Filled.Favorite else Icons.Filled.Info) }
+            val paint =
+                if (kniha.obrazok == null) painterResource(R.drawable.book) else rememberAsyncImagePainter(
+                    kniha.obrazok
+                )
             ListItem(
-                modifier = Modifier.clickable { onClick(kniha) },
+                modifier = Modifier
+                    .combinedClickable(
+                        onClick = { onClick(kniha) },
+                        onLongClick = {
+                            icon = if (kniha.favorit) Icons.Filled.Info else Icons.Filled.Favorite
+                            onLongClick(kniha)
+                        }
+                    ),
                 headlineContent = { Text(kniha.nazov) },
                 supportingContent = { Text(kniha.autor + ", " + kniha.rokVydania) },
                 trailingContent = {
                     if (kniha.favorit) {
                         Icon(
-                            Icons.Filled.Favorite,
+                            icon,
                             contentDescription = "Obľúbená kniha",
                         )
                     } else {
                         Icon(
-                            Icons.Filled.Info,
+                            icon,
                             contentDescription = "Kniha",
                         )
                     }

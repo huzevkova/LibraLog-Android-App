@@ -62,7 +62,7 @@ fun KnihaScreen(kniha: Kniha, viewModel: KnihaViewModel = viewModel()){
                 contentDescription = null,
                 contentScale = ContentScale.Crop,
                 modifier = Modifier
-                    .size(200.dp)
+                    .size(180.dp, 250.dp)
                     .clip(RoundedCornerShape(8.dp))
             )
 
@@ -70,7 +70,7 @@ fun KnihaScreen(kniha: Kniha, viewModel: KnihaViewModel = viewModel()){
 
             Column(
                 modifier = Modifier
-                    .padding(16.dp)
+                    .padding(12.dp)
             ) {
                 TextField(text = "${stringResource(id = R.string.nazov_knihy_form)}:", true)
                 TextField(text = kniha.nazov)

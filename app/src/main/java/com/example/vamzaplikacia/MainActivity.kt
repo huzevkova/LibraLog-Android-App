@@ -1,20 +1,20 @@
 package com.example.vamzaplikacia
 
+import android.Manifest
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.content.Context
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
 import com.example.vamzaplikacia.data.AppDataContainer
 import com.example.vamzaplikacia.logika.knihy.Kniznica
 import com.example.vamzaplikacia.ui.theme.VAMZAplikaciaTheme
-import android.Manifest
-import android.content.Intent
-import androidx.activity.result.contract.ActivityResultContracts
 
 private var prveSpustenie = true
 class MainActivity : ComponentActivity() {
@@ -38,7 +38,16 @@ class MainActivity : ComponentActivity() {
         }
     }
 
-    override fun onStop() {
+
+    override fun onDestroy() {
+        val receiver = Notifikacia()
+        val context = this
+        val intent = Intent("com.your.package.SHOW_NOTIFICATION")
+        receiver.zavolanie(context, intent)
+        super.onDestroy()
+    }
+
+    /*override fun onStop() {
         if (prveSpustenie) {
             prveSpustenie = false
             val receiver = Notifikacia()
@@ -47,7 +56,7 @@ class MainActivity : ComponentActivity() {
             receiver.zavolanie(context, intent)
         }
         super.onStop()
-    }
+    }*/
 
     private val requestPermissionLauncher = registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted: Boolean ->
         if (isGranted) {

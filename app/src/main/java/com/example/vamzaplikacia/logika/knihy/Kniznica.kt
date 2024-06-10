@@ -31,7 +31,7 @@ class ZoznamKnih(nazovZoznamu: String = "") {
     private val knihy: MutableList<Kniha> = mutableListOf()
     private var nazovZoznamu: String = nazovZoznamu
     var obrazokCesta: Uri? = null
-    val obrazok: Int = R.drawable.library
+    var obrazok: Int = R.drawable.library
     constructor(nazovZoznamu: String, obrazok: Uri?) : this(nazovZoznamu) {
         if (obrazok != null) {
             obrazokCesta = obrazok
@@ -114,12 +114,16 @@ class ZoznamKnih(nazovZoznamu: String = "") {
  */
 class Kniznica(context: Context) {
     private val zoznamVsetkychKnih: ZoznamKnih
+    private val zoznamOblubenych: ZoznamKnih
     private val zoznamy: MutableList<ZoznamKnih> = mutableListOf()
     private val autoriKniznice: ZoznamAutorov = ZoznamAutorov()
 
     init {
         zoznamVsetkychKnih = ZoznamKnih(getString(context, R.string.vsetko))
+        zoznamOblubenych = ZoznamKnih(getString(context, R.string.oblubene))
+        zoznamOblubenych.obrazok = R.drawable.favorit
         zoznamy.add(zoznamVsetkychKnih)
+        zoznamy.add(zoznamOblubenych)
     }
     fun pridajAutora(autor: Autor) {
         if (autoriKniznice.getZoznam().find { _autor -> _autor.meno == autor.meno } == null) {
@@ -133,12 +137,23 @@ class Kniznica(context: Context) {
         }
     }
 
+    fun zmazKnihuVsade(kniha: Kniha) {
+        zoznamVsetkychKnih.odoberKnihu(kniha)
+        for (zoz in zoznamy) {
+            zoz.odoberKnihu(kniha)
+        }
+    }
+
     fun getVsetkyZoznamy(): MutableList<ZoznamKnih> {
         return zoznamy
     }
 
     fun getZoznamVsetkych(): ZoznamKnih {
         return zoznamVsetkychKnih
+    }
+
+    fun getZoznamOblubenych(): ZoznamKnih {
+        return zoznamOblubenych
     }
 
     fun getZoznamAutorov(): ZoznamAutorov {

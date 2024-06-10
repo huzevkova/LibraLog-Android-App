@@ -131,7 +131,9 @@ private fun Bottom(modifier: Modifier, autor: Autor, onClick: (Kniha) -> Unit) {
         VypisanieKnih(zoznam = ZoznamKnih(zoznam = autor.knihyKniznica.toMutableList()),modifier = Modifier
             .statusBarsPadding()
             .fillMaxWidth()
-            .padding(horizontal = 0.dp),onClick = onClick)
+            .padding(horizontal = 0.dp),
+            onClick = onClick,
+            onLongClick = {})
 
     }
 }

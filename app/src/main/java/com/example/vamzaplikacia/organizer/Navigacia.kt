@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -33,8 +34,7 @@ import kotlinx.coroutines.launch
  * @param title nazov obrazovky
  */
 enum class LibraAppScreen(@StringRes val title: Int) {
-    Start(title = R.string.app_name),
-    Kniznica(title = R.string.kniznica),
+    Start(title = R.string.kniznica),
     HlavnyZoznam(title = R.string.hlavny_zoznam),
     AutoriZoznam(title = R.string.autori_zoznam),
     VybranyAutor(title = R.string.autor),
@@ -65,17 +65,19 @@ fun LibraNavHost(
     viewModelAutor: FormularAutorViewModel,
     coroutineScope: CoroutineScope,
     onVymazatKartu: () -> Unit,
+    onLongClick: () -> Unit,
     uiStateAutor: FormularAutorUIState,
     uiStateFormular: FormularKnihyUIState,
     innerPadding: PaddingValues,
     kniznica: Kniznica
 ) {
+    val context = LocalContext.current
     NavHost(
         navController = navController,
-        startDestination = LibraAppScreen.Kniznica.name,
+        startDestination = LibraAppScreen.Start.name,
         modifier = Modifier.padding(innerPadding)
     ) {
-        composable(route = LibraAppScreen.Kniznica.name) {
+        composable(route = LibraAppScreen.Start.name) {
             KnizicaKartyScreen(
                 onClick = {
                     Premenne.zoznamKnih = it
@@ -89,14 +91,25 @@ fun LibraNavHost(
             )
         }
         composable(route = LibraAppScreen.HlavnyZoznam.name) {
-            ZoznamKnihScreen(zoznam = Premenne.zoznamKnih, onClick = {
+            ZoznamKnihScreen(zoznam = Premenne.zoznamKnih,
+                onClick = {
                 Premenne.vyberKnihy = it
                 navController.navigate(LibraAppScreen.VybranaKniha.name)
-            })
+                },
+                onLongClick = {
+                    it.favorit = !it.favorit
+                    Premenne.vyberKnihy = it
+                    if (it.favorit) {
+                        kniznica.getZoznamOblubenych().pridajKnihu(it)
+                    } else {
+                        kniznica.getZoznamOblubenych().odoberKnihu(it)
+                    }
+                    onLongClick()
+                })
         }
         composable(route = LibraAppScreen.Formular.name) {
             FormularKnihaScreen(viewModel = viewModelFormular, uiStateFormular) {
-                val kniha = pridajZadanuKnihu(uiStateFormular, kniznica)
+                val kniha = pridajZadanuKnihu(uiStateFormular, kniznica, context)
                 viewModelFormular.resetFormular()
                 navController.popBackStack()
                 coroutineScope.launch {
@@ -122,7 +135,7 @@ fun LibraNavHost(
         }
         composable(route = LibraAppScreen.FormularAutor.name) {
             FormularAutorScreen(viewModel = viewModelAutor, uiState = uiStateAutor, onClick = {
-                val autor = pridajZadanehoAutora(uiState = uiStateAutor, kniznica)
+                val autor = pridajZadanehoAutora(uiState = uiStateAutor, kniznica, context)
                 viewModelAutor.resetFormular()
                 navController.popBackStack()
                 coroutineScope.launch {
