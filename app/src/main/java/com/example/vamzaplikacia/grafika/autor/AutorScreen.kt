@@ -48,7 +48,7 @@ fun AutorScreen(autor: Autor, onClick: (Kniha) -> Unit) {
 
     if (autor.datumNarodenia == "" && autor.datumUmrtia == "") {
         val viewModel: AutorViewModel = viewModel()
-        val authorInfo by viewModel.authorInfo
+        val authorInfo by viewModel.autorInfo
 
         LaunchedEffect(autor.meno) {
             viewModel.fetchAuthorInfo(autor.meno)
