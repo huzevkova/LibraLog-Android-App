@@ -17,7 +17,7 @@ class AutorViewModel : ViewModel(){
 
     val autorInfo = mutableStateOf<AutorData?>(null)
 
-    fun fetchAuthorInfo(autorMeno: String) {
+    fun stiahniAutorInfo(autorMeno: String) {
         viewModelScope.launch {
             try {
                 val searchResponse = RetrofitAPI.api.hladajAutorov(autorMeno).awaitResponse()

@@ -56,4 +56,20 @@
     <string name="oblubena_kniha">Obľúbená kniha</string>
     <string name="pocet_diel_v_kniznici">Počet diel v knižnici:</string>
     <string name="pocet_precitanych_knih">Počet prečítaných kníh:</string>
+    <string name="knih">kníh</string>
+    <string name="knihy">knihy</string>
+    <string name="meno_autora">Meno autora</string>
+    <string name="popis">Popis</string>
+    <string name="datum_narodenia">Dátum narodenia</string>
+    <string name="datum_umrtia">Dátum úmrtia</string>
+    <string name="datum_format">DD.MM.YYYY</string>
+    <string name="novy_zoznam">Nový zoznam</string>
+    <string name="nazov_zoznamu">Názov zoznamu</string>
+    <string name="zrus">Zruš</string>
+    <string name="vymaz_aj_knihy">Áno, vymaž aj knihy.</string>
+    <string name="vymaz_len_zoznam">Nie, vymaž len zoznam.</string>
+    <string name="precitane">"Prečítané:    "</string>
+    <string name="hodnotenie">"Hodnotenie:  "</string>
+    <string name="poznamky">Poznámky</string>
+    <string name="hotovo">hotovo</string>
 </resources>

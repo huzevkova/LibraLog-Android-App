@@ -35,7 +35,7 @@ fun NovyZoznamDialog(
     if (uiState.showDialog) {
         AlertDialog(
             onDismissRequest = { },
-            title = { Text(text = "Nový zoznam") },
+            title = { Text(text = stringResource(R.string.novy_zoznam)) },
             text = {
                 Column(
                     modifier = Modifier.fillMaxWidth()
@@ -43,7 +43,7 @@ fun NovyZoznamDialog(
                     TextField(
                         value = uiState.nazov,
                         onValueChange = { viewModel.setNazov(it) },
-                        label = { Text(text = "Názov zoznamu") },
+                        label = { Text(text = stringResource(R.string.nazov_zoznamu)) },
                         modifier = Modifier.fillMaxWidth()
                     )
                     Spacer(modifier = Modifier.height(16.dp))
@@ -52,12 +52,12 @@ fun NovyZoznamDialog(
             },
             confirmButton = {
                 Button(onClick = onClickOK) {
-                    Text("OK")
+                    Text(stringResource(R.string.ok))
                 }
             },
             dismissButton = {
                 Button(onClick = { viewModel.dismissDialog() }) {
-                    Text("Cancel")
+                    Text(stringResource(R.string.zrus))
                 }
             }
         )
@@ -100,7 +100,7 @@ fun VymazatKartuDialog(
                     onConfirmation()
                 }
             ) {
-                Text("Áno, vymaž aj knihy.")
+                Text(stringResource(R.string.vymaz_aj_knihy))
             }
         },
         dismissButton = {
@@ -109,7 +109,7 @@ fun VymazatKartuDialog(
                     onDismissRequest()
                 }
             ) {
-                Text("Nie, vymaž len zoznam.")
+                Text(stringResource(R.string.vymaz_len_zoznam))
             }
         }
     )

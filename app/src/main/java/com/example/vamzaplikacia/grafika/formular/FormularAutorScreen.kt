@@ -50,7 +50,7 @@ fun FormularAutorScreen(viewModel: FormularAutorViewModel, uiState: FormularAuto
             value = uiState.menoAutora,
             placeHolder = stringResource(id = R.string.autor_placeholder),
             onValueChange = { viewModel.setMeno(it) },
-            labelText = "Meno autora"
+            labelText = stringResource(R.string.meno_autora)
         )
 
         DatumTextField(viewModel = viewModel, modifier = Modifier
@@ -71,7 +71,7 @@ fun FormularAutorScreen(viewModel: FormularAutorViewModel, uiState: FormularAuto
                 .fillMaxWidth(),
             value = uiState.popis,
             onValueChange = { viewModel.setPopis(it) },
-            labelText = "Popis"
+            labelText = stringResource(R.string.popis)
         )
 
         Spacer(modifier = Modifier.height(8.dp))
@@ -98,11 +98,11 @@ fun DatumTextField(viewModel: FormularAutorViewModel, modifier: Modifier, narode
     TextField(
         modifier = modifier,
         value = textValue,
-        placeholder = { Text(text = "DD.MM.YYYY", color = Color.Gray) },
+        placeholder = { Text(text = stringResource(R.string.datum_format), color = Color.Gray) },
         label = { if (narodenie) {
-                    Text("Dátum narodenia")
+                    Text(stringResource(R.string.datum_narodenia))
                 } else {
-                    Text("Dátum úmrtia")
+                    Text(stringResource(R.string.datum_umrtia))
                 }
         },
         onValueChange = { newInput ->

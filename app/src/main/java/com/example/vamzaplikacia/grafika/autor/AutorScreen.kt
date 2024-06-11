@@ -51,7 +51,7 @@ fun AutorScreen(autor: Autor, onClick: (Kniha) -> Unit) {
         val authorInfo by viewModel.autorInfo
 
         LaunchedEffect(autor.meno) {
-            viewModel.fetchAuthorInfo(autor.meno)
+            viewModel.stiahniAutorInfo(autor.meno)
         }
 
         when {

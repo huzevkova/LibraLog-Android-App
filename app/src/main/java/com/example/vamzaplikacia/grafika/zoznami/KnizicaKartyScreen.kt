@@ -116,12 +116,12 @@ fun ZoznamListCard(zoznam: ZoznamKnih, onClick: (ZoznamKnih) -> Unit, onDeleteCl
                                      }, modifier = Modifier
                     .align(Alignment.CenterVertically)
                     .weight(1f)) {
-                    Icon(Icons.Filled.Delete, contentDescription = "Delete", modifier = Modifier.fillMaxSize())
+                    Icon(Icons.Filled.Delete, contentDescription = stringResource(R.string.zmazanie), modifier = Modifier.fillMaxSize())
                 }
                 IconButton(onClick = {odstran = false}, modifier = Modifier
                     .align(Alignment.CenterVertically)
                     .weight(1f)) {
-                    Icon(Icons.Filled.Done, contentDescription = "Done", modifier = Modifier.fillMaxSize())
+                    Icon(Icons.Filled.Done, contentDescription = stringResource(R.string.hotovo), modifier = Modifier.fillMaxSize())
                 }
             }
         } else {

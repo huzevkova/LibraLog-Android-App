@@ -90,14 +90,14 @@ fun KnihaScreen(kniha: Kniha, viewModel: KnihaViewModel = viewModel()){
         }
 
         Spacer(modifier = Modifier.height(16.dp))
-        TextField(text = "Prečítané:    $pocetPrecitanychStran / ${kniha.pocetStran}", true)
+        TextField(text = stringResource(R.string.precitane) + "$pocetPrecitanychStran / ${kniha.pocetStran}", true)
         Slider(value = sliderStranyPosition, steps = kniha.pocetStran, onValueChange = {
             sliderStranyPosition = it
             viewModel.zmena()
         })
 
         Spacer(modifier = Modifier.height(8.dp))
-        TextField(text = "Hodnotenie:  " + "%.1f".format(hodnotenieKnihy),true)
+        TextField(text = stringResource(R.string.hodnotenie) + "%.1f".format(hodnotenieKnihy),true)
         Slider(value = sliderHodnoteniePosition, steps = 100, onValueChange = {
             sliderHodnoteniePosition = it
             viewModel.zmena()
@@ -108,11 +108,11 @@ fun KnihaScreen(kniha: Kniha, viewModel: KnihaViewModel = viewModel()){
         TextField(text = kniha.vlastnosti.joinToString(", "))
 
         Spacer(modifier = Modifier.height(8.dp))
-        TextField(text = "Popis:", true)
+        TextField(text = stringResource(R.string.popis) + ":", true)
         TextField(text = kniha.popis)
 
         Spacer(modifier = Modifier.height(8.dp))
-        TextField(text = "Poznámky:", true)
+        TextField(text = stringResource(R.string.poznamky) + ":", true)
         TextField(text = kniha.poznamky)
     }
 

@@ -17,9 +17,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import coil.compose.rememberAsyncImagePainter
+import com.example.vamzaplikacia.R
 import com.example.vamzaplikacia.logika.knihy.Autor
 import com.example.vamzaplikacia.logika.knihy.ZoznamAutorov
 
@@ -32,16 +34,16 @@ import com.example.vamzaplikacia.logika.knihy.ZoznamAutorov
 @Composable
 fun AutoriZoznamScreen(autori: ZoznamAutorov, onClick: (Autor) -> Unit) {
     Column (modifier = Modifier
-            .statusBarsPadding()
-            .verticalScroll(rememberScrollState())
-            .fillMaxWidth()) {
+        .statusBarsPadding()
+        .verticalScroll(rememberScrollState())
+        .fillMaxWidth()) {
         for (autor in autori.getZoznam()) {
             val knihaSklonovanie = if (autor.pocetKnih == 0 || autor.pocetKnih!! > 4) {
-                "kníh"
+                stringResource(R.string.knih)
             } else if (autor.pocetKnih == 1) {
-                "kniha"
+                stringResource(R.string.kniha).lowercase()
             } else {
-                "knihy"
+                stringResource(R.string.knihy)
             }
 
             val paint = if (autor.obrazokCesta == null) painterResource(autor.obrazok) else rememberAsyncImagePainter(
